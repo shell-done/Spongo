@@ -1,12 +1,12 @@
 # Images
-.jpg
-.jpeg
-.png
+*.jpg
+*.jpeg
+*.png
 
 # Parameters
-.weights
-.names
-.cfg
+*.weights
+*.names
+*.cfg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
