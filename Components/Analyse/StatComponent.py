@@ -8,21 +8,23 @@ from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
 from Services.AnalyseThread import AnalyseThread
 
-class DataComponent(QWidget):
+class StatComponent(QWidget):
     clickedChangeWidget = pyqtSignal(str, str, list)
 
     def __init__(self):
         super().__init__()
 
-        self.mainLayout = QVBoxLayout()
+        title = QLabel("Statistiques")
+        title.setFont(QFont('Times', 15))
 
-        self.label = QLabel("Data sur les éponges")
+        self.label = QLabel("Stats sur les éponges")
         self.label.setAlignment(QtCore.Qt.AlignCenter)
-        font = QFont("Arial", 10)
-        self.label.setFont(font)
-        self.mainLayout.addWidget(self.label)
 
-        self.setLayout(self.mainLayout)
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(title)
+        mainLayout.addWidget(self.label)
+
+        self.setLayout(mainLayout)
 
     def update(self, sponges):
         self.label.setText("")
