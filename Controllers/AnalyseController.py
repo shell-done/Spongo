@@ -6,6 +6,11 @@ from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
+from threading import Lock
+
+from Components.Analyse.DataComponent import DataComponent
+from Components.Analyse.ImageComponent import ImageComponent
+from Components.Analyse.ProgressBarComponent import ProgressBarComponent
 from Services.AnalyseThread import AnalyseThread
 
 class AnalyseController(QWidget):
@@ -14,29 +19,30 @@ class AnalyseController(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.analyseThread = AnalyseThread()
+        self.dataComponent = DataComponent()
+        self.imageComponent = ImageComponent()
 
-        self.mainLayout = QVBoxLayout()
+        hLayout = QHBoxLayout()
+        hLayout.addWidget(self.dataComponent)
+        hLayout.addWidget(self.imageComponent)
 
-        self.label = QLabel("Lancement de l'analyse...")
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.mainLayout.addWidget(self.label)
-
-        self.progressBar = QProgressBar()
-        self.mainLayout.addWidget(self.progressBar)
+        self.progressComponent = ProgressBarComponent()
 
         self.returnButton = QPushButton("Retour")
-        self.mainLayout.addWidget(self.returnButton)
-
-        self.setLayout(self.mainLayout)
-
         self.returnButton.clicked.connect(self.returnClick)
 
+        mainLayout = QVBoxLayout()
+        mainLayout.addLayout(hLayout)
+        mainLayout.addWidget(self.progressComponent)
+        mainLayout.addWidget(self.returnButton)
+
+        self.setLayout(mainLayout)
+
+        self.analyseThread = AnalyseThread()
         self.analyseThread.analyseThreadSignal.connect(self.updateDisplay)
 
     def startAnalyse(self, path, images):
-        self.progressBar.setMaximum(len(images))
-        print("nb images : " + str(len(images)))
+        self.progressComponent.setMaximum(len(images))
 
         self.analyseThread.setParams(path, images)
         self.analyseThread.start()
@@ -44,14 +50,12 @@ class AnalyseController(QWidget):
     def returnClick(self, event):
         self.clickedChangeWidget.emit("MENU", "", [])
 
-    @pyqtSlot(str, int)
-    def updateDisplay(self, image, progressValue):
-        # update image displayed
-        if image != "":
-            pixmap = QPixmap("data/predictions/" + image)
-            self.label.setPixmap(pixmap.scaled(self.label.size()))
+    @pyqtSlot(str, int, dict)
+    def updateDisplay(self, image, progressValue, sponges):
+        if image != "" and sponges != []:
+            self.imageComponent.update(image)
+            self.dataComponent.update(sponges)
 
-        # update progress bar
-        self.progressBar.setValue(progressValue)
+        self.progressComponent.update(progressValue)
 
 

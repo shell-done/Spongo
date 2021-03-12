@@ -74,8 +74,9 @@ class MenuController(QWidget):
         return images
 
     def loadClick(self, event):
-        dialog = QFileDialog()
-        self.path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
+        #dialog = QFileDialog()
+        #self.path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
+        self.path = "D:/Utilisateurs/Margaux/Documents/Workspace/Projets_M1/Spongo_IHM/data/img.bckp"
         #self.path = "D:/Utilisateurs/Margaux/Documents/Workspace/Projets_M1/Spongo_IHM/data/img"
 
         self.directory = QDir(self.path)

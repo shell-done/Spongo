@@ -2,14 +2,16 @@
 
 import cv2
 import numpy as np
-from PyQt5.QtCore import (QThread, Qt, pyqtSignal)
+from PyQt5.QtCore import (QThread, Qt, pyqtSignal, QMutex)
 
 class AnalyseThread(QThread):
-    analyseThreadSignal = pyqtSignal(str, int)
+    analyseThreadSignal = pyqtSignal(str, int, dict)
+
+    def __init__(self):
+        super(QThread, self).__init__()
+        self.mutex = QMutex()
 
     def setParams(self, path, images):
-        self.progress = 0
-
         self.path = path
         self.images = images
 
@@ -45,7 +47,15 @@ class AnalyseThread(QThread):
             [0, 168, 217]
         ]
 
+        progress = 0
+        
         for image in self.images:
+            self.mutex.lock()
+
+            sponges = {}
+            for i in range(len(classes)):
+                sponges[classes[i]] = 0
+
             # Load image
             img = cv2.imread(self.path + "/" + image)
             height, width, channels = img.shape
@@ -80,8 +90,7 @@ class AnalyseThread(QThread):
                         boxes.append([x, y, w, h])
                         confidences.append(float(confidence))
                         class_ids.append(class_id)
-
-
+            
             # Use NMS function in opencv to perform Non-maximum Suppression
             # Give it score threshold and NMS threshold as arguments.
             indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.4, 0.3)
@@ -89,21 +98,27 @@ class AnalyseThread(QThread):
                 if i in indexes:
                     x, y, w, h = boxes[i]
                     label = "%s : %.2f" % (classes[class_ids[i]], confidences[i])
+
+                    sponges[classes[class_ids[i]]] += 1
+                    print(sponges[classes[class_ids[i]]])
+
                     color = colors[class_ids[i]]
                     labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
 
                     cv2.rectangle(img, (x, y), (x + w, y + h), color, 6)
                     cv2.rectangle(img, (x - 3, y - labelSize[1] - 20), (x + labelSize[0], y), color, -1)
                     cv2.putText(img, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                
 
-            self.progress += 1
+            progress += 1
 
             if(len(boxes) != 0):
-                print(image)
                 cv2.imwrite("data/predictions/" + image, img)
-                self.analyseThreadSignal.emit(image, self.progress)
+                self.analyseThreadSignal.emit(image, progress, sponges)
             else:
-                self.analyseThreadSignal.emit("", self.progress)
+                self.analyseThreadSignal.emit("", progress, [])
+
+            self.mutex.unlock()
             
 
         print("Predictions complete on %d images, they are available in data/predictions/ folder" % len(self.images))

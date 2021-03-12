@@ -11,7 +11,7 @@ class WindowController(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Spongo")
-        self.setFixedSize(650, 450)
+        self.setFixedSize(1400, 750)
 
         self.stackedWidget = QStackedWidget()
         self.setCentralWidget(self.stackedWidget)

@@ -6,6 +6,7 @@ from Controllers.WindowController import WindowController
 
 if __name__ == "__main__":
     App = QApplication(sys.argv)
+    App.setStyleSheet("QLabel{font-size: 13pt;};")
 
     window = WindowController()
     window.show()
