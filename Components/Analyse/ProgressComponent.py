@@ -15,9 +15,10 @@ class ProgressComponent(QWidget):
         titleLabel.setFont(QFont('Times', 15))
 
         self.currentImageLabel = QLabel("Image : 0/0")
-        self.timeLabel = QLabel("Temps restant : ")
-        self.nextImageLabel = QLabel("Prochaine image : ")
 
+        self.timeLabel = QLabel("Temps restant : ")
+
+        self.nextImageLabel = QLabel("Prochaine image : ")
 
         infoLayout = QHBoxLayout()
         infoLayout.addWidget(self.currentImageLabel)

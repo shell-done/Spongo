@@ -14,6 +14,8 @@ class StatComponent(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.total = []
+
         title = QLabel("Statistiques")
         title.setFont(QFont('Times', 15))
 
@@ -23,13 +25,21 @@ class StatComponent(QWidget):
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(title)
         mainLayout.addWidget(self.label)
-
         self.setLayout(mainLayout)
 
     def update(self, sponges):
         self.label.setText("")
 
+        print("\n")
+
+        if self.total == []:
+            for i in range(len(sponges)):
+                self.total.append(0)
+
         for key, value in sponges.items():
-            self.label.setText(self.label.text() + key + " : " + str(value) + "\n")
+            index = list(sponges.keys()).index(key)
+            self.total[index] += value
+
+            self.label.setText(self.label.text() + key + " : " + str(self.total[index]) + "\n")
 
 
