@@ -6,6 +6,7 @@ from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
+from Services.Loader import Loader
 from Services.AnalyseThread import AnalyseThread
 
 class StatComponent(QWidget):
@@ -26,10 +27,12 @@ class StatComponent(QWidget):
 
         self.setLayout(mainLayout)
 
-    def update(self, sponges):
-        self.label.setText("")
+    def update(self, detected_sponges: dict[int, int]):
+        text = ""
+        
+        for class_id, class_name in Loader.SpongesClasses().items():
+            text += "%s : %d\n" % (class_name, detected_sponges[class_id])
 
-        for key, value in sponges.items():
-            self.label.setText(self.label.text() + key + " : " + str(value) + "\n")
+        self.label.setText(text)
 
 

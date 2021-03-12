@@ -3,16 +3,21 @@
 import cv2
 import numpy as np
 from PyQt5.QtCore import (QThread, Qt, pyqtSignal, QMutex)
+from PyQt5.QtGui import QPixmap
+
+from Services.Loader import Loader
+from Models.Detection import Detection
+from Models.ProcessedImage import ProcessedImage
 
 class AnalyseThread(QThread):
-    analyseThreadSignal = pyqtSignal(str, int, dict)
+    imageProcessedSignal = pyqtSignal(int, ProcessedImage)
 
     def __init__(self):
         super(QThread, self).__init__()
         self.mutex = QMutex()
         self.__abort = False
 
-    def start(self, path, images):
+    def start(self, path: str, images: list[str]):
         self.mutex.lock()
         self.__abort = True
         self.mutex.unlock()
@@ -32,12 +37,6 @@ class AnalyseThread(QThread):
         self.mutex.unlock()
 
     def run(self):
-        # Load names of classes
-        classesFile = "data/parameters/classes.names"
-        #classes = ["a", "b", "c", "d", "e"]
-        with open(classesFile, 'rt') as f:
-            classes = f.read().rstrip('\n').split('\n')
-
         # Give the configuration and weight files for the model and load the network using them.
         modelConfiguration = "data/parameters/yolov4_custom_test.cfg"
         modelWeights = "data/parameters/yolov4_custom_train_last.weights"
@@ -54,28 +53,15 @@ class AnalyseThread(QThread):
         output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
         print("Yolo loaded")
-
-        colors = [
-            [76, 177, 34],
-            [164, 73, 163],
-            [155, 105, 0],
-            [0, 0, 230],
-            [0, 168, 217],
-            [100, 0, 0]
-        ]
-
-        progress = 0
         
-        for image in self.__images:
+        for image_idx, image_name in enumerate(self.__images):
             if self.__abort:
                 return
 
-            sponges = {}
-            for i in range(len(classes)):
-                sponges[classes[i]] = 0
+            filepath = self.__path + "/" + image_name
 
             # Load image
-            img = cv2.imread(self.__path + "/" + image)
+            img = cv2.imread(filepath)
             height, width, channels = img.shape
 
             # Preprocess image
@@ -109,34 +95,19 @@ class AnalyseThread(QThread):
                         confidences.append(float(confidence))
                         class_ids.append(class_id)
             
+            detections = []
+
             # Use NMS function in opencv to perform Non-maximum Suppression
             # Give it score threshold and NMS threshold as arguments.
             indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.4, 0.3)
             for i in range(len(boxes)):
                 if i in indexes:
-                    x, y, w, h = boxes[i]
-                    label = "%s : %.2f" % (classes[class_ids[i]], confidences[i])
-
-                    sponges[classes[class_ids[i]]] += 1
-
-                    color = colors[class_ids[i]]
-                    labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
-
-                    cv2.rectangle(img, (x, y), (x + w, y + h), color, 6)
-                    cv2.rectangle(img, (x - 3, y - labelSize[1] - 20), (x + labelSize[0], y), color, -1)
-                    cv2.putText(img, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-                
-
-            progress += 1
+                    detections.append(Detection(boxes[i], class_ids[i], confidences[i]))
 
             if self.__abort:
                 return
 
-            if(len(boxes) != 0):
-                deb = cv2.imwrite("data/predictions/" + image, img)
-                self.analyseThreadSignal.emit(image, progress, sponges)
-            else:
-                self.analyseThreadSignal.emit("", progress, [])
-            
+            processed_image = ProcessedImage(filepath, detections)
+            self.imageProcessedSignal.emit(image_idx, processed_image)
 
-        print("Predictions complete on %d images, they are available in data/predictions/ folder" % len(self.__images))
+        print("Predictions complete on %d images" % len(self.__images))

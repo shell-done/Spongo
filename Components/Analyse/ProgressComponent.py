@@ -33,14 +33,14 @@ class ProgressComponent(QWidget):
 
         self.setLayout(mainLayout)
     
-    def setMaximum(self, max):
+    def setMaximum(self, max: int):
         self.maxValue = max
         self.progressBar.setMaximum(self.maxValue)
     
-    def update(self, image, value):
+    def update(self, next_image: str, value: int):
         self.progressBar.setValue(value)
         self.currentImageLabel.setText("Image : " + str(value) + "/" + str(self.maxValue))
-        self.nextImageLabel.setText("Prochaine image : " + image)
+        self.nextImageLabel.setText("Prochaine image : " + next_image)
 
     # def minimumSizeHint(self):
     #     return QSize(100, 600)
