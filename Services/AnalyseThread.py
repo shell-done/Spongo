@@ -10,10 +10,26 @@ class AnalyseThread(QThread):
     def __init__(self):
         super(QThread, self).__init__()
         self.mutex = QMutex()
+        self.__abort = False
 
-    def setParams(self, path, images):
-        self.path = path
-        self.images = images
+    def start(self, path, images):
+        self.mutex.lock()
+        self.__abort = True
+        self.mutex.unlock()
+
+        if self.isRunning:
+            self.wait()
+
+        self.__path = path
+        self.__images = images
+        self.__abort = False
+
+        super().start()
+
+    def stop(self):
+        self.mutex.lock()
+        self.__abort = True
+        self.mutex.unlock()
 
     def run(self):
         # Load names of classes
@@ -44,20 +60,22 @@ class AnalyseThread(QThread):
             [164, 73, 163],
             [155, 105, 0],
             [0, 0, 230],
-            [0, 168, 217]
+            [0, 168, 217],
+            [100, 0, 0]
         ]
 
         progress = 0
         
-        for image in self.images:
-            self.mutex.lock()
+        for image in self.__images:
+            if self.__abort:
+                return
 
             sponges = {}
             for i in range(len(classes)):
                 sponges[classes[i]] = 0
 
             # Load image
-            img = cv2.imread(self.path + "/" + image)
+            img = cv2.imread(self.__path + "/" + image)
             height, width, channels = img.shape
 
             # Preprocess image
@@ -100,7 +118,6 @@ class AnalyseThread(QThread):
                     label = "%s : %.2f" % (classes[class_ids[i]], confidences[i])
 
                     sponges[classes[class_ids[i]]] += 1
-                    print(sponges[classes[class_ids[i]]])
 
                     color = colors[class_ids[i]]
                     labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
@@ -112,13 +129,14 @@ class AnalyseThread(QThread):
 
             progress += 1
 
+            if self.__abort:
+                return
+
             if(len(boxes) != 0):
-                cv2.imwrite("data/predictions/" + image, img)
+                deb = cv2.imwrite("data/predictions/" + image, img)
                 self.analyseThreadSignal.emit(image, progress, sponges)
             else:
                 self.analyseThreadSignal.emit("", progress, [])
-
-            self.mutex.unlock()
             
 
-        print("Predictions complete on %d images, they are available in data/predictions/ folder" % len(self.images))
+        print("Predictions complete on %d images, they are available in data/predictions/ folder" % len(self.__images))

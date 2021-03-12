@@ -44,10 +44,10 @@ class AnalyseController(QWidget):
     def startAnalyse(self, path, images):
         self.progressComponent.setMaximum(len(images))
 
-        self.analyseThread.setParams(path, images)
-        self.analyseThread.start()
+        self.analyseThread.start(path, images)
 
     def returnClick(self, event):
+        self.analyseThread.stop()
         self.clickedChangeWidget.emit("MENU", "", [])
 
     @pyqtSlot(str, int, dict)
