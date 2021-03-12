@@ -8,9 +8,9 @@ from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
 from threading import Lock
 
-from Components.Analyse.DataComponent import DataComponent
+from Components.Analyse.StatComponent import StatComponent
 from Components.Analyse.ImageComponent import ImageComponent
-from Components.Analyse.ProgressBarComponent import ProgressBarComponent
+from Components.Analyse.ProgressComponent import ProgressComponent
 from Services.AnalyseThread import AnalyseThread
 
 class AnalyseController(QWidget):
@@ -19,14 +19,15 @@ class AnalyseController(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.dataComponent = DataComponent()
+        self.statComponent = StatComponent()
         self.imageComponent = ImageComponent()
 
         hLayout = QHBoxLayout()
-        hLayout.addWidget(self.dataComponent)
+        hLayout.addWidget(self.statComponent)
         hLayout.addWidget(self.imageComponent)
 
-        self.progressComponent = ProgressBarComponent()
+        self.progressComponent = ProgressComponent()
+        self.progressComponent.sizeHint()
 
         self.returnButton = QPushButton("Retour")
         self.returnButton.clicked.connect(self.returnClick)
@@ -53,9 +54,9 @@ class AnalyseController(QWidget):
     @pyqtSlot(str, int, dict)
     def updateDisplay(self, image, progressValue, sponges):
         if image != "" and sponges != []:
-            self.imageComponent.update(image)
-            self.dataComponent.update(sponges)
+            self.imageComponent.update(image, sponges)
+            self.statComponent.update(sponges)
 
-        self.progressComponent.update(progressValue)
+        self.progressComponent.update(image, progressValue)
 
 
