@@ -6,12 +6,12 @@ from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
-from threading import Lock
-
+from Services.Loader import Loader
+from Models.ProcessedImage import ProcessedImage
+from Services.AnalyseThread import AnalyseThread
 from Components.Analyse.StatComponent import StatComponent
 from Components.Analyse.ImageComponent import ImageComponent
 from Components.Analyse.ProgressComponent import ProgressComponent
-from Services.AnalyseThread import AnalyseThread
 
 class AnalyseController(QWidget):
     clickedChangeWidget = pyqtSignal(str, str, list)
@@ -19,6 +19,8 @@ class AnalyseController(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.__images = []
+        self.__detected_sponges = {key:0 for key in Loader.SpongesClasses()}
         self.statComponent = StatComponent()
         self.imageComponent = ImageComponent()
 
@@ -40,23 +42,29 @@ class AnalyseController(QWidget):
         self.setLayout(mainLayout)
 
         self.analyseThread = AnalyseThread()
-        self.analyseThread.analyseThreadSignal.connect(self.updateDisplay)
+        self.analyseThread.imageProcessedSignal.connect(self.imageProcessed)
 
-    def startAnalyse(self, path, images):
+    def startAnalyse(self, path: str, images: list[str]):
+        self.__images = images
         self.progressComponent.setMaximum(len(images))
-
         self.analyseThread.start(path, images)
 
     def returnClick(self, event):
         self.analyseThread.stop()
         self.clickedChangeWidget.emit("MENU", "", [])
 
-    @pyqtSlot(str, int, dict)
-    def updateDisplay(self, image, progressValue, sponges):
-        if image != "" and sponges != []:
-            self.imageComponent.update(image, sponges)
-            self.statComponent.update(sponges)
+    @pyqtSlot(int, ProcessedImage)
+    def imageProcessed(self, image_index: int, processed_image: ProcessedImage):
+        next_image = "Pas de prochaine image"
+        if image_index + 1 < len(self.__images):
+            next_image = self.__images[image_index + 1]
 
-        self.progressComponent.update(image, progressValue)
+        for k in self.__detected_sponges:
+            self.__detected_sponges[k] += processed_image.detectionsCount().get(k, 0)
+
+        self.imageComponent.update(processed_image)
+        self.statComponent.update(self.__detected_sponges)
+        self.progressComponent.update(next_image, image_index + 1)
+
 
 
