@@ -8,8 +8,9 @@
 *.names
 *.cfg
 
-# Qt Creator
+# Qt Creator + VSCode
 *.pyproject.user
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
