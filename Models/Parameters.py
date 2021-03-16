@@ -1,30 +1,54 @@
 class Parameters:
-    def __init__(self, name: str, srcFolder: str, threshold: int, displayProcessedImages: bool, morphotypes: list, saveProcessedImages: bool, destFolder: str):
-        self.__name = name
-        self.__srcFolder = srcFolder
-        self.__threshold = threshold
-        self.__displayProcessedImages = displayProcessedImages
-        self.__morphotypes = morphotypes
-        self.__saveProcessedImages = saveProcessedImages
-        self.__destFolder = destFolder
+    def __init__(self):
+        self._name = ""
+        self._srcFolder = ""
+        self._threshold = 0.5
+        self._displayProcessedImages = True
+
+        for i in range(0, 6):
+            self._morphotypes[i] = False
+
+        self._saveProcessedImages = True
+        self._destFolder = ""
 
     def name(self):
         return self.__nameAnalysis
 
+    def setName(self, name: str):
+        self._name = name
+
     def srcFolder(self):
-        return self.__srcFolder
+        return self._srcFolder
+
+    def setSrcFolder(self, srcFolder: str):
+        self._srcFolder = srcFolder
 
     def threshold(self):
-        return self.__threshold
+        return self._threshold
+
+    def setThreshold(self, threshold: float):
+        self._threshold = threshold
     
     def displayProcessedImages(self):
-        return self.__displayProcessedImages
+        return self._displayProcessedImages
+    
+    def setDisplayProcessedImages(self, displayProcessedImages: bool):
+        self._displayProcessedImages = displayProcessedImages
 
     def morphotypes(self):
-        return self.__morphotypes
+        return self._morphotypes
+    
+    def setMorphotypes(self, morphotypes: dict[int, bool]):
+        self._morphotypes = morphotypes
 
     def saveProcessedImages(self):
-        return self.__saveProcessedImages
+        return self._saveProcessedImages
+
+    def setSaveProcessedImages(self, saveProcessedImages: bool):
+        self._saveProcessedImages = saveProcessedImages
     
     def destFolder(self):
-        return self.__destFolder
+        return self._destFolder
+
+    def setDestFolder(self, destFolder: str):
+        self._destFolder = destFolder
