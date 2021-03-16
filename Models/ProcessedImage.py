@@ -4,28 +4,35 @@ from PyQt5.QtGui import QImage
 from Models.Detection import Detection
 
 class ProcessedImage:
-    def __init__(self, filepath: str, detections: list[Detection]):
-        self.__filepath = filepath
-        self.__detections = detections
+    def __init__(self, folder_path: str, file_name: str, detections: list[Detection]):
+        self._file_name = file_name
+        self._folder_path = folder_path
+        self._detections = detections
 
-    def filepath(self) -> str:
-        return self.__filepath
+    def folderPath(self) -> str:
+        return self._folder_path
+
+    def fileName(self) -> str:
+        return self._file_name
+
+    def filePath(self) -> str:
+        return self._folder_path + "/" + self._file_name
 
     def detections(self) -> list[Detection]:
-        return self.__detections
+        return self._detections
 
     def hasDetections(self) -> bool:
-        return len(self.__detections) > 0
+        return len(self._detections) > 0
 
     def detectionsCount(self) -> dict[int, int]:
         detections_count = {}
-        for d in self.__detections:
+        for d in self._detections:
             detections_count[d.classId()] = detections_count.get(d.classId(), 0) + 1
 
         return detections_count
 
     def hightlightedImage(self) -> QImage:
-        img = cv2.imread(self.__filepath)
+        img = cv2.imread(self.filePath())
 
         colors = [
             [76, 177, 34],
@@ -36,7 +43,7 @@ class ProcessedImage:
             [100, 0, 0]
         ]
 
-        for d in self.__detections:
+        for d in self._detections:
             x, y, w, h = d.boundingBox()
             label = "%s : %.2f" % (d.className(), d.confidence())
 

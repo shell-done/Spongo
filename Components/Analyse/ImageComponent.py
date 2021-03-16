@@ -18,7 +18,7 @@ class ImageComponent(QWidget):
         titleLabel = QLabel("Dernière détection")
         titleLabel.setFont(QFont('Times', 15))
 
-        self.imageLabel = QLabel("Image loading...")
+        self.imageLabel = QLabel()
         self.imageLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # self.filenameLabel = QLabel("Aucune image")
@@ -28,7 +28,7 @@ class ImageComponent(QWidget):
         vLayout.addWidget(self.imageLabel)
         # vLayout.addWidget(self.filenameLabel)
 
-        self.statLabel = QLabel("Stats loading...")
+        self.statLabel = QLabel()
         self.statLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         hLayout = QHBoxLayout()
@@ -42,11 +42,10 @@ class ImageComponent(QWidget):
         mainLayout.addWidget(self.imageLabel)
 
         self.setLayout(mainLayout)
+        self.reset()
 
     def update(self, processed_image: ProcessedImage):
         pixmap = QPixmap(processed_image.hightlightedImage())
-
-        filename = processed_image.filepath().split("/")[-1]
         
         detections_count = processed_image.detectionsCount()
         text = ""
@@ -57,7 +56,7 @@ class ImageComponent(QWidget):
         scaled = pixmap.scaled(self.imageLabel.size(), Qt.KeepAspectRatio)
         self.imageLabel.setPixmap(scaled)
 
-        # self.filenameLabel.setText(filename)
+        # self.filenameLabel.setText(processed_image.filePath())
         self.statLabel.setText(text)
 
     def reset(self):
