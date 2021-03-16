@@ -1,0 +1,14 @@
+@myred: #fe0000;
+@mygreen: #00ee00;
+@title-font-size: 25px;
+@primary: #AA1155;
+
+QLabel {
+    color: @myred;
+    font-size: @title-font-size;
+}
+
+QPushButton {
+    color: @mygreen;
+    background-color: @primary;
+}
