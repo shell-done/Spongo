@@ -40,22 +40,23 @@ class MenuController(QWidget):
         self.dirLayout.addWidget(self.dirLabel)
 
         # Main Layout
+
+        self.startButton = QPushButton("Démarrer")
+        self.paramsButton = QPushButton("Paramètres")
+
         self.mainLayout = QVBoxLayout()
-
-        self.startButton = QPushButton("Lancer l'analyse")
-
         self.mainLayout.addLayout(self.dirLayout)
+        self.mainLayout.addWidget(self.paramsButton)
         self.mainLayout.addWidget(self.startButton)
+
 
         self.setLayout(self.mainLayout)
 
         self.images = ""
 
-        # self.path = "blabla"
-        # self.images = ["img1", "img2"]
-
         # Button slots
         self.loadButton.clicked.connect(self.loadClick)
+        self.paramsButton.clicked.connect(self.paramsClick)
         self.startButton.clicked.connect(self.startClick)
 
     def filterFiles(self, extensions):
@@ -81,6 +82,9 @@ class MenuController(QWidget):
 
         self.directory = QDir(self.path)
         self.images = self.filterFiles(["*.jpg"])
+
+    def paramsClick(self, event):
+        self.clickedChangeWidget.emit("PARAMETERS", "", [])
 
     def startClick(self, event):
         if len(self.images) == 0:
