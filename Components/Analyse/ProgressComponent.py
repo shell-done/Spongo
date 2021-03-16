@@ -14,11 +14,11 @@ class ProgressComponent(QWidget):
         titleLabel = QLabel("Progression")
         titleLabel.setFont(QFont('Times', 15))
 
-        self.currentImageLabel = QLabel("Image : 0/0")
+        self._max_value = 1
 
-        self.timeLabel = QLabel("Temps restant : ")
-
-        self.nextImageLabel = QLabel("Prochaine image : ")
+        self.currentImageLabel = QLabel()
+        self.timeLabel = QLabel()
+        self.nextImageLabel = QLabel()
 
         infoLayout = QHBoxLayout()
         infoLayout.addWidget(self.currentImageLabel)
@@ -33,19 +33,30 @@ class ProgressComponent(QWidget):
         mainLayout.addWidget(self.progressBar)
 
         self.setLayout(mainLayout)
+        self.reset()
     
-    def setMaximum(self, max: int):
-        self.maxValue = max
-        self.progressBar.setMaximum(self.maxValue)
+    def setMaximum(self, max_value: int):
+        self._max_value = max_value
+        self.progressBar.setMaximum(self._max_value)
     
-    def update(self, next_image: str, value: int):
+    def update(self, next_image: str, value: int, time_left: QTime):
         self.progressBar.setValue(value)
-        self.currentImageLabel.setText("Image : " + str(value) + "/" + str(self.maxValue))
+        self.currentImageLabel.setText("Image : " + str(value) + "/" + str(self._max_value))
+
+        time_left_str = ""
+        if time_left is None:
+            time_left_str = "Estimation..."
+        else:
+            time_left_str = "%dh %dm %ds" % (time_left.hour(), time_left.minute(), time_left.second())
+
+        self.timeLabel.setText("Temps restant : " + time_left_str)
+
         self.nextImageLabel.setText("Prochaine image : " + next_image)
 
     def reset(self):
         self.progressBar.setValue(0)
-        self.currentImageLabel.setText("Image : ")
+        self.currentImageLabel.setText("Image : 0/0")
+        self.timeLabel.setText("Temps restant : ")
         self.nextImageLabel.setText("Prochaine image : ")
 
 

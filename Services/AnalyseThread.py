@@ -10,31 +10,31 @@ from Models.Detection import Detection
 from Models.ProcessedImage import ProcessedImage
 
 class AnalyseThread(QThread):
-    imageProcessedSignal = pyqtSignal(int, ProcessedImage)
+    imageProcessedSignal = pyqtSignal(ProcessedImage)
     onAnalyseFinishedSignal = pyqtSignal()
 
     def __init__(self):
         super(QThread, self).__init__()
         self.mutex = QMutex()
-        self.__abort = False
+        self._abort = False
 
     def start(self, path: str, images: list[str]):
         self.mutex.lock()
-        self.__abort = True
+        self._abort = True
         self.mutex.unlock()
 
         if self.isRunning:
             self.wait()
 
-        self.__path = path
-        self.__images = images
-        self.__abort = False
+        self._path = path
+        self._images = images
+        self._abort = False
 
         super().start()
 
     def stop(self):
         self.mutex.lock()
-        self.__abort = True
+        self._abort = True
         self.mutex.unlock()
 
     def run(self):
@@ -55,11 +55,11 @@ class AnalyseThread(QThread):
 
         print("Yolo loaded")
         
-        for image_idx, image_name in enumerate(self.__images):
-            if self.__abort:
+        for image_idx, image_name in enumerate(self._images):
+            if self._abort:
                 return
 
-            filepath = self.__path + "/" + image_name
+            filepath = self._path + "/" + image_name
 
             # Load image
             img = cv2.imread(filepath)
@@ -105,12 +105,12 @@ class AnalyseThread(QThread):
                 if i in indexes:
                     detections.append(Detection(boxes[i], class_ids[i], confidences[i]))
 
-            if self.__abort:
+            if self._abort:
                 return
 
-            processed_image = ProcessedImage(filepath, detections)
-            self.imageProcessedSignal.emit(image_idx, processed_image)
+            processed_image = ProcessedImage(self._path, image_name, detections)
+            self.imageProcessedSignal.emit(processed_image)
 
-        print("Predictions complete on %d images" % len(self.__images))
+        print("Predictions complete on %d images" % len(self._images))
 
         self.onAnalyseFinishedSignal.emit()
