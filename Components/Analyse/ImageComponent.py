@@ -21,11 +21,18 @@ class ImageComponent(QWidget):
         self.imageLabel = QLabel("Image loading...")
         self.imageLabel.setAlignment(QtCore.Qt.AlignCenter)
 
+        # self.filenameLabel = QLabel("Aucune image")
+        # self.filenameLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        vLayout = QVBoxLayout()
+        vLayout.addWidget(self.imageLabel)
+        # vLayout.addWidget(self.filenameLabel)
+
         self.statLabel = QLabel("Stats loading...")
         self.statLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         hLayout = QHBoxLayout()
-        hLayout.addWidget(self.imageLabel)
+        hLayout.addLayout(vLayout)
         hLayout.addWidget(self.statLabel)
 
         mainLayout = QVBoxLayout()
@@ -38,6 +45,8 @@ class ImageComponent(QWidget):
 
     def update(self, processed_image: ProcessedImage):
         pixmap = QPixmap(processed_image.hightlightedImage())
+
+        filename = processed_image.filepath().split("/")[-1]
         
         detections_count = processed_image.detectionsCount()
         text = ""
@@ -45,5 +54,13 @@ class ImageComponent(QWidget):
         for class_id, class_name in Loader.SpongesClasses().items():
             text += "%s : %d\n" % (class_name, detections_count.get(class_id, 0))
 
-        self.imageLabel.setPixmap(pixmap.scaled(self.imageLabel.size()))
+        scaled = pixmap.scaled(self.imageLabel.size(), Qt.KeepAspectRatio)
+        self.imageLabel.setPixmap(scaled)
+
+        # self.filenameLabel.setText(filename)
         self.statLabel.setText(text)
+
+    def reset(self):
+        self.imageLabel.setText("Image loading...")
+        # self.filenameLabel.setText("Aucune image")
+        self.statLabel.setText("Stats loading...")

@@ -11,6 +11,7 @@ from Models.ProcessedImage import ProcessedImage
 
 class AnalyseThread(QThread):
     imageProcessedSignal = pyqtSignal(int, ProcessedImage)
+    onAnalyseFinishedSignal = pyqtSignal()
 
     def __init__(self):
         super(QThread, self).__init__()
@@ -111,3 +112,5 @@ class AnalyseThread(QThread):
             self.imageProcessedSignal.emit(image_idx, processed_image)
 
         print("Predictions complete on %d images" % len(self.__images))
+
+        self.onAnalyseFinishedSignal.emit()

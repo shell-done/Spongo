@@ -10,15 +10,16 @@ class ErrorDialog(QDialog):
 
         self.setWindowTitle("Erreur !")
 
-        QBtn = QDialogButtonBox.Ok
+        message = QLabel("Aucune image n'a été chargé !")
 
+        QBtn = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.accept)
 
         self.layout = QVBoxLayout()
-        message = QLabel("Aucune image n'a été chargé !")
         self.layout.addWidget(message)
         self.layout.addWidget(self.buttonBox)
+
         self.setLayout(self.layout)
 
 class MenuController(QWidget):

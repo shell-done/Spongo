@@ -43,7 +43,9 @@ class ProgressComponent(QWidget):
         self.currentImageLabel.setText("Image : " + str(value) + "/" + str(self.maxValue))
         self.nextImageLabel.setText("Prochaine image : " + next_image)
 
-    # def minimumSizeHint(self):
-    #     return QSize(100, 600)
+    def reset(self):
+        self.progressBar.setValue(0)
+        self.currentImageLabel.setText("Image : ")
+        self.nextImageLabel.setText("Prochaine image : ")
 
 
