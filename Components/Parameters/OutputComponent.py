@@ -11,30 +11,52 @@ class OutputComponent(QWidget):
     def __init__(self):
         super().__init__()
 
-        titleLabel = QLabel("Entrée")
+        titleLabel = QLabel("Sortie")
         titleLabel.setFont(QFont('Times', 15))
 
         # Save layout
         saveLabel = QLabel("Sauvegarder les images avec les boîtes de détection : ")
-        saveCBox = QCheckBox()
+        self._saveCBox = QCheckBox()
 
         saveLayout = QHBoxLayout()
         saveLayout.addWidget(saveLabel)
-        saveLayout.addWidget(saveCBox)
+        saveLayout.addWidget(self._saveCBox)
 
         # Filepath layout
         filepathLabel = QLabel("Dossier de destination des images avec les boîtes de détection : ")
-        filepathText = QTextEdit()
+        self._filepathText = QLineEdit()
+        filepathButton = QPushButton("Charger")
 
         filepathLayout = QHBoxLayout()
         filepathLayout.addWidget(filepathLabel)
-        filepathLayout.addWidget(filepathText)
+        filepathLayout.addWidget(self._filepathText)
+        filepathLayout.addWidget(filepathButton)
 
         # Main layout
         mainLayout = QVBoxLayout()
+        mainLayout.addWidget(titleLabel)
         mainLayout.addLayout(saveLayout)
         mainLayout.addLayout(filepathLayout)
 
         self.setLayout(mainLayout)
+
+        # Button slots
+        filepathButton.clicked.connect(self.filepathClick)
+
+    @pyqtSlot()
+    def filepathClick(self):
+        #dialog = QFileDialog()
+        #self.path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
+        self.path = "./data/predictions"
+        
+        self._filepathText.setText(self.path)
+
+    def setDefaultValues(self, parameters):
+        self._saveCBox.setChecked(parameters.saveProcessedImages())
+        self._filepathText.setText(parameters.destFolder())
+
+    def updateParameters(self, parameters):
+        parameters.setSaveProcessedImages(self._saveCBox.isChecked())
+        parameters.setDestFolder(self._filepathText.text())
 
 

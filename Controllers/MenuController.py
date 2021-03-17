@@ -75,7 +75,8 @@ class MenuController(QWidget):
 
         return images
 
-    def loadClick(self, event):
+    @pyqtSlot()
+    def loadClick(self):
         #dialog = QFileDialog()
         #self.path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
         self.path = "./data/images"
@@ -83,10 +84,12 @@ class MenuController(QWidget):
         self.directory = QDir(self.path)
         self.images = self.filterFiles(["*.jpg"])
 
-    def paramsClick(self, event):
+    @pyqtSlot()
+    def paramsClick(self):
         self.clickedChangeWidget.emit("PARAMETERS", "", [])
 
-    def startClick(self, event):
+    @pyqtSlot()
+    def startClick(self):
         if len(self.images) == 0:
             error_dialog = ErrorDialog()
             error_dialog.exec_()

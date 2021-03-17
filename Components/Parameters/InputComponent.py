@@ -16,25 +16,46 @@ class InputComponent(QWidget):
 
         # Name layout
         nameLabel = QLabel("Nom de l'analyse : ")
-        nameText = QTextEdit()
+        self._nameText = QLineEdit()
 
         nameLayout = QHBoxLayout()
         nameLayout.addWidget(nameLabel)
-        nameLayout.addWidget(nameText)
+        nameLayout.addWidget(self._nameText)
 
         # Filepath layout
         filepathLabel = QLabel("Dossier d'images à analyser : ")
-        filepathText = QTextEdit()
+        self._filepathText = QLineEdit()
+        filepathButton = QPushButton("Charger")
 
         filepathLayout = QHBoxLayout()
         filepathLayout.addWidget(filepathLabel)
-        filepathLayout.addWidget(filepathText)
+        filepathLayout.addWidget(self._filepathText)
+        filepathLayout.addWidget(filepathButton)
 
         # Main layout
         mainLayout = QVBoxLayout()
+        mainLayout.addWidget(titleLabel)
         mainLayout.addLayout(nameLayout)
         mainLayout.addLayout(filepathLayout)
 
         self.setLayout(mainLayout)
 
+        # Button slots
+        filepathButton.clicked.connect(self.filepathClick)
+
+    @pyqtSlot()
+    def filepathClick(self):
+        #dialog = QFileDialog()
+        #self.path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
+        self.path = "./data/image"
+    
+        self._filepathText.setText(self.path)
+
+    def setDefaultValues(self, parameters):
+        self._nameText.setText(parameters.name())
+        self._filepathText.setText(parameters.srcFolder())
+
+    def updateParameters(self, parameters):
+        parameters.setName(self._nameText.text())
+        parameters.setSrcFolder(self._filepathText.text())
 

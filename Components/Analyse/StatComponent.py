@@ -71,4 +71,3 @@ class StatComponent(QWidget):
 
         self.totalLabel.setText("Éponges détectées : 0")
         self.spongesLabel.setText("Aucune éponge détectée")
-        self.series.remove()
