@@ -8,6 +8,8 @@ from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
 from Services.Loader import Loader
 from Services.AnalyseThread import AnalyseThread
+from Services.TextReportWriter import TextReportWriter
+from Services.CSVReportWriter import CSVReportWriter
 from Models.ProcessedImage import ProcessedImage
 from Models.Analyse import Analyse
 from Controllers.CancelController import CancelController
@@ -38,6 +40,7 @@ class AnalyseController(QWidget):
 
         self.downloadButton = QPushButton("Télécharger les données")
         self.downloadButton.setVisible(False)
+        self.downloadButton.clicked.connect(self.downloadReport)
 
         sp_retain = self.downloadButton.sizePolicy()
         sp_retain.setRetainSizeWhenHidden(True)
@@ -69,7 +72,8 @@ class AnalyseController(QWidget):
 
         self.analyseThread.start(path, images)
 
-    def returnClick(self, event):
+    @pyqtSlot()
+    def returnClick(self):
         if self._analyse.isFinished():
             self.clickedChangeWidget.emit("MENU", "", [])
             self.resetComponents()
@@ -81,6 +85,14 @@ class AnalyseController(QWidget):
                 self.analyseThread.stop()
                 self.clickedChangeWidget.emit("MENU", "", [])
                 self.resetComponents()
+
+    @pyqtSlot()
+    def downloadReport(self):
+        writer = TextReportWriter(self._analyse)
+        writer.writeSummary("report.txt")
+
+        writer = CSVReportWriter(self._analyse, shape="rectangle")
+        writer.write("report.csv")
 
     @pyqtSlot(ProcessedImage)
     def imageProcessed(self, processed_image: ProcessedImage):
@@ -109,3 +121,4 @@ class AnalyseController(QWidget):
     def analyseFinished(self):
         self._analyse.finish()
         self.displayButtons("Continuer", True, "Analyse terminée")
+

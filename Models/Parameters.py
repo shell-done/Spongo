@@ -1,18 +1,21 @@
+from Services.Loader import Loader
+
 class Parameters:
     def __init__(self):
-        self._name = ""
+        self._name = "Analyse de la plongée"
         self._srcFolder = ""
         self._threshold = 0.5
         self._displayProcessedImages = True
 
-        for i in range(0, 6):
+        self._morphotypes = {}
+        for i in range(len(Loader.SpongesClasses())):
             self._morphotypes[i] = False
 
         self._saveProcessedImages = True
         self._destFolder = ""
 
     def name(self):
-        return self.__nameAnalysis
+        return self._name
 
     def setName(self, name: str):
         self._name = name
