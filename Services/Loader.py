@@ -2,18 +2,18 @@ class Loader:
     CLASSES_FILE_PATH = "data/parameters/classes.names"
     STYLE_FILE_PATH = "data/assets/style.qss"
 
-    __sponges_classes = {}
+    _sponges_classes = {}
 
     @staticmethod
     def SpongesClasses() -> dict[int, str]:
-        if len(Loader.__sponges_classes) == 0:
+        if len(Loader._sponges_classes) == 0:
 
             with open(Loader.CLASSES_FILE_PATH, 'rt') as f:
                 for i, name in enumerate(f.readlines()):
                     name = name.rstrip("\n")
-                    Loader.__sponges_classes[i] = name
+                    Loader._sponges_classes[i] = name
 
-        return Loader.__sponges_classes
+        return Loader._sponges_classes
 
 
     @staticmethod
