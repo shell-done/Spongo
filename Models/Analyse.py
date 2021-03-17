@@ -1,8 +1,10 @@
 from PyQt5.QtCore import QDateTime, QTime
+from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage
 
 class Analyse:
     def __init__(self, images_filenames: list[str], sponges_classes: list[str]):
+        self._parameters = Parameters()
         self._images_filenames = images_filenames
         self._detected_sponges = {key:0 for key in sponges_classes}
 
@@ -10,6 +12,9 @@ class Analyse:
         self._start_datetime = QDateTime.currentDateTime()
         self._end_datetime = None
         self._processed_images = []
+
+    def parameters(self) -> Parameters:
+        return self._parameters
 
     def addProcessedImage(self, processed_image: ProcessedImage):
         self._processed_images.append(processed_image)
@@ -24,6 +29,9 @@ class Analyse:
 
     def cumulativeDetections(self) -> dict[int, int]:
         return self._detected_sponges
+
+    def totalDetections(self) -> int:
+        return sum(self._detected_sponges.values())
 
     def imagesCount(self) -> int:
         return len(self._images_filenames)
