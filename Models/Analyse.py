@@ -30,6 +30,9 @@ class Analyse:
     def cumulativeDetections(self) -> dict[int, int]:
         return self._detected_sponges
 
+    def cumulativeDetectionsFor(self, class_id) -> int:
+        return self._detected_sponges.get(class_id, 0)
+
     def totalDetections(self) -> int:
         return sum(self._detected_sponges.values())
 

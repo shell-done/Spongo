@@ -103,7 +103,7 @@ class AnalyseController(QWidget):
             next_image = "Pas de prochaine image"
 
         self.imageComponent.update(processed_image)
-        self.statComponent.update(self._analyse.cumulativeDetections())
+        self.statComponent.update(self._analyse)
         self.progressComponent.update(next_image, self._analyse.currentImageIndex(), self._analyse.estimateTimeLeft())
 
     def displayButtons(self, returnValue: str, showDownload: bool, title: str):

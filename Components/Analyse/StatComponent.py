@@ -1,73 +1,76 @@
-import cv2
-import numpy as np
 from PyQt5 import QtCore, QtGui, QtChart
 from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
-from PyQt5.QtChart import QChart, QChartView, QLineSeries
+from PyQt5.QtChart import QChart, QChartView, QSplineSeries
 
+from Models.Analyse import Analyse
 from Services.Loader import Loader
 from Services.AnalyseThread import AnalyseThread
 
 class StatComponent(QWidget):
-    clickedChangeWidget = pyqtSignal(str, str, list)
-
     def __init__(self):
         super().__init__()
+
+        self._series = {}
 
         title = QLabel("Statistiques")
         title.setFont(QFont('Times', 15))
 
-        self.totalLabel = QLabel("Éponges détectées : ")
+        self._total_label = QLabel()
+        self._sponges_label = QLabel()
+        self._sponges_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.spongesLabel = QLabel("Aucune éponge détectée")
-        self.spongesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(title)
+        main_layout.addWidget(self._total_label)
+        main_layout.addWidget(self._sponges_label)
+        main_layout.addWidget(self._createLineChart())
 
-        self.chartview =  QChartView()
-        self.create_linechart()
+        self.setLayout(main_layout)
+        self.reset()
 
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(title)
-        mainLayout.addWidget(self.totalLabel)
-        mainLayout.addWidget(self.spongesLabel)
-        mainLayout.addWidget(self.chartview)
-
-        self.setLayout(mainLayout)
-
-    def create_linechart(self):
+    def _createLineChart(self) -> QChartView:
+        self._chart = QChart()
+        
+        self._chart.setAnimationOptions(QChart.SeriesAnimations)
+        self._chart.setTitle("Détection cumulées")
  
-        self.series = QLineSeries(self)
-
-        self.chart = QChart()
-
-        self.chart.addSeries(self.series)
-        self.chart.createDefaultAxes()
-        self.chart.setAnimationOptions(QChart.SeriesAnimations)
-        self.chart.setTitle("Line Chart Example")
+        self._chart.legend().setVisible(True)
+        self._chart.legend().setAlignment(Qt.AlignBottom)
  
-        self.chart.legend().setVisible(True)
-        self.chart.legend().setAlignment(Qt.AlignBottom)
- 
-        self.chartview = QChartView(self.chart)
+        chart_view = QChartView(self._chart)
+        chart_view.setRenderHint(QPainter.Antialiasing)
 
-    def update(self, detected_sponges: dict[int, int]):
+        return chart_view
+
+    def update(self, analyse: Analyse):
         text = ""
-        total = 0
-        cpt = 2
+        points = len(list(self._series.values())[0])
 
         for class_id, class_name in Loader.SpongesClasses().items():
-            text += "%s : %d\n" % (class_name, detected_sponges[class_id])
-            total += detected_sponges[class_id]
+            text += "%s : %d\n" % (class_name, analyse.cumulativeDetectionsFor(class_id))
+            self._series[class_id].append(points, analyse.cumulativeDetectionsFor(class_id))
 
-        self.totalLabel.setText("Éponges détectées : " + str(total))
-        self.spongesLabel.setText(text)
+        self._total_label.setText("Éponges détectées : %d" % analyse.totalDetections())
+        self._sponges_label.setText(text)
 
-        self.series.append(cpt, cpt)
-        cpt += 1
+        self._chart.axisX().setRange(0, points)
+        self._chart.axisY().setRange(0, max(analyse.cumulativeDetections().values()))
+
 
     def reset(self):
-        text = ""
-        total = 0
+        self._total_label.setText("Éponges détectées : 0")
+        self._sponges_label.setText("Aucune éponge détectée")
 
-        self.totalLabel.setText("Éponges détectées : 0")
-        self.spongesLabel.setText("Aucune éponge détectée")
+        self._chart.removeAllSeries()
+        for i,n in Loader.SpongesClasses().items():
+            self._series[i] = QSplineSeries(self)
+            self._series[i].setName(n)
+            self._series[i].pen().setWidth(2)
+            self._series[i].append(0, 0)
+            self._chart.addSeries(self._series[i])
+
+        self._chart.createDefaultAxes()
+        self._chart.axisX().setRange(0, 1)
+        self._chart.axisY().setRange(0, 1)
