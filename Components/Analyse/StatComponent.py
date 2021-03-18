@@ -7,6 +7,7 @@ from PyQt5.QtChart import QChart, QChartView, QSplineSeries
 from Models.Analyse import Analyse
 from Services.Loader import Loader
 from Services.AnalyseThread import AnalyseThread
+from PyQt5.QtWinExtras import QWinTaskbarButton
 
 class StatComponent(QWidget):
     def __init__(self):

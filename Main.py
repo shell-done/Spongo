@@ -10,6 +10,5 @@ if __name__ == "__main__":
     App.setStyleSheet(Loader.PreprocessedQSS())
 
     window = WindowController()
-    window.show()
 
     sys.exit(App.exec())

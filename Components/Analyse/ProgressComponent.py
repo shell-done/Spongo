@@ -5,6 +5,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtWinExtras import QWinTaskbarButton
 
 class ProgressComponent(QWidget):
 
@@ -15,6 +16,7 @@ class ProgressComponent(QWidget):
         titleLabel.setFont(QFont('Times', 15))
 
         self._max_value = 1
+        self._taskbar_button = None
 
         self.currentImageLabel = QLabel()
         self.timeLabel = QLabel()
@@ -50,8 +52,20 @@ class ProgressComponent(QWidget):
             time_left_str = "%dh %dm %ds" % (time_left.hour(), time_left.minute(), time_left.second())
 
         self.timeLabel.setText("Temps restant : " + time_left_str)
-
         self.nextImageLabel.setText("Prochaine image : " + next_image)
+
+        if self._taskbar_button is not None:
+            self._taskbar_button.progress().setVisible(True)
+            self._taskbar_button.progress().setRange(0, self._max_value)
+            self._taskbar_button.progress().setValue(value)
+
+    def initWinTaskbarProgress(self):
+        window = self.window().windowHandle()
+        if window is None:
+            self._taskbar_button = None
+        
+        self._taskbar_button = QWinTaskbarButton(self)
+        self._taskbar_button.setWindow(window)
 
     def reset(self):
         self.progressBar.setValue(0)

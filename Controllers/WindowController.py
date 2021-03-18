@@ -3,6 +3,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWinExtras import *
 
 import Resources.Resources
 
@@ -34,6 +35,8 @@ class WindowController(QMainWindow):
         self.menu.clickedChangeWidget.connect(self.displayWidget)
         self.parameters.clickedChangeWidget.connect(self.displayWidget)
         self.analyse.clickedChangeWidget.connect(self.displayWidget)
+
+        self.show()
 
     @pyqtSlot(str, str, list)
     def displayWidget(self, nameWidget, path, images):
