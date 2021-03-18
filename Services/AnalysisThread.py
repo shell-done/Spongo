@@ -18,7 +18,7 @@ class AnalysisThread(QThread):
         super(QThread, self).__init__()
         self._abort = False
 
-    def start(self, parameters: Parameters, images: list[str]):
+    def start(self, parameters: Parameters, images: list):
         self._abort = True
 
         if self.isRunning():

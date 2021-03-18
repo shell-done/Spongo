@@ -65,7 +65,7 @@ class AnalysisController(BaseController):
         self._analysis_thread.imageProcessedSignal.connect(self._imageProcessed)
         self._analysis_thread.onAnalysisFinishedSignal.connect(self._analysisFinished)
 
-    def start(self, parameters: Parameters, images: list[str]):
+    def start(self, parameters: Parameters, images: list):
         self._analysis = Analysis(images, Loader.SpongesClasses())
 
         self._stat_component.reset()

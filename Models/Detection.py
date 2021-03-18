@@ -2,7 +2,7 @@ from Services.Loader import Loader
 
 class Detection:
     @staticmethod
-    def DetectionShapes() -> list[str]:
+    def DetectionShapes() -> list:
         return ["circle", "rectangle"]
 
     @staticmethod
@@ -26,7 +26,7 @@ class Detection:
     def confidence(self) -> float:
         return self._confidence
     
-    def toPointsList(self, shape) -> list[int]:
+    def toPointsList(self, shape) -> list:
         if shape == "circle":
             x,y = (self._boundingBox[0] + self._boundingBox[2]//2, self._boundingBox[1] + self._boundingBox[3]//2)
             r = max(self._boundingBox[2], self._boundingBox[3])

@@ -3,7 +3,7 @@ from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage
 
 class Analysis:
-    def __init__(self, images_filenames: list[str], sponges_classes: list[str]):
+    def __init__(self, images_filenames: list, sponges_classes: list):
         self._parameters = Parameters()
         self._images_filenames = images_filenames
         self._detected_sponges = {key:0 for key in sponges_classes}
@@ -24,10 +24,10 @@ class Analysis:
 
         self._current_img_index += 1
 
-    def processedImages(self) -> list[ProcessedImage]:
+    def processedImages(self) -> list:
         return self._processed_images
 
-    def cumulativeDetections(self) -> dict[int, int]:
+    def cumulativeDetections(self) -> dict:
         return self._detected_sponges
 
     def cumulativeDetectionsFor(self, class_id) -> int:

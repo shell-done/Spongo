@@ -41,7 +41,7 @@ class Parameters:
     def morphotypes(self):
         return self._morphotypes
 
-    def setMorphotypes(self, morphotypes: dict[int, bool]):
+    def setMorphotypes(self, morphotypes: dict):
         self._morphotypes = morphotypes
 
     def saveProcessedImages(self):
