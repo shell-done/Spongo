@@ -1,11 +1,11 @@
 from Services.ReportWriter import ReportWriter
 from Services.Loader import Loader
-from Models.Analyse import Analyse
+from Models.Analysis import Analysis
 from Models.ProcessedImage import ProcessedImage
 from Models.Detection import Detection
 
 class CSVReportWriter(ReportWriter):
-    def __init__(self, analyse: Analyse, separator=";", shape=Detection.DefaultDetectionShape()):
+    def __init__(self, analysis: Analysis, separator=";", shape=Detection.DefaultDetectionShape()):
         self._separator = separator
 
         if shape in Detection.DetectionShapes():
@@ -14,7 +14,7 @@ class CSVReportWriter(ReportWriter):
             self._shape = Detection.DefaultDetectionShape()
             print("[WARNING] Invalid shape %s, using default shape : %s" % (shape, self._shape))
 
-        super().__init__(analyse)
+        super().__init__(analysis)
 
     def _fileHeader(self) -> str:
         labels = ["id", "morphotype_id", "morphotype_name", "filename", "shape", "points"]
@@ -24,7 +24,7 @@ class CSVReportWriter(ReportWriter):
         lines = []
 
         id = 0
-        for img in self._analyse.processedImages():
+        for img in self._analysis.processedImages():
             for d in img.detections():
                 points = "\"[%s]\"" % ",".join([str(p) for p in d.toPointsList(self._shape)])
                 line = [str(id), str(d.classId()), d.className(), img.fileName(), self._shape, points]

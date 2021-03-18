@@ -7,6 +7,7 @@ data/
 
 # Others
 report.*
+spongo.pyproject
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

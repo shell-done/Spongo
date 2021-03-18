@@ -13,7 +13,7 @@ from Components.Parameters.OutputComponent import OutputComponent
 
 class ParametersController(BaseController):
     clickedChangeWidget = pyqtSignal(str)
-    clickedChangeToAnalyseWidget = pyqtSignal(Parameters, list)
+    clickedChangeToAnalysisWidget = pyqtSignal(Parameters, list)
 
     def __init__(self):
         super().__init__()
@@ -68,5 +68,5 @@ class ParametersController(BaseController):
             error_dialog = ErrorDialog("Aucune image n'a été chargé !")
             error_dialog.exec_()
         else:
-            self.clickedChangeToAnalyseWidget.emit(self._parameters, images)
+            self.clickedChangeToAnalysisWidget.emit(self._parameters, images)
 

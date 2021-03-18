@@ -7,17 +7,17 @@ class TextReportWriter(ReportWriter):
 
         lines.append("+%s+" % ("-"*58))
         lines.append("|%s|" % (" "*58))
-        lines.append("|%s|" % self._analyse.parameters().name().upper().center(58))
+        lines.append("|%s|" % self._analysis.parameters().name().upper().center(58))
         lines.append("|%s|" % (" "*58))
         lines.append("+%s+" % ("-"*58))
         lines.append("")
 
         lines.append("Informations :")
         lines.append("-"*25)
-        lines.append("\tNom de l'analyse : %s" % self._analyse.parameters().name())
-        lines.append("\tImages analysées : %d" % self._analyse.imagesCount())
-        lines.append("\tCommencé le : %s" % self._analyse.startDateTime().toString("dd/MM/yyyy 'à' hh:mm"))
-        lines.append("\tTerminé le : %s" % self._analyse.endDateTime().toString("dd/MM/yyyy 'à' hh:mm"))
+        lines.append("\tNom de l'analyse : %s" % self._analysis.parameters().name())
+        lines.append("\tImages analysées : %d" % self._analysis.imagesCount())
+        lines.append("\tCommencé le : %s" % self._analysis.startDateTime().toString("dd/MM/yyyy 'à' hh:mm"))
+        lines.append("\tTerminé le : %s" % self._analysis.endDateTime().toString("dd/MM/yyyy 'à' hh:mm"))
         lines.append("")
         lines.append("")
 
@@ -28,14 +28,14 @@ class TextReportWriter(ReportWriter):
 
         lines.append("Paramètres :")
         lines.append("-"*25)
-        lines.append("\tDossier analysé : %s" % self._analyse.parameters().srcFolder())
-        if self._analyse.parameters().saveProcessedImages():
-            lines.append("\tDossier des images analysées : %s" % self._analyse.parameters().destFolder())
-        lines.append("\tSeuil de confiance : %.1f%%" % (self._analyse.parameters().threshold()*100))
+        lines.append("\tDossier analysé : %s" % self._analysis.parameters().srcFolder())
+        if self._analysis.parameters().saveProcessedImages():
+            lines.append("\tDossier des images analysées : %s" % self._analysis.parameters().destFolder())
+        lines.append("\tSeuil de confiance : %.1f%%" % (self._analysis.parameters().threshold()*100))
 
         morphotypes = []
         for k,v in Loader.SpongesClasses().items():
-            if self._analyse.parameters().morphotypes()[k]:
+            if self._analysis.parameters().morphotypes()[k]:
                 morphotypes.append(v)
         
         lines.append("\tMorphotypes recherchés :%s " % ", ".join(morphotypes))
@@ -50,9 +50,9 @@ class TextReportWriter(ReportWriter):
         lines.append("Détections :")
         lines.append("-"*25)
 
-        total = self._analyse.totalDetections()
+        total = self._analysis.totalDetections()
         for class_id, class_name in Loader.SpongesClasses().items():
-            detections = self._analyse.cumulativeDetections()[class_id]
+            detections = self._analysis.cumulativeDetections()[class_id]
             lines.append("\t%s : %d (%.1f%%)" % (class_name, detections, detections*100/total))
 
         lines.append("")
