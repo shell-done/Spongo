@@ -2,6 +2,9 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
+
+import Resources.Resources
 
 from Controllers.MenuController import MenuController
 from Controllers.ParametersController import ParametersController
@@ -13,6 +16,7 @@ class WindowController(QMainWindow):
         super().__init__()
         self.setWindowTitle("Spongo")
         self.setFixedSize(1400, 750)
+        self.setWindowIcon(QIcon(":/img/icon.png"))
 
         self.stackedWidget = QStackedWidget()
         self.setCentralWidget(self.stackedWidget)

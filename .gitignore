@@ -1,12 +1,5 @@
-# Images
-*.jpg
-*.jpeg
-*.png
-
-# Parameters
-*.weights
-*.names
-*.cfg
+# NN files
+data/
 
 # Qt Creator + VSCode
 *.pyproject.user

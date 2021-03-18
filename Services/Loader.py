@@ -1,6 +1,10 @@
+import Resources.Resources
+from PyQt5.QtCore import QFile
+from PyQt5 import QtCore
+
 class Loader:
     CLASSES_FILE_PATH = "data/parameters/classes.names"
-    STYLE_FILE_PATH = "data/assets/style.qss"
+    STYLE_FILE_PATH = "Resources/style/style.qss"
 
     _sponges_classes = {}
 
@@ -18,8 +22,15 @@ class Loader:
 
     @staticmethod
     def PreprocessedQSS() -> str:
-        with open(Loader.STYLE_FILE_PATH, "r") as qss_file:
-            lines = [l.rstrip("\n") for l in qss_file.readlines()]
+        lines = []
+        qss_file = QFile(Loader.STYLE_FILE_PATH)
+        if qss_file.open(QtCore.QIODevice.ReadOnly | QtCore.QFile.Text):
+            text = QtCore.QTextStream(qss_file)
+
+        while not text.atEnd():
+            lines.append(text.readLine().rstrip("\n"))
+
+        qss_file.close()
 
         qss_vars = {}
         qss_body = ""
