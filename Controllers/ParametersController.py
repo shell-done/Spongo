@@ -3,8 +3,8 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import re
 
+from Controllers.BaseController import BaseController
 from Components.Parameters.InputComponent import InputComponent
 from Components.Parameters.ParametersComponent import ParametersComponent
 from Components.Parameters.OutputComponent import OutputComponent
@@ -29,7 +29,7 @@ class ErrorDialog(QDialog):
 
         self.setLayout(self.layout)
 
-class ParametersController(QWidget):
+class ParametersController(BaseController):
     clickedChangeWidget = pyqtSignal(str)
     clickedChangeToAnalyseWidget = pyqtSignal(Parameters, list)
 

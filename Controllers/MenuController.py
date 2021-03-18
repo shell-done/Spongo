@@ -5,8 +5,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from Models.Parameters import Parameters
+from Controllers.BaseController import BaseController
 
-class MenuController(QWidget):
+class MenuController(BaseController):
     clickedChangeWidget = pyqtSignal(str)
 
     def __init__(self):

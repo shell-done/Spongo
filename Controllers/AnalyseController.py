@@ -1,5 +1,3 @@
-import cv2
-import numpy as np
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
@@ -13,12 +11,13 @@ from Services.TextReportWriter import TextReportWriter
 from Services.CSVReportWriter import CSVReportWriter
 from Models.ProcessedImage import ProcessedImage
 from Models.Analyse import Analyse
+from Controllers.BaseController import BaseController
 from Controllers.CancelController import CancelController
 from Components.Analyse.StatComponent import StatComponent
 from Components.Analyse.ImageComponent import ImageComponent
 from Components.Analyse.ProgressComponent import ProgressComponent
 
-class AnalyseController(QWidget):
+class AnalyseController(BaseController):
     clickedChangeWidget = pyqtSignal(str)
 
     def __init__(self):
