@@ -90,7 +90,7 @@ class AnalysisController(BaseController):
         if self._analysis.isFinished():
             self.clickedChangeWidget.emit("MENU")
         else:
-            cancel_dialog = CancelController()
+            cancel_dialog = CancelDialog()
             result = cancel_dialog.exec_()
 
             if result == cancel_dialog.Accepted:
