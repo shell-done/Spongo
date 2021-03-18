@@ -2,7 +2,7 @@
 
 import cv2
 import numpy as np
-from PyQt5.QtCore import (QThread, Qt, pyqtSignal, QMutex)
+from PyQt5.QtCore import QThread, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
 from Services.Loader import Loader
@@ -16,28 +16,23 @@ class AnalysisThread(QThread):
 
     def __init__(self):
         super(QThread, self).__init__()
-        self.mutex = QMutex()
         self._abort = False
 
     def start(self, parameters: Parameters, images: list[str]):
-        self.mutex.lock()
         self._abort = True
-        self.mutex.unlock()
 
-        if self.isRunning:
+        if self.isRunning():
             self.wait()
 
         self._srcPath = parameters.srcFolder()
-        self.destPath = parameters.destFolder()
+        self._destPath = parameters.destFolder()
         self._images = images
         self._abort = False
 
         super().start()
 
     def stop(self):
-        self.mutex.lock()
         self._abort = True
-        self.mutex.unlock()
 
     def run(self):
         # Give the configuration and weight files for the model and load the network using them.
