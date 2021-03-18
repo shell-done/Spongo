@@ -1,8 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtGui import QFont, QPixmap, QImage
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 
 from Services.Loader import Loader
 from Services.HighlightDetectionsThread import HighlightDetectionsThread
@@ -17,19 +15,19 @@ class ImageComponent(QWidget):
         title_label.setFont(QFont('Times', 15))
 
         self._image_label = QLabel()
-        self._image_label.setAlignment(QtCore.Qt.AlignCenter)
+        self._image_label.setAlignment(Qt.AlignCenter)
         self._highlight_detections_thread = HighlightDetectionsThread()
         self._highlight_detections_thread.imageLoadedSignal.connect(self._highlightedImageReceived)
 
         self._filename_label = QLabel("Aucune image")
-        self._filename_label.setAlignment(QtCore.Qt.AlignCenter)
+        self._filename_label.setAlignment(Qt.AlignCenter)
 
         v_layout = QVBoxLayout()
         v_layout.addWidget(self._image_label)
         v_layout.addWidget(self._filename_label)
 
         self._stat_label = QLabel()
-        self._stat_label.setAlignment(QtCore.Qt.AlignCenter)
+        self._stat_label.setAlignment(Qt.AlignCenter)
 
         h_layout = QHBoxLayout()
         h_layout.addLayout(v_layout)

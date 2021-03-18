@@ -1,8 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QMainWindow, QStackedWidget
 
 import Resources.Resources
 

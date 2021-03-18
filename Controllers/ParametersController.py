@@ -1,8 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QDir, pyqtSignal, pyqtSlot
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 
 from Models.Parameters import Parameters
 from Controllers.BaseController import BaseController

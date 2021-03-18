@@ -1,8 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QWidget, QCheckBox, QDoubleSpinBox, QLabel, QVBoxLayout, QHBoxLayout
 
 from Services.Loader import Loader
 

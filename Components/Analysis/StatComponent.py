@@ -1,12 +1,10 @@
-from PyQt5 import QtCore, QtGui, QtChart
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont, QPainter
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 from PyQt5.QtChart import QChart, QChartView, QSplineSeries
 
 from Models.Analysis import Analysis
 from Services.Loader import Loader
-from PyQt5.QtWinExtras import QWinTaskbarButton
 
 class StatComponent(QWidget):
 
@@ -20,7 +18,7 @@ class StatComponent(QWidget):
 
         self._total_label = QLabel()
         self._sponges_label = QLabel()
-        self._sponges_label.setAlignment(QtCore.Qt.AlignCenter)
+        self._sponges_label.setAlignment(Qt.AlignCenter)
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(title)

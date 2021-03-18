@@ -1,7 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
 import cv2
-import numpy as np
 from PyQt5.QtCore import QThread, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
@@ -76,7 +75,9 @@ class AnalysisThread(QThread):
             for out in outs:
                 for detection in out:
                     scores = detection[5:]
-                    class_id = np.argmax(scores)
+                    #class_id = np.argmax(scores)
+                    class_id = scores.tolist().index(max(scores))
+
                     confidence = scores[class_id]
                     if confidence > 0.5:
                         # Object detected

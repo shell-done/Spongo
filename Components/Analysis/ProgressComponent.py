@@ -1,8 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtCore import QPropertyAnimation, QTime
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QWidget, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
 
 try:
     from PyQt5.QtWinExtras import QWinTaskbarButton
