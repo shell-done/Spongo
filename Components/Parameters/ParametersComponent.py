@@ -44,7 +44,6 @@ class ParametersComponent(QWidget):
         morphotypeLayout = QVBoxLayout()
         morphotypeLayout.addWidget(morphotypeLabel)
 
-        print(Loader.SpongesClasses())
         self._tabCBox = []
         for k, v in Loader.SpongesClasses().items():
             self._spongeCBox = QCheckBox()

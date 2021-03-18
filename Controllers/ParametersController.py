@@ -60,13 +60,28 @@ class ParametersController(BaseController):
         self._inputComponent.updateParameters(self._parameters)
         self._outputComponent.updateParameters(self._parameters)
 
-        directory = QDir(self._parameters.srcFolder())
-        print(self._parameters.srcFolder())
-        images = directory.entryList(["*.jpg"], filters = QDir.Files)
+        src_dir = self._parameters.srcFolder()
+        images = QDir(src_dir).entryList(["*.jpg"], filters = QDir.Files)
 
-        if len(images) == 0:
-            error_dialog = ErrorDialog("Aucune image n'a été chargé !")
-            error_dialog.exec_()
+        dest_dir = self._parameters.destFolder()
+
+        morphotypes_selected = 0
+        morphotypes = self._parameters.morphotypes()
+        for k, v in morphotypes.items():
+            if v == True:
+                morphotypes_selected += 1
+
+        if src_dir == "":
+            self.createErrorDialog("Vous n'avez pas sélectionné de dossier source")
+        elif len(images) == 0:
+            self.createErrorDialog("Le dossier source ne contient aucune image au format .jpg")
+        elif morphotypes_selected == 0:
+            self.createErrorDialog("Aucun morphotype n'a été sélectionné")
+        elif dest_dir == "":
+            self.createErrorDialog("Vous n'avez pas sélectionné de dossier destination")
         else:
             self.clickedChangeToAnalysisWidget.emit(self._parameters, images)
 
+    def createErrorDialog(self, message):
+        error_dialog = ErrorDialog(message)
+        error_dialog.exec_()
