@@ -3,6 +3,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+import re
 
 from Components.Parameters.InputComponent import InputComponent
 from Components.Parameters.ParametersComponent import ParametersComponent
@@ -11,19 +12,19 @@ from Components.Parameters.OutputComponent import OutputComponent
 from Models.Parameters import Parameters
 
 class ErrorDialog(QDialog):
-    def __init__(self, parent = None):
+    def __init__(self, message = "Un champ n'est pas correctement rempli", parent = None):
         super().__init__(parent = parent)
 
         self.setWindowTitle("Erreur !")
 
-        message = QLabel("Aucune image n'a été chargé !")
+        messageLabel = QLabel(message)
 
         QBtn = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.accept)
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(message)
+        self.layout.addWidget(messageLabel)
         self.layout.addWidget(self.buttonBox)
 
         self.setLayout(self.layout)
@@ -81,10 +82,8 @@ class ParametersController(QWidget):
         print(self._parameters.srcFolder())
         images = directory.entryList(["*.jpg"], filters = QDir.Files)
 
-        print(images)
-
         if len(images) == 0:
-            error_dialog = ErrorDialog()
+            error_dialog = ErrorDialog("Aucune image n'a été chargé !")
             error_dialog.exec_()
         else:
             self.clickedChangeToAnalyseWidget.emit(self._parameters, images)
