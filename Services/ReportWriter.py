@@ -1,6 +1,6 @@
-from Models.Analyse import Analyse
+from Models.Analysis import Analysis
 
 class ReportWriter():
-    def __init__(self, analyse: Analyse):
-        self._analyse = analyse
+    def __init__(self, analysis: Analysis):
+        self._analysis = analysis
     

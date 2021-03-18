@@ -2,7 +2,7 @@ from PyQt5.QtCore import QDateTime, QTime
 from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage
 
-class Analyse:
+class Analysis:
     def __init__(self, images_filenames: list[str], sponges_classes: list[str]):
         self._parameters = Parameters()
         self._images_filenames = images_filenames

@@ -10,7 +10,7 @@ import Resources.Resources
 from Models.Parameters import Parameters
 from Controllers.MenuController import MenuController
 from Controllers.ParametersController import ParametersController
-from Controllers.AnalyseController import AnalyseController
+from Controllers.AnalysisController import AnalysisController
 
 class WindowController(QMainWindow):
 
@@ -25,30 +25,44 @@ class WindowController(QMainWindow):
 
         self.menu = MenuController()
         self.parameters = ParametersController()
-        self.analyse = AnalyseController()
+        self.analysis = AnalysisController()
 
         self.stackedWidget.addWidget(self.menu)
         self.stackedWidget.addWidget(self.parameters)
-        self.stackedWidget.addWidget(self.analyse)
+        self.stackedWidget.addWidget(self.analysis)
 
         self.stackedWidget.setCurrentWidget(self.menu)
 
         self.menu.clickedChangeWidget.connect(self.changeWidget)
         self.parameters.clickedChangeWidget.connect(self.changeWidget)
-        self.parameters.clickedChangeToAnalyseWidget.connect(self.changetoAnalyseWidget)
-        self.analyse.clickedChangeWidget.connect(self.changeWidget)
+        self.parameters.clickedChangeToAnalysisWidget.connect(self.changetoAnalysisWidget)
+        self.analysis.clickedChangeWidget.connect(self.changeWidget)
 
         self.show()
 
     @pyqtSlot(Parameters, list)
-    def changetoAnalyseWidget(self, parameters, images):
-        self.stackedWidget.setCurrentWidget(self.analyse)
-        self.analyse.startAnalyse(parameters, images)
+    def changetoAnalysisWidget(self, parameters, images):
+        current_widget = self.stackedWidget.currentWidget()
+        current_widget.stop()
+
+        self.stackedWidget.setCurrentWidget(self.analysis)
+        self.analysis.start(parameters, images)
 
     @pyqtSlot(str)
     def changeWidget(self, nameWidget):
+        next_widget = None
         if(nameWidget == "MENU"):
-            self.stackedWidget.setCurrentWidget(self.menu)
+            next_widget = self.menu
         if(nameWidget == "PARAMETERS"):
-            self.stackedWidget.setCurrentWidget(self.parameters)
+            next_widget = self.parameters
+
+        if next_widget is None:
+            print("[WARNING] Unknown widget : %s" % str(next_widget))
+            return
+        
+        current_widget = self.stackedWidget.currentWidget()
+        current_widget.stop()
+
+        self.stackedWidget.setCurrentWidget(next_widget)
+        next_widget.start()
 

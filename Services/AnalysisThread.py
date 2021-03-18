@@ -10,9 +10,9 @@ from Models.Detection import Detection
 from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
 
-class AnalyseThread(QThread):
+class AnalysisThread(QThread):
     imageProcessedSignal = pyqtSignal(ProcessedImage)
-    onAnalyseFinishedSignal = pyqtSignal()
+    onAnalysisFinishedSignal = pyqtSignal()
 
     def __init__(self):
         super(QThread, self).__init__()
@@ -115,4 +115,4 @@ class AnalyseThread(QThread):
 
         print("Predictions complete on %d images" % len(self._images))
 
-        self.onAnalyseFinishedSignal.emit()
+        self.onAnalysisFinishedSignal.emit()
