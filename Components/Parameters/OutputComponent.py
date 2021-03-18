@@ -46,10 +46,10 @@ class OutputComponent(QWidget):
     @pyqtSlot()
     def filepathClick(self):
         #dialog = QFileDialog()
-        #self.path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
-        self.path = "./data/predictions"
+        #path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
+        path = "./data/predictions"
         
-        self._filepathText.setText(self.path)
+        self._filepathText.setText(path)
 
     def setDefaultValues(self, parameters):
         self._saveCBox.setChecked(parameters.saveProcessedImages())

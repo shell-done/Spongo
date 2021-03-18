@@ -18,28 +18,28 @@ class ImageComponent(QWidget):
         titleLabel = QLabel("Dernière détection")
         titleLabel.setFont(QFont('Times', 15))
 
-        self.imageLabel = QLabel()
-        self.imageLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self._imageLabel = QLabel()
+        self._imageLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # self.filenameLabel = QLabel("Aucune image")
         # self.filenameLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         vLayout = QVBoxLayout()
-        vLayout.addWidget(self.imageLabel)
+        vLayout.addWidget(self._imageLabel)
         # vLayout.addWidget(self.filenameLabel)
 
-        self.statLabel = QLabel()
-        self.statLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self._statLabel = QLabel()
+        self._statLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         hLayout = QHBoxLayout()
         hLayout.addLayout(vLayout)
-        hLayout.addWidget(self.statLabel)
+        hLayout.addWidget(self._statLabel)
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(titleLabel)
 
         mainLayout.addLayout(hLayout)
-        mainLayout.addWidget(self.imageLabel)
+        mainLayout.addWidget(self._imageLabel)
 
         self.setLayout(mainLayout)
         self.reset()
@@ -53,13 +53,13 @@ class ImageComponent(QWidget):
         for class_id, class_name in Loader.SpongesClasses().items():
             text += "%s : %d\n" % (class_name, detections_count.get(class_id, 0))
 
-        scaled = pixmap.scaled(self.imageLabel.size(), Qt.KeepAspectRatio)
-        self.imageLabel.setPixmap(scaled)
+        scaled = pixmap.scaled(self._imageLabel.size(), Qt.KeepAspectRatio)
+        self._imageLabel.setPixmap(scaled)
 
         # self.filenameLabel.setText(processed_image.filePath())
-        self.statLabel.setText(text)
+        self._statLabel.setText(text)
 
     def reset(self):
-        self.imageLabel.setText("Image loading...")
+        self._imageLabel.setText("Image loading...")
         # self.filenameLabel.setText("Aucune image")
-        self.statLabel.setText("Stats loading...")
+        self._statLabel.setText("Stats loading...")

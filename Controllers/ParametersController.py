@@ -4,30 +4,12 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+from Models.Parameters import Parameters
 from Controllers.BaseController import BaseController
+from Controllers.Dialogs.ErrorDialog import ErrorDialog
 from Components.Parameters.InputComponent import InputComponent
 from Components.Parameters.ParametersComponent import ParametersComponent
 from Components.Parameters.OutputComponent import OutputComponent
-
-from Models.Parameters import Parameters
-
-class ErrorDialog(QDialog):
-    def __init__(self, message = "Un champ n'est pas correctement rempli", parent = None):
-        super().__init__(parent = parent)
-
-        self.setWindowTitle("Erreur !")
-
-        messageLabel = QLabel(message)
-
-        QBtn = QDialogButtonBox.Ok
-        self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.accept)
-
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(messageLabel)
-        self.layout.addWidget(self.buttonBox)
-
-        self.setLayout(self.layout)
 
 class ParametersController(BaseController):
     clickedChangeWidget = pyqtSignal(str)

@@ -18,32 +18,32 @@ class ProgressComponent(QWidget):
         self._max_value = 1
         self._taskbar_button = None
 
-        self.currentImageLabel = QLabel()
-        self.timeLabel = QLabel()
-        self.nextImageLabel = QLabel()
+        self._currentImageLabel = QLabel()
+        self._timeLabel = QLabel()
+        self._nextImageLabel = QLabel()
 
         infoLayout = QHBoxLayout()
-        infoLayout.addWidget(self.currentImageLabel)
-        infoLayout.addWidget(self.timeLabel)
-        infoLayout.addWidget(self.nextImageLabel)
+        infoLayout.addWidget(self._currentImageLabel)
+        infoLayout.addWidget(self._timeLabel)
+        infoLayout.addWidget(self._nextImageLabel)
 
-        self.progressBar = QProgressBar()
+        self._progressBar = QProgressBar()
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(titleLabel)
         mainLayout.addLayout(infoLayout)
-        mainLayout.addWidget(self.progressBar)
+        mainLayout.addWidget(self._progressBar)
 
         self.setLayout(mainLayout)
         self.reset()
     
     def setMaximum(self, max_value: int):
         self._max_value = max_value
-        self.progressBar.setMaximum(self._max_value)
+        self._progressBar.setMaximum(self._max_value)
     
     def update(self, next_image: str, value: int, time_left: QTime):
-        self.progressBar.setValue(value)
-        self.currentImageLabel.setText("Image : " + str(value) + "/" + str(self._max_value))
+        self._progressBar.setValue(value)
+        self._currentImageLabel.setText("Image : " + str(value) + "/" + str(self._max_value))
 
         time_left_str = ""
         if time_left is None:
@@ -51,8 +51,8 @@ class ProgressComponent(QWidget):
         else:
             time_left_str = "%dh %dm %ds" % (time_left.hour(), time_left.minute(), time_left.second())
 
-        self.timeLabel.setText("Temps restant : " + time_left_str)
-        self.nextImageLabel.setText("Prochaine image : " + next_image)
+        self._timeLabel.setText("Temps restant : " + time_left_str)
+        self._nextImageLabel.setText("Prochaine image : " + next_image)
 
         if self._taskbar_button is not None:
             self._taskbar_button.progress().setVisible(True)
@@ -68,9 +68,9 @@ class ProgressComponent(QWidget):
         self._taskbar_button.setWindow(window)
 
     def reset(self):
-        self.progressBar.setValue(0)
-        self.currentImageLabel.setText("Image : 0/0")
-        self.timeLabel.setText("Temps restant : ")
-        self.nextImageLabel.setText("Prochaine image : ")
+        self._progressBar.setValue(0)
+        self._currentImageLabel.setText("Image : 0/0")
+        self._timeLabel.setText("Temps restant : ")
+        self._nextImageLabel.setText("Prochaine image : ")
 
 
