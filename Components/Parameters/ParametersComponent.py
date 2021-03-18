@@ -16,11 +16,14 @@ class ParametersComponent(QWidget):
 
         # Threshold layout
         thresholdLabel = QLabel("Seuil de détection : ")
-        self._thresholdText = QLineEdit()
+        self._thresholdSBox = QDoubleSpinBox()
+        self._thresholdSBox.setMinimum(0)
+        self._thresholdSBox.setMaximum(1)
+        self._thresholdSBox.setSingleStep(0.01)
 
         thresholdLayout = QHBoxLayout()
         thresholdLayout.addWidget(thresholdLabel)
-        thresholdLayout.addWidget(self._thresholdText)
+        thresholdLayout.addWidget(self._thresholdSBox)
 
         # Filepath layout
         detectionBoxLabel = QLabel("Afficher les boîtes de détection en direct : ")
@@ -68,11 +71,11 @@ class ParametersComponent(QWidget):
         self.setLayout(mainLayout)
 
     def setDefaultValues(self, parameters):
-        self._thresholdText.setText(str(parameters.threshold()))
+        self._thresholdSBox.setValue(parameters.threshold())
         self._detectionBoxCBox.setChecked(parameters.displayProcessedImages())
 
     def updateParameters(self, parameters):
-        parameters.setThreshold(self._thresholdText.text())
+        parameters.setThreshold(self._thresholdSBox.value())
         parameters.setDisplayProcessedImages(self._detectionBoxCBox.isChecked())
 
         morphotypes = {}

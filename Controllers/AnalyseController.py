@@ -6,6 +6,7 @@ from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
+from Models.Parameters import Parameters
 from Services.Loader import Loader
 from Services.AnalyseThread import AnalyseThread
 from Services.TextReportWriter import TextReportWriter
@@ -18,7 +19,7 @@ from Components.Analyse.ImageComponent import ImageComponent
 from Components.Analyse.ProgressComponent import ProgressComponent
 
 class AnalyseController(QWidget):
-    clickedChangeWidget = pyqtSignal(str, str, list)
+    clickedChangeWidget = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -66,16 +67,16 @@ class AnalyseController(QWidget):
 
         self.analyseThread.onAnalyseFinishedSignal.connect(self.analyseFinished)
 
-    def startAnalyse(self, path: str, images: list[str]):
+    def startAnalyse(self, parameters: Parameters, images: list[str]):
         self._analyse = Analyse(images, Loader.SpongesClasses())
         self.progressComponent.setMaximum(self._analyse.imagesCount())
 
-        self.analyseThread.start(path, images)
+        self.analyseThread.start(parameters, images)
 
     @pyqtSlot()
     def returnClick(self):
         if self._analyse.isFinished():
-            self.clickedChangeWidget.emit("MENU", "", [])
+            self.clickedChangeWidget.emit("MENU")
             self.resetComponents()
         else:
             cancel_dialog = CancelController()
@@ -83,7 +84,7 @@ class AnalyseController(QWidget):
 
             if result == cancel_dialog.Accepted:
                 self.analyseThread.stop()
-                self.clickedChangeWidget.emit("MENU", "", [])
+                self.clickedChangeWidget.emit("MENU")
                 self.resetComponents()
 
     @pyqtSlot()

@@ -8,6 +8,7 @@ from PyQt5.QtGui import QPixmap
 from Services.Loader import Loader
 from Models.Detection import Detection
 from Models.ProcessedImage import ProcessedImage
+from Models.Parameters import Parameters
 
 class AnalyseThread(QThread):
     imageProcessedSignal = pyqtSignal(ProcessedImage)
@@ -18,7 +19,7 @@ class AnalyseThread(QThread):
         self.mutex = QMutex()
         self._abort = False
 
-    def start(self, path: str, images: list[str]):
+    def start(self, parameters: Parameters, images: list[str]):
         self.mutex.lock()
         self._abort = True
         self.mutex.unlock()
@@ -26,7 +27,8 @@ class AnalyseThread(QThread):
         if self.isRunning:
             self.wait()
 
-        self._path = path
+        self._srcPath = parameters.srcFolder()
+        self.destPath = parameters.destFolder()
         self._images = images
         self._abort = False
 
@@ -59,7 +61,7 @@ class AnalyseThread(QThread):
             if self._abort:
                 return
 
-            filepath = self._path + "/" + image_name
+            filepath = self._srcPath + "/" + image_name
 
             # Load image
             img = cv2.imread(filepath)
@@ -108,7 +110,7 @@ class AnalyseThread(QThread):
             if self._abort:
                 return
 
-            processed_image = ProcessedImage(self._path, image_name, detections)
+            processed_image = ProcessedImage(self._srcPath, image_name, detections)
             self.imageProcessedSignal.emit(processed_image)
 
         print("Predictions complete on %d images" % len(self._images))
