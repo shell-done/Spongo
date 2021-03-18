@@ -4,7 +4,7 @@ from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
 
-class CancelController(QDialog):
+class CancelDialog(QDialog):
     clickedCancelEvent = pyqtSignal(bool)
 
     def __init__(self, parent = None):

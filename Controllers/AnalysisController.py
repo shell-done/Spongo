@@ -12,7 +12,7 @@ from Services.CSVReportWriter import CSVReportWriter
 from Models.ProcessedImage import ProcessedImage
 from Models.Analysis import Analysis
 from Controllers.BaseController import BaseController
-from Controllers.CancelController import CancelController
+from Controllers.Dialogs.CancelDialog import CancelDialog
 from Components.Analysis.StatComponent import StatComponent
 from Components.Analysis.ImageComponent import ImageComponent
 from Components.Analysis.ProgressComponent import ProgressComponent

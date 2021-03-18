@@ -17,8 +17,8 @@ class ParametersComponent(QWidget):
         # Threshold layout
         thresholdLabel = QLabel("Seuil de détection : ")
         self._thresholdSBox = QDoubleSpinBox()
-        self._thresholdSBox.setMinimum(0)
-        self._thresholdSBox.setMaximum(1)
+        self._thresholdSBox.setMinimum(0.01)
+        self._thresholdSBox.setMaximum(0.99)
         self._thresholdSBox.setSingleStep(0.01)
 
         thresholdLayout = QHBoxLayout()
@@ -44,7 +44,6 @@ class ParametersComponent(QWidget):
         morphotypeLayout = QVBoxLayout()
         morphotypeLayout.addWidget(morphotypeLabel)
 
-        print(Loader.SpongesClasses())
         self._tabCBox = []
         for k, v in Loader.SpongesClasses().items():
             self._spongeCBox = QCheckBox()
