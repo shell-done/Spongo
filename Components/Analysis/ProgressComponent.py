@@ -3,7 +3,12 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
 from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt5.QtGui import * #(QProgressBar, QPixmap)
-from PyQt5.QtWinExtras import QWinTaskbarButton
+
+try:
+    from PyQt5.QtWinExtras import QWinTaskbarButton
+    _QT_WIN_EXTRAS_LOADED = True
+except ModuleNotFoundError:
+    _QT_WIN_EXTRAS_LOADED = False
 
 class ProgressComponent(QWidget):
 
@@ -43,14 +48,15 @@ class ProgressComponent(QWidget):
         self._time_label.setText("Temps restant : ")
         self._next_image_label.setText("Prochaine image : ")
 
-        window = self.window().windowHandle()
-        if window is None:
-            self._taskbar_button = None
-        else:
-            self._taskbar_button = QWinTaskbarButton(self)
-            self._taskbar_button.setWindow(window)
-            self._taskbar_button.progress().setVisible(True)
-            self._taskbar_button.progress().setRange(0, self._max_value)
+        if _QT_WIN_EXTRAS_LOADED:
+            window = self.window().windowHandle()
+            if window is None:
+                self._taskbar_button = None
+            else:
+                self._taskbar_button = QWinTaskbarButton(self)
+                self._taskbar_button.setWindow(window)
+                self._taskbar_button.progress().setVisible(True)
+                self._taskbar_button.progress().setRange(0, self._max_value)
 
     def stop(self):
         if self._taskbar_button is not None:
