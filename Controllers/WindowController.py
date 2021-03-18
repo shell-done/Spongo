@@ -3,6 +3,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 
+from Models.Parameters import Parameters
 from Controllers.MenuController import MenuController
 from Controllers.ParametersController import ParametersController
 from Controllers.AnalyseController import AnalyseController
@@ -27,17 +28,20 @@ class WindowController(QMainWindow):
 
         self.stackedWidget.setCurrentWidget(self.menu)
 
-        self.menu.clickedChangeWidget.connect(self.displayWidget)
-        self.parameters.clickedChangeWidget.connect(self.displayWidget)
-        self.analyse.clickedChangeWidget.connect(self.displayWidget)
+        self.menu.clickedChangeWidget.connect(self.changeWidget)
+        self.parameters.clickedChangeWidget.connect(self.changeWidget)
+        self.parameters.clickedChangeToAnalyseWidget.connect(self.changetoAnalyseWidget)
+        self.analyse.clickedChangeWidget.connect(self.changeWidget)
 
-    @pyqtSlot(str, str, list)
-    def displayWidget(self, nameWidget, path, images):
+    @pyqtSlot(Parameters, list)
+    def changetoAnalyseWidget(self, parameters, images):
+        self.stackedWidget.setCurrentWidget(self.analyse)
+        self.analyse.startAnalyse(parameters, images)
+
+    @pyqtSlot(str)
+    def changeWidget(self, nameWidget):
         if(nameWidget == "MENU"):
             self.stackedWidget.setCurrentWidget(self.menu)
         if(nameWidget == "PARAMETERS"):
             self.stackedWidget.setCurrentWidget(self.parameters)
-        if(nameWidget == "ANALYSE"):
-            self.stackedWidget.setCurrentWidget(self.analyse)
-            self.analyse.startAnalyse(path, images)
 

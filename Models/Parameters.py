@@ -55,3 +55,4 @@ class Parameters:
 
     def setDestFolder(self, destFolder: str):
         self._destFolder = destFolder
+    

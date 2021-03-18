@@ -47,7 +47,7 @@ class InputComponent(QWidget):
     def filepathClick(self):
         #dialog = QFileDialog()
         #self.path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
-        self.path = "./data/image"
+        self.path = "./data/images"
     
         self._filepathText.setText(self.path)
 
