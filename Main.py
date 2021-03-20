@@ -7,7 +7,7 @@ from Controllers.WindowController import WindowController
 
 if __name__ == "__main__":
     App = QApplication(sys.argv)
-    App.setStyleSheet(Loader.PreprocessedQSS())
+    #App.setStyleSheet(Loader.PreprocessedQSS())
 
     window = WindowController()
 

@@ -8,10 +8,10 @@ class Parameters:
         self._displayProcessedImages = True
 
         self._morphotypes = {}
-        for i in range(len(Loader.SpongesClasses())):
-            self._morphotypes[i] = False
+        for i in Loader.SpongesClasses():
+            self._morphotypes[i] = True
 
-        self._saveProcessedImages = True
+        self._saveProcessedImages = False
         self._destFolder = ""
 
     def name(self):
