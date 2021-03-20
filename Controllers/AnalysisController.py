@@ -3,7 +3,6 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
 
 from Models.Parameters import Parameters
-from Services.Loader import Loader
 from Services.AnalysisThread import AnalysisThread
 from Services.TextReportWriter import TextReportWriter
 from Services.CSVReportWriter import CSVReportWriter
@@ -47,24 +46,24 @@ class AnalysisController(BaseController):
         self._return_button = QPushButton("Annuler")
         self._return_button.clicked.connect(self._returnClick)
 
-        _button_layout = QHBoxLayout()
-        _button_layout.addWidget(self._export_button)
-        _button_layout.addWidget(self._return_button)
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self._export_button)
+        button_layout.addWidget(self._return_button)
 
-        _main_layout = QVBoxLayout()
-        _main_layout.addWidget(self._title)
-        _main_layout.addLayout(h_layout)
-        _main_layout.addWidget(self._progress_component)
-        _main_layout.addLayout(_button_layout)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self._title)
+        main_layout.addLayout(h_layout)
+        main_layout.addWidget(self._progress_component)
+        main_layout.addLayout(button_layout)
 
-        self.setLayout(_main_layout)
+        self.setLayout(main_layout)
 
         self._analysis_thread = AnalysisThread()
         self._analysis_thread.imageProcessedSignal.connect(self._imageProcessed)
         self._analysis_thread.onAnalysisFinishedSignal.connect(self._analysisFinished)
 
     def start(self, parameters: Parameters, images: list):
-        self._analysis = Analysis(images, Loader.SpongesClasses())
+        self._analysis = Analysis(parameters, images)
 
         self._stat_component.reset()
         self._image_component.reset()

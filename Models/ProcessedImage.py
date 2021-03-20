@@ -1,8 +1,3 @@
-from cv2 import cv2
-from PyQt5.QtGui import QImage
-
-from Models.Detection import Detection
-
 class ProcessedImage:
     def __init__(self, folder_path: str, file_name: str, detections: list):
         self._file_name = file_name

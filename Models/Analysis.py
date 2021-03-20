@@ -3,10 +3,11 @@ from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage
 
 class Analysis:
-    def __init__(self, images_filenames: list, sponges_classes: list):
-        self._parameters = Parameters()
+    def __init__(self, parameters: Parameters, images_filenames: list):
+        self._parameters = parameters
+
         self._images_filenames = images_filenames
-        self._detected_sponges = {key:0 for key in sponges_classes}
+        self._detected_sponges = {key:0 for key in parameters.morphotypes()}
 
         self._current_img_index = 0
         self._start_datetime = QDateTime.currentDateTime()

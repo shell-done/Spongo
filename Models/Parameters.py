@@ -14,43 +14,51 @@ class Parameters:
         self._saveProcessedImages = False
         self._destFolder = ""
 
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     def setName(self, name: str):
         self._name = name
 
-    def srcFolder(self):
+    def srcFolder(self) -> str:
         return self._srcFolder
 
     def setSrcFolder(self, srcFolder: str):
         self._srcFolder = srcFolder
 
-    def threshold(self):
+    def threshold(self) -> float:
         return self._threshold
 
     def setThreshold(self, threshold: float):
         self._threshold = threshold
 
-    def displayProcessedImages(self):
+    def displayProcessedImages(self) -> bool:
         return self._displayProcessedImages
 
     def setDisplayProcessedImages(self, displayProcessedImages: bool):
         self._displayProcessedImages = displayProcessedImages
 
-    def morphotypes(self):
+    def morphotypes(self) -> dict:
         return self._morphotypes
 
     def setMorphotypes(self, morphotypes: dict):
         self._morphotypes = morphotypes
 
-    def saveProcessedImages(self):
+    def morphotypesNames(self) -> dict:
+        ret = {}
+        for k,v in self._morphotypes:
+            if v:
+                ret[k] = Loader.SpongesClasses()[k]
+
+        return ret
+
+    def saveProcessedImages(self) -> bool:
         return self._saveProcessedImages
 
     def setSaveProcessedImages(self, saveProcessedImages: bool):
         self._saveProcessedImages = saveProcessedImages
 
-    def destFolder(self):
+    def destFolder(self) -> str:
         return self._destFolder
 
     def setDestFolder(self, destFolder: str):
