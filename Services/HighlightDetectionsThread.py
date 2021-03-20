@@ -1,3 +1,4 @@
+from Models.Parameters import Parameters
 from cv2 import cv2
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QImage
@@ -29,14 +30,14 @@ class HighlightDetectionsThread(QThread):
         if self._abort:
             return
 
-        colors = [
-            [76, 177, 34],
-            [164, 73, 163],
-            [155, 105, 0],
-            [0, 0, 230],
-            [0, 168, 217],
-            [100, 0, 0]
-        ]
+        colors = {
+            0: [76, 177, 34],
+            1: [164, 73, 163],
+            2: [155, 105, 0],
+            3: [0, 0, 230],
+            4: [0, 168, 217],
+            5: [100, 0, 0]
+        }
 
         for d in self._processed_image.detections():
             x, y, w, h = d.boundingBox()

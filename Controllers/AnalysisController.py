@@ -65,8 +65,8 @@ class AnalysisController(BaseController):
     def start(self, parameters: Parameters, images: list):
         self._analysis = Analysis(parameters, images)
 
-        self._stat_component.reset()
-        self._image_component.reset()
+        self._stat_component.reset(parameters)
+        self._image_component.reset(parameters)
         self._progress_component.reset(self._analysis.imagesCount())
         self._displayButtons("Annuler", False, "Analyse en cours")
 
@@ -75,12 +75,22 @@ class AnalysisController(BaseController):
     def stop(self):
         self._progress_component.stop()
 
-
     def _displayButtons(self, returnValue: str, showDownload: bool, title: str):
         self._return_button.setText(returnValue)
         self._export_button.setVisible(showDownload)
         self._title.setText(title)
 
+    @pyqtSlot(ProcessedImage)
+    def _imageProcessed(self, processed_image: ProcessedImage):
+        self._analysis.addProcessedImage(processed_image)
+
+        next_image = self._analysis.nextImageName()
+        if next_image is None:
+            next_image = "Pas de prochaine image"
+
+        self._image_component.update(processed_image)
+        self._stat_component.update(self._analysis)
+        self._progress_component.update(next_image, self._analysis.currentImageIndex(), self._analysis.estimateTimeLeft())
 
     @pyqtSlot()
     def _returnClick(self):
@@ -100,18 +110,6 @@ class AnalysisController(BaseController):
 
         writer = CSVReportWriter(self._analysis, shape="rectangle")
         writer.write("report.csv")
-
-    @pyqtSlot(ProcessedImage)
-    def _imageProcessed(self, processed_image: ProcessedImage):
-        self._analysis.addProcessedImage(processed_image)
-
-        next_image = self._analysis.nextImageName()
-        if next_image is None:
-            next_image = "Pas de prochaine image"
-
-        self._image_component.update(processed_image)
-        self._stat_component.update(self._analysis)
-        self._progress_component.update(next_image, self._analysis.currentImageIndex(), self._analysis.estimateTimeLeft())
 
     @pyqtSlot()
     def _analysisFinished(self):

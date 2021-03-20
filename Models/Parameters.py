@@ -46,7 +46,7 @@ class Parameters:
 
     def morphotypesNames(self) -> dict:
         ret = {}
-        for k,v in self._morphotypes:
+        for k,v in self._morphotypes.items():
             if v:
                 ret[k] = Loader.SpongesClasses()[k]
 

@@ -2,9 +2,9 @@ from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtGui import QFont, QPixmap, QImage
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 
-from Services.Loader import Loader
-from Services.HighlightDetectionsThread import HighlightDetectionsThread
 from Models.ProcessedImage import ProcessedImage
+from Models.Parameters import Parameters
+from Services.HighlightDetectionsThread import HighlightDetectionsThread
 
 class ImageComponent(QWidget):
 
@@ -41,7 +41,9 @@ class ImageComponent(QWidget):
 
         self.setLayout(main_layout)
 
-    def reset(self):
+    def reset(self, parameters: Parameters):
+        self._parameters = parameters
+
         self._image_label.setText("Image loading...")
         self._filename_label.setText("Aucune image")
         self._stat_label.setText("Stats loading...")
@@ -52,7 +54,7 @@ class ImageComponent(QWidget):
         detections_count = processed_image.detectionsCount()
         text = ""
         
-        for class_id, class_name in Loader.SpongesClasses().items():
+        for class_id, class_name in self._parameters.morphotypesNames().items():
             text += "%s : %d\n" % (class_name, detections_count.get(class_id, 0))
 
         self._filename_label.setText(processed_image.fileName())

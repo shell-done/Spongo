@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QDateTime, QTime
+
 from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage
 
@@ -7,7 +8,7 @@ class Analysis:
         self._parameters = parameters
 
         self._images_filenames = images_filenames
-        self._detected_sponges = {key:0 for key in parameters.morphotypes()}
+        self._detected_sponges = {key:0 for key in parameters.morphotypesNames()}
 
         self._current_img_index = 0
         self._start_datetime = QDateTime.currentDateTime()

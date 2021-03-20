@@ -23,6 +23,7 @@ class AnalysisThread(QThread):
         if self.isRunning():
             self.wait()
 
+        self._morphotypes = parameters.morphotypesNames().copy()
         self._srcPath = parameters.srcFolder()
         self._destPath = parameters.destFolder()
         self._images = images
@@ -51,7 +52,7 @@ class AnalysisThread(QThread):
 
         print("Yolo loaded")
         
-        for image_idx, image_name in enumerate(self._images):
+        for image_name in self._images:
             if self._abort:
                 return
 
@@ -77,6 +78,9 @@ class AnalysisThread(QThread):
                     scores = detection[5:]
                     #class_id = np.argmax(scores)
                     class_id = scores.tolist().index(max(scores))
+
+                    if class_id not in self._morphotypes:
+                        continue
 
                     confidence = scores[class_id]
                     if confidence > 0.5:

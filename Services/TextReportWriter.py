@@ -32,13 +32,8 @@ class TextReportWriter(ReportWriter):
         if self._analysis.parameters().saveProcessedImages():
             lines.append("\tDossier des images analysées : %s" % self._analysis.parameters().destFolder())
         lines.append("\tSeuil de confiance : %.1f%%" % (self._analysis.parameters().threshold()*100))
-
-        morphotypes = []
-        for k,v in Loader.SpongesClasses().items():
-            if self._analysis.parameters().morphotypes()[k]:
-                morphotypes.append(v)
         
-        lines.append("\tMorphotypes recherchés :%s " % ", ".join(morphotypes))
+        lines.append("\tMorphotypes recherchés : %s " % ", ".join(self._analysis.parameters().morphotypesNames().values()))
         lines.append("")
         lines.append("")
 
@@ -51,7 +46,7 @@ class TextReportWriter(ReportWriter):
         lines.append("-"*25)
 
         total = self._analysis.totalDetections()
-        for class_id, class_name in Loader.SpongesClasses().items():
+        for class_id, class_name in self._analysis.parameters().morphotypesNames().items():
             detections = self._analysis.cumulativeDetections()[class_id]
             lines.append("\t%s : %d (%.1f%%)" % (class_name, detections, detections*100/total))
 
