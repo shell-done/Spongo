@@ -10,7 +10,7 @@ from Services.CSVReportWriter import CSVReportWriter
 from Models.ProcessedImage import ProcessedImage
 from Models.Analysis import Analysis
 from Controllers.BaseController import BaseController
-from Controllers.Dialogs.CancelDialog import CancelDialog
+from Controllers.MessageBox.CancelMessageBox import CancelMessageBox
 from Components.Analysis.StatComponent import StatComponent
 from Components.Analysis.ImageComponent import ImageComponent
 from Components.Analysis.ProgressComponent import ProgressComponent
@@ -88,10 +88,9 @@ class AnalysisController(BaseController):
         if self._analysis.isFinished():
             self.clickedChangeWidget.emit("MENU")
         else:
-            cancel_dialog = CancelDialog()
-            result = cancel_dialog.exec_()
+            cancel_message_box = CancelMessageBox(self)
 
-            if result == cancel_dialog.Accepted:
+            if cancel_message_box.exec_() == True:
                 self._analysis_thread.stop()
                 self.clickedChangeWidget.emit("MENU")
 
