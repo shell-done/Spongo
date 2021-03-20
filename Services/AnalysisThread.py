@@ -24,6 +24,7 @@ class AnalysisThread(QThread):
             self.wait()
 
         self._morphotypes = parameters.morphotypesNames().copy()
+        self._threshold = parameters.threshold()
         self._srcPath = parameters.srcFolder()
         self._destPath = parameters.destFolder()
         self._images = images
@@ -83,7 +84,7 @@ class AnalysisThread(QThread):
                         continue
 
                     confidence = scores[class_id]
-                    if confidence > 0.5:
+                    if confidence > self._threshold:
                         # Object detected
                         center_x = int(detection[0] * width)
                         center_y = int(detection[1] * height)
