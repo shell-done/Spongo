@@ -1,5 +1,4 @@
-from Services.ReportWriter import ReportWriter
-from Services.Loader import Loader
+from Services.Writers.ReportWriter import ReportWriter
 
 class TextReportWriter(ReportWriter):
     def _fileHeader(self) -> str:

@@ -1,8 +1,7 @@
-from Services.ReportWriter import ReportWriter
-from Services.Loader import Loader
 from Models.Analysis import Analysis
 from Models.ProcessedImage import ProcessedImage
 from Models.Detection import Detection
+from Services.Writers.ReportWriter import ReportWriter
 
 class CSVReportWriter(ReportWriter):
     def __init__(self, analysis: Analysis, separator=";", shape=Detection.DefaultDetectionShape()):

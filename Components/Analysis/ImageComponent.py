@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 
 from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
-from Services.HighlightDetectionsThread import HighlightDetectionsThread
+from Services.Threads.HighlightDetectionsThread import HighlightDetectionsThread
 
 class ImageComponent(QWidget):
 

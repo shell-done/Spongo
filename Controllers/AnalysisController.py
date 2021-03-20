@@ -3,9 +3,9 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
 
 from Models.Parameters import Parameters
-from Services.AnalysisThread import AnalysisThread
-from Services.TextReportWriter import TextReportWriter
-from Services.CSVReportWriter import CSVReportWriter
+from Services.Threads.AnalysisThread import AnalysisThread
+from Services.Writers.TextReportWriter import TextReportWriter
+from Services.Writers.CSVReportWriter import CSVReportWriter
 from Models.ProcessedImage import ProcessedImage
 from Models.Analysis import Analysis
 from Controllers.BaseController import BaseController
