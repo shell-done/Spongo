@@ -4,16 +4,16 @@ from Services.Loader import Loader
 class Parameters:
     def __init__(self):
         self._name = "Analyse de la plongée"
-        self._srcFolder = ""
+        self._src_folder = ""
         self._threshold = 0.5
-        self._displayProcessedImages = True
+        self._display_processed_images = True
 
         self._morphotypes = {}
         for i in Loader.SpongesClasses():
             self._morphotypes[i] = True
 
-        self._saveProcessedImages = False
-        self._destFolder = ""
+        self._save_processed_images = False
+        self._dest_folder = ""
 
     def name(self) -> str:
         return self._name
@@ -22,10 +22,10 @@ class Parameters:
         self._name = name.strip()
 
     def srcFolder(self) -> str:
-        return self._srcFolder
+        return self._src_folder
 
     def setSrcFolder(self, srcFolder: str):
-        self._srcFolder = srcFolder.strip()
+        self._src_folder = srcFolder.strip()
 
     def threshold(self) -> float:
         return self._threshold
@@ -34,10 +34,10 @@ class Parameters:
         self._threshold = threshold
 
     def displayProcessedImages(self) -> bool:
-        return self._displayProcessedImages
+        return self._display_processed_images
 
-    def setDisplayProcessedImages(self, displayProcessedImages: bool):
-        self._displayProcessedImages = displayProcessedImages
+    def setDisplayProcessedImages(self, display_processed_images: bool):
+        self._display_processed_images = display_processed_images
 
     def morphotypes(self) -> dict:
         return self._morphotypes
@@ -54,22 +54,22 @@ class Parameters:
         return ret
 
     def saveProcessedImages(self) -> bool:
-        return self._saveProcessedImages
+        return self._save_processed_images
 
     def setSaveProcessedImages(self, saveProcessedImages: bool):
-        self._saveProcessedImages = saveProcessedImages
+        self._save_processed_images = saveProcessedImages
 
     def destFolder(self) -> str:
-        return self._destFolder
+        return self._dest_folder
 
     def setDestFolder(self, destFolder: str):
-        self._destFolder = destFolder.strip()
+        self._dest_folder = destFolder.strip()
     
     def checkValidity(self) -> str:
         if len(self._name) < 2:
             return "Le nom de l'analyse doit faire au moins 2 caractères"
         
-        if not QFileInfo(self._srcFolder).isDir():
+        if not QFileInfo(self._src_folder).isDir():
             return "Le dossier source sélectionné est invalide"
         
         if self._threshold < 0.01 or self._threshold > 0.99:
@@ -78,8 +78,8 @@ class Parameters:
         if not any(self._morphotypes.values()):
             return "Aucun morphotype n'a été sélectionné"
         
-        if self._saveProcessedImages:
-            dest_folder = QFileInfo(self._destFolder)
+        if self._save_processed_images:
+            dest_folder = QFileInfo(self._dest_folder)
 
             if not dest_folder.isDir():
                 return "Le dossier de destination sélectionné est invalide"
