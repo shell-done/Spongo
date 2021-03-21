@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QFileInfo
 from Services.Loader import Loader
 
 class Parameters:
@@ -18,13 +19,13 @@ class Parameters:
         return self._name
 
     def setName(self, name: str):
-        self._name = name
+        self._name = name.strip()
 
     def srcFolder(self) -> str:
         return self._srcFolder
 
     def setSrcFolder(self, srcFolder: str):
-        self._srcFolder = srcFolder
+        self._srcFolder = srcFolder.strip()
 
     def threshold(self) -> float:
         return self._threshold
@@ -62,5 +63,28 @@ class Parameters:
         return self._destFolder
 
     def setDestFolder(self, destFolder: str):
-        self._destFolder = destFolder
+        self._destFolder = destFolder.strip()
     
+    def checkValidity(self) -> str:
+        if len(self._name) < 2:
+            return "Le nom de l'analyse doit faire au moins 2 caractères"
+        
+        if not QFileInfo(self._srcFolder).isDir():
+            return "Le dossier source sélectionné est invalide"
+        
+        if self._threshold < 0.01 or self._threshold > 0.99:
+            return "Le seuil de détection doit être compris entre 1%% et 99%%"
+
+        if not any(self._morphotypes.values()):
+            return "Aucun morphotype n'a été sélectionné"
+        
+        if self._saveProcessedImages:
+            dest_folder = QFileInfo(self._destFolder)
+
+            if not dest_folder.isDir():
+                return "Le dossier de destination sélectionné est invalide"
+
+            if not dest_folder.isWritable():
+                return "Le dossier de destination est protégé en écriture, veuillez sélectionner un autre dossier"
+
+        return None

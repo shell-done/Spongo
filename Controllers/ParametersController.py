@@ -59,22 +59,14 @@ class ParametersController(BaseController):
         self._input_component.updateParameters(self._parameters)
         self._output_component.updateParameters(self._parameters)
 
-        src_dir = self._parameters.srcFolder()
-        images = QDir(src_dir).entryList(["*.jpg"], filters = QDir.Files)
+        error = self._parameters.checkValidity()
+        if error is None:
+            images = QDir(self._parameters.srcFolder()).entryList(["*.jpg", "*.jpeg"], filters = QDir.Files)
 
-        dest_dir = self._parameters.destFolder()
-
-        error_message = None
-        if src_dir == "":
-            error_message = "Vous n'avez pas sélectionné de dossier source"
-        elif len(images) == 0:
-            error_message = "Le dossier source ne contient aucune image au format .jpg"
-        elif not any(self._parameters.morphotypes().values()):
-            error_message = "Aucun morphotype n'a été sélectionné"
-        elif dest_dir == "" and self._parameters.saveProcessedImages():
-            error_message = "Vous n'avez pas sélectionné de dossier destination"
+            if len(images) == 0:
+                error = "Le dossier source ne contient aucune image au format .jpg"
         
-        if error_message:
-            QMessageBox.warning(self, "Erreur", error_message)
-        else:
+        if error is None:
             self.clickedChangeToAnalysisWidget.emit(self._parameters, images)
+        else:
+            QMessageBox.warning(self, "Erreur", error)
