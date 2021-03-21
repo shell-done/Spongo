@@ -1,4 +1,3 @@
-from Models.Parameters import Parameters
 from cv2 import cv2
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QImage
@@ -13,13 +12,14 @@ class HighlightDetectionsThread(QThread):
         self._abort = False
         self._processed_image = None
 
-    def start(self, processed_image: ProcessedImage):
+    def start(self, processed_image: ProcessedImage, dest_folder: str):
         self._abort = True
 
         if self.isRunning:
             self.wait()
 
         self._processed_image = processed_image
+        self._dest_folder = dest_folder
         self._abort = False
 
         super().start()
@@ -61,3 +61,6 @@ class HighlightDetectionsThread(QThread):
             return
 
         self.imageLoadedSignal.emit(q_img)
+
+        if self._dest_folder is not None:
+            q_img.save(self._dest_folder + "/" + self._processed_image.fileName(), quality=85)

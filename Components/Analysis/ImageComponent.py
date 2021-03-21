@@ -49,7 +49,9 @@ class ImageComponent(QWidget):
         self._stat_label.setText("Stats loading...")
 
     def update(self, processed_image: ProcessedImage):
-        self._highlight_detections_thread.start(processed_image)
+        dest_folder = self._parameters.destFolder() if self._parameters.saveProcessedImages() else None
+
+        self._highlight_detections_thread.start(processed_image, dest_folder)
         
         detections_count = processed_image.detectionsCount()
         text = ""
