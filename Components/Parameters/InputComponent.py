@@ -1,47 +1,52 @@
-import cv2
-import numpy as np
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from Models.Parameters import Parameters
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout
 
 class InputComponent(QWidget):
 
     def __init__(self):
         super().__init__()
 
-        titleLabel = QLabel("Entrée")
-        titleLabel.setFont(QFont('Times', 15))
+        title_label = QLabel("Entrée")
+        title_label.setFont(QFont('Times', 15))
 
         # Name layout
-        nameLabel = QLabel("Nom de l'analyse : ")
+        name_label = QLabel("Nom de l'analyse : ")
         self._nameText = QLineEdit()
 
-        nameLayout = QHBoxLayout()
-        nameLayout.addWidget(nameLabel)
-        nameLayout.addWidget(self._nameText)
+        name_layout = QHBoxLayout()
+        name_layout.addWidget(name_label)
+        name_layout.addWidget(self._nameText)
 
         # Filepath layout
-        filepathLabel = QLabel("Dossier d'images à analyser : ")
-        self._filepathText = QLineEdit()
-        filepathButton = QPushButton("Charger")
+        filepath_label = QLabel("Dossier d'images à analyser : ")
+        self._filepath_text = QLineEdit()
+        filepath_button = QPushButton("Charger")
 
-        filepathLayout = QHBoxLayout()
-        filepathLayout.addWidget(filepathLabel)
-        filepathLayout.addWidget(self._filepathText)
-        filepathLayout.addWidget(filepathButton)
+        filepath_layout = QHBoxLayout()
+        filepath_layout.addWidget(filepath_label)
+        filepath_layout.addWidget(self._filepath_text)
+        filepath_layout.addWidget(filepath_button)
 
         # Main layout
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(titleLabel)
-        mainLayout.addLayout(nameLayout)
-        mainLayout.addLayout(filepathLayout)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(title_label)
+        main_layout.addLayout(name_layout)
+        main_layout.addLayout(filepath_layout)
 
-        self.setLayout(mainLayout)
+        self.setLayout(main_layout)
 
         # Button slots
-        filepathButton.clicked.connect(self.filepathClick)
+        filepath_button.clicked.connect(self.filepathClick)
+
+    def reset(self, parameters: Parameters):
+        self._nameText.setText(parameters.name())
+        self._filepath_text.setText(parameters.srcFolder())
+
+    def updateParameters(self, parameters: Parameters):
+        parameters.setName(self._nameText.text())
+        parameters.setSrcFolder(self._filepath_text.text())
 
     @pyqtSlot()
     def filepathClick(self):
@@ -49,13 +54,4 @@ class InputComponent(QWidget):
         #path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
         path = "./data/images"
     
-        self._filepathText.setText(path)
-
-    def setDefaultValues(self, parameters):
-        self._nameText.setText(parameters.name())
-        self._filepathText.setText(parameters.srcFolder())
-
-    def updateParameters(self, parameters):
-        parameters.setName(self._nameText.text())
-        parameters.setSrcFolder(self._filepathText.text())
-
+        self._filepath_text.setText(path)

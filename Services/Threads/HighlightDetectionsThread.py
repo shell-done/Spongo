@@ -12,13 +12,14 @@ class HighlightDetectionsThread(QThread):
         self._abort = False
         self._processed_image = None
 
-    def start(self, processed_image: ProcessedImage):
+    def start(self, processed_image: ProcessedImage, dest_folder: str):
         self._abort = True
 
         if self.isRunning:
             self.wait()
 
         self._processed_image = processed_image
+        self._dest_folder = dest_folder
         self._abort = False
 
         super().start()
@@ -29,14 +30,14 @@ class HighlightDetectionsThread(QThread):
         if self._abort:
             return
 
-        colors = [
-            [76, 177, 34],
-            [164, 73, 163],
-            [155, 105, 0],
-            [0, 0, 230],
-            [0, 168, 217],
-            [100, 0, 0]
-        ]
+        colors = {
+            0: [76, 177, 34],
+            1: [164, 73, 163],
+            2: [155, 105, 0],
+            3: [0, 0, 230],
+            4: [0, 168, 217],
+            5: [100, 0, 0]
+        }
 
         for d in self._processed_image.detections():
             x, y, w, h = d.boundingBox()
@@ -60,3 +61,6 @@ class HighlightDetectionsThread(QThread):
             return
 
         self.imageLoadedSignal.emit(q_img)
+
+        if self._dest_folder is not None:
+            q_img.save(self._dest_folder + "/" + self._processed_image.fileName(), quality=85)

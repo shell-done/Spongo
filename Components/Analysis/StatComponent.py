@@ -1,12 +1,11 @@
-from PyQt5 import QtCore, QtGui, QtChart
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont, QPainter
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 from PyQt5.QtChart import QChart, QChartView, QSplineSeries
 
+from Models.Parameters import Parameters
 from Models.Analysis import Analysis
 from Services.Loader import Loader
-from PyQt5.QtWinExtras import QWinTaskbarButton
 
 class StatComponent(QWidget):
 
@@ -20,7 +19,7 @@ class StatComponent(QWidget):
 
         self._total_label = QLabel()
         self._sponges_label = QLabel()
-        self._sponges_label.setAlignment(QtCore.Qt.AlignCenter)
+        self._sponges_label.setAlignment(Qt.AlignCenter)
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(title)
@@ -30,12 +29,15 @@ class StatComponent(QWidget):
 
         self.setLayout(main_layout)
 
-    def reset(self):
+    def reset(self, parameters: Parameters):
+        self._parameters = parameters
+
         self._total_label.setText("Éponges détectées : 0")
         self._sponges_label.setText("Aucune éponge détectée")
 
         self._chart.removeAllSeries()
-        for i,n in Loader.SpongesClasses().items():
+        self._series = {}
+        for i,n in parameters.morphotypesNames().items():
             self._series[i] = QSplineSeries(self)
             self._series[i].setName(n)
             self._series[i].pen().setWidth(2)
@@ -64,7 +66,7 @@ class StatComponent(QWidget):
         text = ""
         points = len(list(self._series.values())[0])
 
-        for class_id, class_name in Loader.SpongesClasses().items():
+        for class_id, class_name in self._parameters.morphotypesNames().items():
             text += "%s : %d\n" % (class_name, analysis.cumulativeDetectionsFor(class_id))
             self._series[class_id].append(points, analysis.cumulativeDetectionsFor(class_id))
 
@@ -72,4 +74,4 @@ class StatComponent(QWidget):
         self._sponges_label.setText(text)
 
         self._chart.axisX().setRange(0, points)
-        self._chart.axisY().setRange(0, max(analysis.cumulativeDetections().values()))
+        self._chart.axisY().setRange(0, max(analysis.cumulativeDetections().values()) + 1)

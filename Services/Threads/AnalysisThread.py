@@ -1,7 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
 import cv2
-import numpy as np
 from PyQt5.QtCore import QThread, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
@@ -18,12 +17,14 @@ class AnalysisThread(QThread):
         super(QThread, self).__init__()
         self._abort = False
 
-    def start(self, parameters: Parameters, images: list[str]):
+    def start(self, parameters: Parameters, images: list):
         self._abort = True
 
         if self.isRunning():
             self.wait()
 
+        self._morphotypes = parameters.morphotypesNames().copy()
+        self._threshold = parameters.threshold()
         self._srcPath = parameters.srcFolder()
         self._destPath = parameters.destFolder()
         self._images = images
@@ -52,7 +53,7 @@ class AnalysisThread(QThread):
 
         print("Yolo loaded")
         
-        for image_idx, image_name in enumerate(self._images):
+        for image_name in self._images:
             if self._abort:
                 return
 
@@ -76,9 +77,14 @@ class AnalysisThread(QThread):
             for out in outs:
                 for detection in out:
                     scores = detection[5:]
-                    class_id = np.argmax(scores)
+                    #class_id = np.argmax(scores)
+                    class_id = scores.tolist().index(max(scores))
+
+                    if class_id not in self._morphotypes:
+                        continue
+
                     confidence = scores[class_id]
-                    if confidence > 0.5:
+                    if confidence > self._threshold:
                         # Object detected
                         center_x = int(detection[0] * width)
                         center_y = int(detection[1] * height)

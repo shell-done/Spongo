@@ -1,8 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtCore import QPropertyAnimation, QTime
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QWidget, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
 
 try:
     from PyQt5.QtWinExtras import QWinTaskbarButton
@@ -31,6 +29,8 @@ class ProgressComponent(QWidget):
         info_layout.addWidget(self._next_image_label)
 
         self._progress_bar = QProgressBar()
+        self._progress_bar_animation = QPropertyAnimation(self._progress_bar, b"value")
+        self._progress_bar_animation.setDuration(500)
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(title_label)
@@ -42,7 +42,7 @@ class ProgressComponent(QWidget):
     def reset(self, max_value: int):
         self._max_value = max_value
         self._progress_bar.setValue(0)
-        self._progress_bar.setMaximum(max_value)
+        self._progress_bar.setMaximum(10*max_value)
 
         self._current_image_label.setText("Image : 0/%d" % max_value)
         self._time_label.setText("Temps restant : ")
@@ -63,7 +63,11 @@ class ProgressComponent(QWidget):
             self._taskbar_button.progress().setVisible(False)
 
     def update(self, next_image: str, value: int, time_left: QTime):
-        self._progress_bar.setValue(value)
+        self._progress_bar_animation.stop()
+        self._progress_bar_animation.setStartValue(self._progress_bar_animation.currentValue())
+        self._progress_bar_animation.setEndValue(value*10)
+        self._progress_bar_animation.start()
+
         self._current_image_label.setText("Image : " + str(value) + "/" + str(self._max_value))
 
         time_left_str = ""

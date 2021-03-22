@@ -9,7 +9,7 @@ class Loader:
     _sponges_classes = {}
 
     @staticmethod
-    def SpongesClasses() -> dict[int, str]:
+    def SpongesClasses() -> dict:
         if len(Loader._sponges_classes) == 0:
 
             with open(Loader.CLASSES_FILE_PATH, 'rt') as f:

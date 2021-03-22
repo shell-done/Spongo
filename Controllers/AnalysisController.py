@@ -1,18 +1,15 @@
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import * #(pyqtSignal, pyqtSlot)
-from PyQt5.QtWidgets import * #(QWidget, QVBoxLayout, QLabel, QPushButton)
-from PyQt5.QtGui import * #(QProgressBar, QPixmap)
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtGui import QFont, QPixmap
+from PyQt5.QtWidgets import QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
 
 from Models.Parameters import Parameters
-from Services.Loader import Loader
-from Services.AnalysisThread import AnalysisThread
-from Services.TextReportWriter import TextReportWriter
-from Services.CSVReportWriter import CSVReportWriter
+from Services.Threads.AnalysisThread import AnalysisThread
+from Services.Writers.TextReportWriter import TextReportWriter
+from Services.Writers.CSVReportWriter import CSVReportWriter
 from Models.ProcessedImage import ProcessedImage
 from Models.Analysis import Analysis
 from Controllers.BaseController import BaseController
-from Controllers.Dialogs.CancelDialog import CancelDialog
+from Controllers.MessageBox.CancelMessageBox import CancelMessageBox
 from Components.Analysis.StatComponent import StatComponent
 from Components.Analysis.ImageComponent import ImageComponent
 from Components.Analysis.ProgressComponent import ProgressComponent
@@ -49,27 +46,27 @@ class AnalysisController(BaseController):
         self._return_button = QPushButton("Annuler")
         self._return_button.clicked.connect(self._returnClick)
 
-        _button_layout = QHBoxLayout()
-        _button_layout.addWidget(self._export_button)
-        _button_layout.addWidget(self._return_button)
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self._export_button)
+        button_layout.addWidget(self._return_button)
 
-        _main_layout = QVBoxLayout()
-        _main_layout.addWidget(self._title)
-        _main_layout.addLayout(h_layout)
-        _main_layout.addWidget(self._progress_component)
-        _main_layout.addLayout(_button_layout)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self._title)
+        main_layout.addLayout(h_layout)
+        main_layout.addWidget(self._progress_component)
+        main_layout.addLayout(button_layout)
 
-        self.setLayout(_main_layout)
+        self.setLayout(main_layout)
 
         self._analysis_thread = AnalysisThread()
         self._analysis_thread.imageProcessedSignal.connect(self._imageProcessed)
         self._analysis_thread.onAnalysisFinishedSignal.connect(self._analysisFinished)
 
-    def start(self, parameters: Parameters, images: list[str]):
-        self._analysis = Analysis(images, Loader.SpongesClasses())
+    def start(self, parameters: Parameters, images: list):
+        self._analysis = Analysis(parameters, images)
 
-        self._stat_component.reset()
-        self._image_component.reset()
+        self._stat_component.reset(parameters)
+        self._image_component.reset(parameters)
         self._progress_component.reset(self._analysis.imagesCount())
         self._displayButtons("Annuler", False, "Analyse en cours")
 
@@ -78,32 +75,10 @@ class AnalysisController(BaseController):
     def stop(self):
         self._progress_component.stop()
 
-
     def _displayButtons(self, returnValue: str, showDownload: bool, title: str):
         self._return_button.setText(returnValue)
         self._export_button.setVisible(showDownload)
         self._title.setText(title)
-
-
-    @pyqtSlot()
-    def _returnClick(self):
-        if self._analysis.isFinished():
-            self.clickedChangeWidget.emit("MENU")
-        else:
-            cancel_dialog = CancelDialog()
-            result = cancel_dialog.exec_()
-
-            if result == cancel_dialog.Accepted:
-                self._analysis_thread.stop()
-                self.clickedChangeWidget.emit("MENU")
-
-    @pyqtSlot()
-    def _exportReport(self):
-        writer = TextReportWriter(self._analysis)
-        writer.writeSummary("report.txt")
-
-        writer = CSVReportWriter(self._analysis, shape="rectangle")
-        writer.write("report.csv")
 
     @pyqtSlot(ProcessedImage)
     def _imageProcessed(self, processed_image: ProcessedImage):
@@ -116,6 +91,25 @@ class AnalysisController(BaseController):
         self._image_component.update(processed_image)
         self._stat_component.update(self._analysis)
         self._progress_component.update(next_image, self._analysis.currentImageIndex(), self._analysis.estimateTimeLeft())
+
+    @pyqtSlot()
+    def _returnClick(self):
+        if self._analysis.isFinished():
+            self.clickedChangeWidget.emit("MENU")
+        else:
+            cancel_message_box = CancelMessageBox(self)
+
+            if cancel_message_box.exec_() == True:
+                self._analysis_thread.stop()
+                self.clickedChangeWidget.emit("MENU")
+
+    @pyqtSlot()
+    def _exportReport(self):
+        writer = TextReportWriter(self._analysis)
+        writer.writeSummary("report.txt")
+
+        writer = CSVReportWriter(self._analysis, shape="rectangle")
+        writer.write("report.csv")
 
     @pyqtSlot()
     def _analysisFinished(self):

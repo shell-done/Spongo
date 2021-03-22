@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QFileInfo
 from Services.Loader import Loader
 
 class Parameters:
@@ -8,51 +9,82 @@ class Parameters:
         self._displayProcessedImages = True
 
         self._morphotypes = {}
-        for i in range(len(Loader.SpongesClasses())):
+        for i in Loader.SpongesClasses():
             self._morphotypes[i] = True
 
-        self._saveProcessedImages = True
+        self._saveProcessedImages = False
         self._destFolder = ""
 
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     def setName(self, name: str):
-        self._name = name
+        self._name = name.strip()
 
-    def srcFolder(self):
+    def srcFolder(self) -> str:
         return self._srcFolder
 
     def setSrcFolder(self, srcFolder: str):
-        self._srcFolder = srcFolder
+        self._srcFolder = srcFolder.strip()
 
-    def threshold(self):
+    def threshold(self) -> float:
         return self._threshold
 
     def setThreshold(self, threshold: float):
         self._threshold = threshold
 
-    def displayProcessedImages(self):
+    def displayProcessedImages(self) -> bool:
         return self._displayProcessedImages
 
     def setDisplayProcessedImages(self, displayProcessedImages: bool):
         self._displayProcessedImages = displayProcessedImages
 
-    def morphotypes(self):
+    def morphotypes(self) -> dict:
         return self._morphotypes
 
-    def setMorphotypes(self, morphotypes: dict[int, bool]):
+    def setMorphotypes(self, morphotypes: dict):
         self._morphotypes = morphotypes
 
-    def saveProcessedImages(self):
+    def morphotypesNames(self) -> dict:
+        ret = {}
+        for k,v in self._morphotypes.items():
+            if v:
+                ret[k] = Loader.SpongesClasses()[k]
+
+        return ret
+
+    def saveProcessedImages(self) -> bool:
         return self._saveProcessedImages
 
     def setSaveProcessedImages(self, saveProcessedImages: bool):
         self._saveProcessedImages = saveProcessedImages
 
-    def destFolder(self):
+    def destFolder(self) -> str:
         return self._destFolder
 
     def setDestFolder(self, destFolder: str):
-        self._destFolder = destFolder
-    
+        self._destFolder = destFolder.strip()
+
+    def checkValidity(self) -> str:
+        if len(self._name) < 2:
+            return "Le nom de l'analyse doit faire au moins 2 caractères"
+
+        if not QFileInfo(self._srcFolder).isDir():
+            return "Le dossier source sélectionné est invalide"
+
+        if self._threshold < 0.01 or self._threshold > 0.99:
+            return "Le seuil de détection doit être compris entre 1%% et 99%%"
+
+        if not any(self._morphotypes.values()):
+            return "Aucun morphotype n'a été sélectionné"
+
+        if self._saveProcessedImages:
+            dest_folder = QFileInfo(self._destFolder)
+
+            if not dest_folder.isDir():
+                return "Le dossier de destination sélectionné est invalide"
+
+            if not dest_folder.isWritable():
+                return "Le dossier de destination est protégé en écriture, veuillez sélectionner un autre dossier"
+
+        return None

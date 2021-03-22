@@ -1,12 +1,14 @@
 from PyQt5.QtCore import QDateTime, QTime
+
 from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage
 
 class Analysis:
-    def __init__(self, images_filenames: list[str], sponges_classes: list[str]):
-        self._parameters = Parameters()
+    def __init__(self, parameters: Parameters, images_filenames: list):
+        self._parameters = parameters
+
         self._images_filenames = images_filenames
-        self._detected_sponges = {key:0 for key in sponges_classes}
+        self._detected_sponges = {key:0 for key in parameters.morphotypesNames()}
 
         self._current_img_index = 0
         self._start_datetime = QDateTime.currentDateTime()
@@ -24,10 +26,10 @@ class Analysis:
 
         self._current_img_index += 1
 
-    def processedImages(self) -> list[ProcessedImage]:
+    def processedImages(self) -> list:
         return self._processed_images
 
-    def cumulativeDetections(self) -> dict[int, int]:
+    def cumulativeDetections(self) -> dict:
         return self._detected_sponges
 
     def cumulativeDetectionsFor(self, class_id) -> int:
