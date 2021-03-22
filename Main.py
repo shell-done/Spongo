@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import sys
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QApplication
 
 from Services.Loader import Loader
 from Controllers.WindowController import WindowController

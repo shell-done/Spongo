@@ -1,6 +1,6 @@
 from Models.Parameters import Parameters
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QCheckBox, QDoubleSpinBox, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QSpinBox, QWidget, QCheckBox, QDoubleSpinBox, QLabel, QVBoxLayout, QHBoxLayout
 
 from Services.Loader import Loader
 
@@ -14,27 +14,26 @@ class ParametersComponent(QWidget):
 
         # Threshold layout
         threshold_label = QLabel("Seuil de détection : ")
-        self._threshold_sbox = QDoubleSpinBox()
-        self._threshold_sbox.setMinimum(0.01)
-        self._threshold_sbox.setMaximum(0.99)
-        self._threshold_sbox.setSingleStep(0.01)
+        self._threshold_sbox = QSpinBox()
+        self._threshold_sbox.setRange(1, 99)
+        self._threshold_sbox.setSuffix("%")
 
         threshold_layout = QHBoxLayout()
         threshold_layout.addWidget(threshold_label)
         threshold_layout.addWidget(self._threshold_sbox)
 
         # Filepath layout
-        detection_box_label = QLabel("Afficher les boîtes de détection en direct : ")
-        self._detection_box_cbox = QCheckBox()
+        # detection_box_label = QLabel("Afficher les boîtes de détection en direct : ")
+        # self._detection_box_cbox = QCheckBox()
 
-        detection_box_layout = QHBoxLayout()
-        detection_box_layout.addWidget(detection_box_label)
-        detection_box_layout.addWidget(self._detection_box_cbox)
+        # detection_box_layout = QHBoxLayout()
+        # detection_box_layout.addWidget(detection_box_label)
+        # detection_box_layout.addWidget(self._detection_box_cbox)
 
         # Left layout
         left_layout = QVBoxLayout()
         left_layout.addLayout(threshold_layout)
-        left_layout.addLayout(detection_box_layout)
+        #left_layout.addLayout(detection_box_layout)
 
         # Morphotypes layout
         morphotype_label = QLabel("Morphotypes à détecter : ")
@@ -68,15 +67,15 @@ class ParametersComponent(QWidget):
         self.setLayout(main_layout)
 
     def reset(self, parameters: Parameters):
-        self._threshold_sbox.setValue(parameters.threshold())
-        self._detection_box_cbox.setChecked(parameters.displayProcessedImages())
+        self._threshold_sbox.setValue(parameters.threshold()*100)
+        # self._detection_box_cbox.setChecked(parameters.displayProcessedImages())
 
         for k,v in parameters.morphotypes().items():
             self._tab_cbox[k].setChecked(v)
 
     def updateParameters(self, parameters: Parameters):
-        parameters.setThreshold(self._threshold_sbox.value())
-        parameters.setDisplayProcessedImages(self._detection_box_cbox.isChecked())
+        parameters.setThreshold(self._threshold_sbox.value()/100)
+        # parameters.setDisplayProcessedImages(self._detection_box_cbox.isChecked())
 
         for k in parameters.morphotypes():
             parameters.morphotypes()[k] = self._tab_cbox[k].isChecked()
