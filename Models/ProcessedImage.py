@@ -25,3 +25,10 @@ class ProcessedImage:
             detections_count[d.classId()] = detections_count.get(d.classId(), 0) + 1
 
         return detections_count
+
+    def interestScore(self) -> float:
+        s = 0
+        for v in self.detectionsCount().values():
+            s += s**0.5
+
+        return s
