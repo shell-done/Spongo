@@ -85,3 +85,8 @@ class ParametersController(BaseController):
     def createErrorDialog(self, message):
         error_dialog = ErrorDialog(message)
         error_dialog.exec_()
+
+    def start(self):
+        self._inputComponent.setDefaultValues(self._parameters)
+        self._parametersComponent.setDefaultValues(self._parameters)
+        self._outputComponent.setDefaultValues(self._parameters)

@@ -9,7 +9,7 @@ class Parameters:
 
         self._morphotypes = {}
         for i in range(len(Loader.SpongesClasses())):
-            self._morphotypes[i] = False
+            self._morphotypes[i] = True
 
         self._saveProcessedImages = True
         self._destFolder = ""

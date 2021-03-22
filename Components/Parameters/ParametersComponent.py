@@ -73,6 +73,9 @@ class ParametersComponent(QWidget):
         self._thresholdSBox.setValue(parameters.threshold())
         self._detectionBoxCBox.setChecked(parameters.displayProcessedImages())
 
+        for i in range(len(self._tabCBox)):
+            self._tabCBox[i] = True
+
     def updateParameters(self, parameters):
         parameters.setThreshold(self._thresholdSBox.value())
         parameters.setDisplayProcessedImages(self._detectionBoxCBox.isChecked())
