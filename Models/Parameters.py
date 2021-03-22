@@ -64,20 +64,20 @@ class Parameters:
 
     def setDestFolder(self, destFolder: str):
         self._dest_folder = destFolder.strip()
-    
+
     def checkValidity(self) -> str:
         if len(self._name) < 2:
             return "Le nom de l'analyse doit faire au moins 2 caractères"
-        
+
         if not QFileInfo(self._src_folder).isDir():
             return "Le dossier source sélectionné est invalide"
-        
+
         if self._threshold < 0.01 or self._threshold > 0.99:
             return "Le seuil de détection doit être compris entre 1%% et 99%%"
 
         if not any(self._morphotypes.values()):
             return "Aucun morphotype n'a été sélectionné"
-        
+
         if self._save_processed_images:
             dest_folder = QFileInfo(self._dest_folder)
 

@@ -17,7 +17,7 @@ class ParametersController(BaseController):
 
         title = QLabel("Démarrer une analyse")
         title.setFont(QFont("Arial", 20))
-        
+
         self._input_component = InputComponent()
         self._parameters_component = ParametersComponent()
         self._output_component = OutputComponent()
@@ -65,7 +65,7 @@ class ParametersController(BaseController):
 
             if len(images) == 0:
                 error = "Le dossier source ne contient aucune image au format .jpg"
-        
+
         if error is None:
             self.clickedChangeToAnalysisWidget.emit(self._parameters, images)
         else:

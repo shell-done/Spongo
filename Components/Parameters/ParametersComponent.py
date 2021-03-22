@@ -79,4 +79,3 @@ class ParametersComponent(QWidget):
 
         for k in parameters.morphotypes():
             parameters.morphotypes()[k] = self._tab_cbox[k].isChecked()
-
