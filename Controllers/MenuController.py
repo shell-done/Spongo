@@ -17,17 +17,10 @@ class MenuController(BaseController):
         subtitle = QLabel("Outil de classification et de reconnaissance de morphotypes d’éponges marines")
         subtitle.setObjectName("subtitle")
 
-        start_button = StylizedButton("Commencer une analyse")
-        start_button.setObjectName("blue")
-
-        history_button = StylizedButton("Historique des analyses")
-        history_button.setObjectName("blue")
-
-        about_button = StylizedButton("À propos")
-        about_button.setObjectName("blue")
-
-        exit_button = StylizedButton("Quitter")
-        exit_button.setObjectName("yellow")
+        start_button = StylizedButton("Commencer une analyse", "blue")
+        history_button = StylizedButton("Historique des analyses", "blue")
+        about_button = StylizedButton("À propos", "blue")
+        exit_button = StylizedButton("Quitter", "yellow")
 
         main_layout = QGridLayout()
         main_layout.setAlignment(Qt.AlignCenter)

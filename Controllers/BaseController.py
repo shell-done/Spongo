@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QPaintEvent, QPainter
+from PyQt5.QtWidgets import QStyle, QStyleOption, QWidget
 
 class BaseController(QWidget):
     def __init__(self):
@@ -9,3 +10,12 @@ class BaseController(QWidget):
 
     def stop(self):
         pass
+
+    def paintEvent(self, a0: QPaintEvent):
+        o = QStyleOption()
+        o.initFrom(self)
+
+        p = QPainter(self)
+        self.style().drawPrimitive(QStyle.PE_Widget, o, p, self)
+
+        return super().paintEvent(a0)
