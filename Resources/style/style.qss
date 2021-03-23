@@ -1,14 +1,66 @@
-@myred: #fe00FF;
-@mygreen: #00ee00;
-@title-font-size: 25px;
-@primary: #AA1155;
+@primary-blue: #419DD1;
+@primary-blue-dark: #3886AF;
+@primary-blue-darker: #2D6E8E;
+@primary-blue-light: #7AB0CC;
 
-QLabel {
-    color: @myred;
-    font-size: @title-font-size;
+@primary-yellow: #F4D05C;
+@primary-yellow-dark: #E8C158;
+@primary-yellow-darker: #CEAC4E;
+@primary-yellow-light: #F2D685;
+
+@dark: #373F41;
+@gray: #737B7D;
+@white: #FFFFFF;
+
+QWidget {
+    font-family: 'Mulish';
+    color: @dark;
 }
 
-QPushButton {
-    color: @mygreen;
-    background-color: @primary;
+QLabel#title {
+    font-weight: bold;
+    font-size: 96px;
+    qproperty-alignment: AlignCenter;
+
+    margin-bottom: 10px;
+}
+
+QLabel#subtitle {
+    width: 550px;
+
+    font-size: 24px;
+    qproperty-alignment: AlignCenter;
+    qproperty-wordWrap: true;
+
+    color: @gray;
+
+    margin-bottom: 40px;
+}
+
+StylizedButton {
+    padding: 5px 8px;
+    
+    font-size: 20px;
+    font-weight: bold;
+
+    border-radius: 10px;
+
+    color: @white;
+}
+
+StylizedButton#blue {background-color: @primary-blue;}
+StylizedButton#blue:hover {background-color: @primary-blue-dark;}
+StylizedButton#blue:pressed {background-color: @primary-blue-darker;}
+StylizedButton#blue:disabled {background-color: @primary-blue-light;}
+
+StylizedButton#yellow {background-color: @primary-yellow;}
+StylizedButton#yellow:hover {background-color: @primary-yellow-dark;}
+StylizedButton#yellow:pressed {background-color: @primary-yellow-darker;}
+StylizedButton#yellow:disabled {background-color: @primary-yellow-light;}
+
+MenuController StylizedButton {
+    width: 230px;
+    height: 60px;
+
+    font-size: 32px;
 }
