@@ -75,6 +75,12 @@ class AnalysisController(BaseController):
     def stop(self):
         self._progress_component.stop()
 
+    def askExit(self) -> bool:
+        if self._analysis.isFinished():
+            return True
+
+        return CancelMessageBox(self).exec_()
+
     def _displayButtons(self, returnValue: str, showDownload: bool, title: str):
         self._return_button.setText(returnValue)
         self._export_button.setVisible(showDownload)
@@ -99,7 +105,7 @@ class AnalysisController(BaseController):
         else:
             cancel_message_box = CancelMessageBox(self)
 
-            if cancel_message_box.exec_() == True:
+            if cancel_message_box.exec_():
                 self._analysis_thread.stop()
                 self.clickedChangeWidget.emit("MENU")
 

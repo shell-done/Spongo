@@ -11,6 +11,9 @@ class BaseController(QWidget):
     def stop(self):
         pass
 
+    def askExit(self) -> bool:
+        return True
+
     def paintEvent(self, a0: QPaintEvent):
         o = QStyleOption()
         o.initFrom(self)
