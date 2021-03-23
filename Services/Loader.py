@@ -40,6 +40,9 @@ class Loader:
             if len(l) == 0:
                 continue
 
+            if l.startswith("//"):
+                continue
+
             if l[0] == "@":
                 if not l.endswith(";"):
                     print("[WARNING] QSSPreprocessor : Parsing error at line %d for '%s' (missing semicolon)" % (i, l))
