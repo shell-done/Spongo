@@ -27,25 +27,21 @@ class ParametersComponent(QGroupBox):
 
 
         morphotype_layout = QGridLayout()
-        morphotype_layout.addWidget(QLabel("Morphotypes à détecter :"), 0, 0, 1, 6)
+        morphotype_layout.setSpacing(5)
+
+        morphotype_layout.addWidget(QLabel("Morphotypes à détecter :"), 0, 0, 1, 4)
 
         self._tab_cbox = {}
-        for k, v in Loader.SpongesClasses().items():
-            sponge_cbox = QCheckBox()
+        for k,v in Loader.SpongesClasses().items():
+            sponge_cbox = QCheckBox(v)
             self._tab_cbox[k] = sponge_cbox
 
             x = k%2 + 1
-            y = k//2 * 2 + 1
+            y = k//2 + 1
             morphotype_layout.addWidget(sponge_cbox, x, y)
-            morphotype_layout.addWidget(QLabel(v), x, y + 1)
 
-        for i in range(0, 7):
-            if i == 0:
-                morphotype_layout.setColumnMinimumWidth(i, 15)
-                morphotype_layout.setColumnStretch(i, 0)
-            if i%2 == 1:
-                morphotype_layout.setColumnMinimumWidth(i, 20)
-                morphotype_layout.setColumnStretch(i, 0)
+        morphotype_layout.setColumnMinimumWidth(0, 15)
+        morphotype_layout.setColumnStretch(0, 0)
 
         main_layout.addLayout(left_layout)
         main_layout.addLayout(morphotype_layout)

@@ -108,5 +108,6 @@ QGroupBox QLabel {
 }
 
 QGroupBox QCheckBox {
-    margin-top: 3px;
+    font-weight: bold;
+    spacing: 12px;
 }
