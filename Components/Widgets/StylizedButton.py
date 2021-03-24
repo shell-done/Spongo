@@ -3,7 +3,7 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QPushButton
 
 class StylizedButton(QPushButton):
-    def __init__(self, text: str, object_name: str = None):
+    def __init__(self, text: str, object_name: str = "blue"):
         super().__init__(text)
 
         self.setCursor(Qt.PointingHandCursor)

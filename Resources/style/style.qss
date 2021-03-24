@@ -10,16 +10,20 @@
 
 @dark: #373F41;
 @gray: #737B7D;
+@light-gray: #CECECE;
 @black: #000000;
 @white: #FFFFFF;
 
+@font: 'Mulish';
+
 QWidget {
-    font-family: 'Mulish';
+    font-family: @font;
     color: @dark;
 }
 
 QStackedWidget {
     padding: 5px 35px 10px 35px;
+    background-color: #F0F0F0;
 }
 
 QPushButton {
@@ -32,6 +36,8 @@ QPushButton:disabled {
 
 StylizedButton {
     padding: 8px 25px;
+    margin-top: 15px;
+    margin-bottom: 5px;
     
     font-size: 20px;
     font-weight: bold;
@@ -53,6 +59,7 @@ StylizedButton#yellow:disabled {background-color: @primary-yellow-light;}
 
 MenuController StylizedButton {
     padding: 0;
+    margin: 0;
     width: 230px;
     height: 60px;
 
@@ -110,4 +117,19 @@ QGroupBox QLabel {
 QGroupBox QCheckBox {
     font-weight: bold;
     spacing: 12px;
+}
+
+ChartLegendItem QLabel#item-icon {
+    border: 1px solid @gray;
+    padding: 0;
+}
+
+ChartLegendItem QLabel#value {
+    color: @gray;
+}
+
+ImageComponent QLabel#image {
+    background: @white;
+    border: 2px solid @gray;
+    border-radius: 5px;
 }

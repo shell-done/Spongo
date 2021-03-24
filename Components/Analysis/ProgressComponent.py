@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QPropertyAnimation, QTime
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QGroupBox, QWidget, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
 
 try:
     from PyQt5.QtWinExtras import QWinTaskbarButton
@@ -8,13 +8,12 @@ try:
 except ModuleNotFoundError:
     _QT_WIN_EXTRAS_LOADED = False
 
-class ProgressComponent(QWidget):
+class ProgressComponent(QGroupBox):
 
     def __init__(self):
         super().__init__()
 
-        title_label = QLabel("Progression")
-        title_label.setFont(QFont('Times', 15))
+        self.setTitle("Progression")
 
         self._max_value = 1
         self._taskbar_button = None
@@ -33,7 +32,7 @@ class ProgressComponent(QWidget):
         self._progress_bar_animation.setDuration(500)
 
         main_layout = QVBoxLayout()
-        main_layout.addWidget(title_label)
+        main_layout.setSpacing(15)
         main_layout.addLayout(info_layout)
         main_layout.addWidget(self._progress_bar)
 

@@ -1,6 +1,8 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from Components.Widgets.StylizedButton import StylizedButton
+from Components.Widgets.PageTitle import PageTitle
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtWidgets import QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QBoxLayout, QGridLayout, QSizePolicy, QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
 
 from Models.Parameters import Parameters
 from Services.Threads.AnalysisThread import AnalysisThread
@@ -22,41 +24,42 @@ class AnalysisController(BaseController):
 
         self._analysis = None
 
-        self._title = QLabel("Analyse en cours")
-        self._title.setFont(QFont("Arial", 20))
+        self._title = PageTitle("Démarrer une analyse", False, self)
 
         self._stat_component = StatComponent()
         self._image_component = ImageComponent()
-
-        h_layout = QHBoxLayout()
-        h_layout.addWidget(self._stat_component)
-        h_layout.addWidget(self._image_component)
-
         self._progress_component = ProgressComponent()
-        self._progress_component.sizeHint()
 
-        self._export_button = QPushButton("Télécharger les données")
-        self._export_button.setVisible(False)
-        self._export_button.clicked.connect(self._exportReport)
+        components_layout = QGridLayout()
+        components_layout.setHorizontalSpacing(20)
+        components_layout.setColumnStretch(0, 6)
+        components_layout.setColumnStretch(1, 5)
 
-        sp_retain = self._export_button.sizePolicy()
-        sp_retain.setRetainSizeWhenHidden(True)
-        self._export_button.setSizePolicy(sp_retain)
+        components_layout.addWidget(self._stat_component, 0, 0)
+        components_layout.addWidget(self._image_component, 0, 1)
+        components_layout.addWidget(self._progress_component, 1, 0, 1, 2)
 
-        self._return_button = QPushButton("Annuler")
-        self._return_button.clicked.connect(self._returnClick)
+        self._export_button = StylizedButton("Télécharger les données", "blue")
+        self._export_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+
+        self._return_button = StylizedButton("Annuler", "yellow")
+        self._return_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
         button_layout = QHBoxLayout()
+        button_layout.setAlignment(Qt.AlignRight)
+        button_layout.setSpacing(35)
         button_layout.addWidget(self._export_button)
         button_layout.addWidget(self._return_button)
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(self._title)
-        main_layout.addLayout(h_layout)
-        main_layout.addWidget(self._progress_component)
+        main_layout.addLayout(components_layout)
         main_layout.addLayout(button_layout)
 
         self.setLayout(main_layout)
+
+        self._export_button.clicked.connect(self._exportReport)
+        self._return_button.clicked.connect(self._returnClick)
 
         self._analysis_thread = AnalysisThread()
         self._analysis_thread.imageProcessedSignal.connect(self._imageProcessed)
@@ -68,7 +71,11 @@ class AnalysisController(BaseController):
         self._stat_component.reset(parameters)
         self._image_component.reset(parameters)
         self._progress_component.reset(self._analysis.imagesCount())
-        self._displayButtons("Annuler", False, "Analyse en cours")
+
+        self._title.setText("Analyse en cours")
+        self._return_button.setText("Annuler")
+        self._return_button.setObjectName("yellow")
+        self._export_button.setVisible(False)
 
         self._analysis_thread.start(parameters, images)
 
@@ -80,11 +87,6 @@ class AnalysisController(BaseController):
             return True
 
         return CancelMessageBox(self).exec_()
-
-    def _displayButtons(self, returnValue: str, showDownload: bool, title: str):
-        self._return_button.setText(returnValue)
-        self._export_button.setVisible(showDownload)
-        self._title.setText(title)
 
     @pyqtSlot(ProcessedImage)
     def _imageProcessed(self, processed_image: ProcessedImage):
@@ -120,5 +122,9 @@ class AnalysisController(BaseController):
     @pyqtSlot()
     def _analysisFinished(self):
         self._analysis.finish()
-        self._displayButtons("Continuer", True, "Analyse terminée")
+
+        self._title.setText("Analyse terminée")
+        self._return_button.setText("Continuer")
+        self._return_button.setObjectName("blue")
+        self._export_button.setVisible(True)
 

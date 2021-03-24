@@ -26,7 +26,7 @@ class PageTitle(QWidget):
         return self._title().text()
 
     def setText(self, text: str):
-        self._title.setText(str)
+        self._title.setText(text)
 
     def isBackArrowVisible(self) -> bool:
         return self._back_arrow_visible
