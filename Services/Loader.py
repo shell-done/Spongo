@@ -7,6 +7,7 @@ class Loader:
     STYLE_FILE_PATH = "Resources/style/style.qss"
 
     _sponges_classes = {}
+    _qss_variables = {}
 
     @staticmethod
     def SpongesClasses() -> dict:
@@ -62,5 +63,10 @@ class Loader:
         qss_vars_names.reverse()
         for k in qss_vars_names:
             qss_body = qss_body.replace(k, qss_vars[k])
+            Loader._qss_variables[k] = qss_vars[k]
         
         return qss_body
+
+    @staticmethod
+    def QSSVariable(name: str) -> str:
+        return Loader._qss_variables.get(name, None)
