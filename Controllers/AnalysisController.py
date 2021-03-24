@@ -16,6 +16,7 @@ from Components.Analysis.ProgressComponent import ProgressComponent
 
 class AnalysisController(BaseController):
     clickedChangeWidget = pyqtSignal(str)
+    clickedChangeToHistoryWidget = pyqtSignal(Analysis)
 
     def __init__(self):
         super().__init__()
@@ -95,7 +96,7 @@ class AnalysisController(BaseController):
     @pyqtSlot()
     def _returnClick(self):
         if self._analysis.isFinished():
-            self.clickedChangeWidget.emit("MENU")
+            self.clickedChangeToHistoryWidget.emit(self._analysis)
         else:
             cancel_message_box = CancelMessageBox(self)
 

@@ -80,3 +80,9 @@ class Analysis:
         time = QTime(0, 0).addSecs(seconds_left)
 
         return time
+
+    def duration(self):
+        seconds_elapsed = self._start_datetime.secsTo(self._end_datetime)
+        time = QTime(0, 0).addSecs(seconds_elapsed)
+
+        return time
