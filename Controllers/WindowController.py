@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QStackedWidget
 
 import Resources.Resources
@@ -16,8 +16,8 @@ class WindowController(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Spongo")
-        self.setFixedSize(1400, 750)
-        self.setWindowIcon(QIcon(":/img/icon.png"))
+        self.setFixedSize(1280, 720)
+        self.setWindowIcon(QIcon("Resources/img/icon.png"))
 
         self.stackedWidget = QStackedWidget()
         self.setCentralWidget(self.stackedWidget)
@@ -42,6 +42,14 @@ class WindowController(QMainWindow):
         self.history.clickedChangeWidget.connect(self.changeWidget)
 
         self.show()
+
+    def closeEvent(self, event: QCloseEvent):
+        ask_exit = self.stackedWidget.currentWidget().askExit()
+
+        if ask_exit:
+            event.accept()
+        else:
+            event.ignore()
 
     @pyqtSlot(Parameters, list)
     def changetoAnalysisWidget(self, parameters, images):

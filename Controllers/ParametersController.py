@@ -1,12 +1,14 @@
-from PyQt5.QtCore import QDir, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import Qt, QDir, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QVBoxLayout
 
 from Models.Parameters import Parameters
-from Controllers.BaseController import BaseController
+from Components.Widgets.PageTitle import PageTitle
+from Components.Widgets.StylizedButton import StylizedButton
 from Components.Parameters.InputComponent import InputComponent
 from Components.Parameters.ParametersComponent import ParametersComponent
-from Components.Parameters.OutputComponent import OutputComponent
+from Components.Parameters.OptionsComponent import OptionsComponent
+from Controllers.BaseController import BaseController
 
 class ParametersController(BaseController):
     clickedChangeWidget = pyqtSignal(str)
@@ -15,31 +17,31 @@ class ParametersController(BaseController):
     def __init__(self):
         super().__init__()
 
-        title = QLabel("Démarrer une analyse")
-        title.setFont(QFont("Arial", 20))
+        title = PageTitle("Démarrer une analyse")
+        title.backArrowClicked.connect(self._returnClicked)
 
         self._input_component = InputComponent()
         self._parameters_component = ParametersComponent()
-        self._output_component = OutputComponent()
+        self._options_component = OptionsComponent()
 
-        self._return_button = QPushButton("Retour")
-        self._start_button = QPushButton("Démarrer")
+        self._start_button = StylizedButton("Démarrer", "blue")
+        self._start_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
         button_layout = QHBoxLayout()
-        button_layout.addWidget(self._return_button)
+        button_layout.setAlignment(Qt.AlignRight)
         button_layout.addWidget(self._start_button)
 
         main_layout = QVBoxLayout()
+
         main_layout.addWidget(title)
         main_layout.addWidget(self._input_component)
         main_layout.addWidget(self._parameters_component)
-        main_layout.addWidget(self._output_component)
+        main_layout.addWidget(self._options_component)
         main_layout.addLayout(button_layout)
 
         self.setLayout(main_layout)
 
         # Button slots
-        self._return_button.clicked.connect(self._returnClick)
         self._start_button.clicked.connect(self._startClick)
 
     def start(self):
@@ -47,17 +49,17 @@ class ParametersController(BaseController):
 
         self._input_component.reset(self._parameters)
         self._parameters_component.reset(self._parameters)
-        self._output_component.reset(self._parameters)
+        self._options_component.reset(self._parameters)
 
     @pyqtSlot()
-    def _returnClick(self):
+    def _returnClicked(self):
         self.clickedChangeWidget.emit("MENU")
 
     @pyqtSlot()
     def _startClick(self):
         self._parameters_component.updateParameters(self._parameters)
         self._input_component.updateParameters(self._parameters)
-        self._output_component.updateParameters(self._parameters)
+        self._options_component.updateParameters(self._parameters)
 
         error = self._parameters.checkValidity()
         if error is None:

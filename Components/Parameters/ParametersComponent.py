@@ -1,68 +1,50 @@
-from Models.Parameters import Parameters
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QSpinBox, QWidget, QCheckBox, QDoubleSpinBox, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QFormLayout, QGridLayout, QGroupBox, QSizePolicy, QSpinBox, QCheckBox, QLabel, QVBoxLayout, QHBoxLayout
 
 from Services.Loader import Loader
+from Models.Parameters import Parameters
 
-class ParametersComponent(QWidget):
+class ParametersComponent(QGroupBox):
 
     def __init__(self):
         super().__init__()
 
-        title_tabel = QLabel("Paramètres")
-        title_tabel.setFont(QFont('Times', 15))
+        self.setTitle("Paramètres")
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        
+        # Main layout
+        main_layout = QHBoxLayout(self)
+        main_layout.setSpacing(20)
 
-        # Threshold layout
-        threshold_label = QLabel("Seuil de détection : ")
+        left_layout = QFormLayout()
+        left_layout.setHorizontalSpacing(20)
+        left_layout.setVerticalSpacing(14)
+
         self._threshold_sbox = QSpinBox()
         self._threshold_sbox.setRange(1, 99)
-        self._threshold_sbox.setSuffix("%")
+        self._threshold_sbox.setSuffix(" %")
+        self._threshold_sbox.setMaximumWidth(150)
+        left_layout.addRow("Seuil de détection :", self._threshold_sbox)
 
-        threshold_layout = QHBoxLayout()
-        threshold_layout.addWidget(threshold_label)
-        threshold_layout.addWidget(self._threshold_sbox)
 
-        # Filepath layout
-        # detection_box_label = QLabel("Afficher les boîtes de détection en direct : ")
-        # self._detection_box_cbox = QCheckBox()
+        morphotype_layout = QGridLayout()
+        morphotype_layout.setSpacing(5)
 
-        # detection_box_layout = QHBoxLayout()
-        # detection_box_layout.addWidget(detection_box_label)
-        # detection_box_layout.addWidget(self._detection_box_cbox)
-
-        # Left layout
-        left_layout = QVBoxLayout()
-        left_layout.addLayout(threshold_layout)
-        #left_layout.addLayout(detection_box_layout)
-
-        # Morphotypes layout
-        morphotype_label = QLabel("Morphotypes à détecter : ")
-
-        morphotype_layout = QVBoxLayout()
-        morphotype_layout.addWidget(morphotype_label)
+        morphotype_layout.addWidget(QLabel("Morphotypes à détecter :"), 0, 0, 1, 4)
 
         self._tab_cbox = {}
-        for k, v in Loader.SpongesClasses().items():
-            self._spongeCBox = QCheckBox()
-            self._tab_cbox[k] = self._spongeCBox
+        for k,v in Loader.SpongesClasses().items():
+            sponge_cbox = QCheckBox(v)
+            self._tab_cbox[k] = sponge_cbox
 
-            sponge_label = QLabel(v)
+            x = k%2 + 1
+            y = k//2 + 1
+            morphotype_layout.addWidget(sponge_cbox, x, y)
 
-            sponge_layout = QHBoxLayout()
-            sponge_layout.addWidget(self._tab_cbox[k])
-            sponge_layout.addWidget(sponge_label)
+        morphotype_layout.setColumnMinimumWidth(0, 15)
+        morphotype_layout.setColumnStretch(0, 0)
 
-            morphotype_layout.addLayout(sponge_layout)
-
-        # Horizontal layout
-        h_layout = QHBoxLayout()
-        h_layout.addLayout(left_layout)
-        h_layout.addLayout(morphotype_layout)
-
-        # Main layout
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(title_tabel)
-        main_layout.addLayout(h_layout)
+        main_layout.addLayout(left_layout)
+        main_layout.addLayout(morphotype_layout)
 
         self.setLayout(main_layout)
 

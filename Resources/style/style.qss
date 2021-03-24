@@ -1,14 +1,135 @@
-@myred: #fe00FF;
-@mygreen: #00ee00;
-@title-font-size: 25px;
-@primary: #AA1155;
+@primary-blue: #419DD1;
+@primary-blue-dark: #3886AF;
+@primary-blue-darker: #2D6E8E;
+@primary-blue-light: #7AB0CC;
 
-QLabel {
-    color: @myred;
-    font-size: @title-font-size;
+@primary-yellow: #F4D05C;
+@primary-yellow-dark: #E8C158;
+@primary-yellow-darker: #CEAC4E;
+@primary-yellow-light: #F2D685;
+
+@dark: #373F41;
+@gray: #737B7D;
+@light-gray: #CECECE;
+@black: #000000;
+@white: #FFFFFF;
+
+@font: 'Mulish';
+
+QWidget {
+    font-family: @font;
+    color: @dark;
+}
+
+QStackedWidget {
+    padding: 5px 35px 10px 35px;
+    background-color: #F0F0F0;
 }
 
 QPushButton {
-    color: @mygreen;
-    background-color: @primary;
+    color: @black;
+}
+
+QPushButton:disabled {
+    color: @gray;
+}
+
+StylizedButton {
+    padding: 8px 25px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    
+    font-size: 20px;
+    font-weight: bold;
+
+    border-radius: 10px;
+
+    color: @white;
+}
+
+StylizedButton#blue {background-color: @primary-blue;}
+StylizedButton#blue:hover {background-color: @primary-blue-dark;}
+StylizedButton#blue:pressed {background-color: @primary-blue-darker;}
+StylizedButton#blue:disabled {background-color: @primary-blue-light;}
+
+StylizedButton#yellow {background-color: @primary-yellow;}
+StylizedButton#yellow:hover {background-color: @primary-yellow-dark;}
+StylizedButton#yellow:pressed {background-color: @primary-yellow-darker;}
+StylizedButton#yellow:disabled {background-color: @primary-yellow-light;}
+
+MenuController StylizedButton {
+    padding: 0;
+    margin: 0;
+    width: 230px;
+    height: 60px;
+
+    font-size: 32px;
+}
+
+QLabel#title {
+    font-weight: bold;
+    font-size: 96px;
+    qproperty-alignment: AlignCenter;
+
+    margin-bottom: 10px;
+}
+
+QLabel#subtitle {
+    width: 550px;
+
+    font-size: 24px;
+    qproperty-alignment: AlignCenter;
+    qproperty-wordWrap: true;
+
+    color: @gray;
+
+    margin-bottom: 40px;
+}
+
+PageTitle QLabel {
+    font-weight: bold;
+    font-size: 50px;
+}
+
+
+QGroupBox {
+    border: 2px solid @dark;
+    font-weight: bold;
+    font-size: 28px;
+    margin-top: 0.5em;
+    padding: 15px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 35px;
+    padding: 0px 8px;
+}
+
+QGroupBox QWidget {
+    font-size: 18px;
+}
+
+QGroupBox QLabel {
+    font-weight: bold;
+}
+
+QGroupBox QCheckBox {
+    font-weight: bold;
+    spacing: 12px;
+}
+
+ChartLegendItem QLabel#item-icon {
+    border: 1px solid @gray;
+    padding: 0;
+}
+
+ChartLegendItem QLabel#value {
+    color: @gray;
+}
+
+ImageComponent QLabel#image {
+    background: @white;
+    border: 2px solid @gray;
+    border-radius: 5px;
 }

@@ -1,55 +1,48 @@
-from Models.Parameters import Parameters
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QFormLayout, QGroupBox, QSizePolicy, QHBoxLayout, QLineEdit, QPushButton
 
-class InputComponent(QWidget):
+from Models.Parameters import Parameters
+
+class InputComponent(QGroupBox):
 
     def __init__(self):
         super().__init__()
 
-        title_label = QLabel("Entrée")
-        title_label.setFont(QFont('Times', 15))
+        self.setTitle("Entrée")
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
 
-        # Name layout
-        name_label = QLabel("Nom de l'analyse : ")
-        self._nameText = QLineEdit()
+        main_layout = QFormLayout(self)
+        main_layout.setHorizontalSpacing(20)
+        main_layout.setVerticalSpacing(14)
 
-        name_layout = QHBoxLayout()
-        name_layout.addWidget(name_label)
-        name_layout.addWidget(self._nameText)
+        self._name_text = QLineEdit()
+        main_layout.addRow("Nom de l'analyse :", self._name_text)
 
-        # Filepath layout
-        filepath_label = QLabel("Dossier d'images à analyser : ")
         self._filepath_text = QLineEdit()
-        filepath_button = QPushButton("Charger")
-
+        self._filepath_button = QPushButton(" Parcourir... ")
+        
         filepath_layout = QHBoxLayout()
-        filepath_layout.addWidget(filepath_label)
+        filepath_layout.setSpacing(8)
         filepath_layout.addWidget(self._filepath_text)
-        filepath_layout.addWidget(filepath_button)
+        filepath_layout.addWidget(self._filepath_button)
 
-        # Main layout
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(title_label)
-        main_layout.addLayout(name_layout)
-        main_layout.addLayout(filepath_layout)
+        main_layout.addRow("Dossier d'images à analyser :", filepath_layout)
 
         self.setLayout(main_layout)
 
         # Button slots
-        filepath_button.clicked.connect(self.filepathClick)
+        self._filepath_button.clicked.connect(self.filepathBrowse)
 
     def reset(self, parameters: Parameters):
-        self._nameText.setText(parameters.name())
+        self._name_text.setText(parameters.name())
         self._filepath_text.setText(parameters.srcFolder())
 
     def updateParameters(self, parameters: Parameters):
-        parameters.setName(self._nameText.text())
+        parameters.setName(self._name_text.text())
         parameters.setSrcFolder(self._filepath_text.text())
 
     @pyqtSlot()
-    def filepathClick(self):
+    def filepathBrowse(self):
         #dialog = QFileDialog()
         #path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
         path = "./data/images"
