@@ -61,10 +61,10 @@ class StatComponent(QGroupBox):
 
             self._legend_layout.addWidget(self._legend_items[k], row, col)
 
-        axis_pen = QPen(QColor(Loader.QSSVariable("@dark")))
+        axis_pen = QPen(Loader.QSSColor("@dark"))
         axis_pen.setWidth(2)
 
-        grid_line_pen = QPen(QColor(Loader.QSSVariable("@light-gray")))
+        grid_line_pen = QPen(Loader.QSSColor("@light-gray"))
 
         labels_font = QFont(Loader.QSSVariable("@font"))
         labels_font.setPointSize(10)
@@ -92,7 +92,7 @@ class StatComponent(QGroupBox):
         title_font = QFont(Loader.QSSVariable("@font"))
         title_font.setPointSize(14)
         self._chart.setTitleFont(title_font)
-        self._chart.setTitleBrush(QBrush(QColor(Loader.QSSVariable("@dark"))))
+        self._chart.setTitleBrush(QBrush(Loader.QSSColor("@dark")))
 
         chart_view = QChartView(self._chart)
         chart_view.setRenderHint(QPainter.Antialiasing)

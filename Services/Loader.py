@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QColor
 import Resources.Resources
 from PyQt5.QtCore import QFile
 from PyQt5 import QtCore
@@ -70,3 +71,7 @@ class Loader:
     @staticmethod
     def QSSVariable(name: str) -> str:
         return Loader._qss_variables.get(name, None)
+
+    @staticmethod
+    def QSSColor(name: str) -> str:
+        return QColor(Loader._qss_variables.get(name, None))
