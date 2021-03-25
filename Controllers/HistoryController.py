@@ -9,7 +9,6 @@ from Controllers.BaseController import BaseController
 from Components.History.ResumeComponent import ResumeComponent
 
 class HistoryController(BaseController):
-    clickedChangeWidget = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -40,8 +39,8 @@ class HistoryController(BaseController):
     def start(self, analysis):
         self._resume_component.reset(analysis)
 
-        src = "D:/Utilisateurs/Margaux/Documents/Workspace/Projets_M1/Spongo_IHM/data/pdf/default.html"
-        dst = "D:/Utilisateurs/Margaux/Documents/Workspace/Projets_M1/Spongo_IHM/data/pdf/current.html"
+        src = "./data/pdf/default.html"
+        dst = "./data/pdf/current.html"
 
         with open(src, "r") as f:
             self._data = f.read()
@@ -53,11 +52,11 @@ class HistoryController(BaseController):
 
     @pyqtSlot()
     def _returnClick(self):
-        self.clickedChangeWidget.emit("ANALYSIS")
+        pass
 
     @pyqtSlot()
     def _quitClick(self):
-        self.clickedChangeWidget.emit("MENU")
+        self.changeWidget.emit("/menu")
 
     def replaceString(self, analysis):
         self._data = self._data.replace("{{TITLE}}", analysis._parameters.name())
@@ -102,8 +101,8 @@ class HistoryController(BaseController):
                     </div>
                 """
 
-                sponge_element = sponge_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.morphotypesNames()[k]))
-                legend_element = legend_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.morphotypesNames()[k]))
+                sponge_element = sponge_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.selectedMorphotypes()[k].name()))
+                legend_element = legend_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.selectedMorphotypes()[k].name()))
 
                 sponge_element = sponge_element.replace("{{NUMBER_SPONGE}}", str(analysis.cumulativeDetectionsFor(k)))                    
 

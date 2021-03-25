@@ -11,8 +11,6 @@ from Components.Parameters.OptionsComponent import OptionsComponent
 from Controllers.BaseController import BaseController
 
 class ParametersController(BaseController):
-    clickedChangeWidget = pyqtSignal(str)
-    clickedChangeToAnalysisWidget = pyqtSignal(Parameters, list)
 
     def __init__(self):
         super().__init__()
@@ -53,7 +51,7 @@ class ParametersController(BaseController):
 
     @pyqtSlot()
     def _returnClicked(self):
-        self.clickedChangeWidget.emit("MENU")
+        self.changeWidget.emit("/menu")
 
     @pyqtSlot()
     def _startClick(self):
@@ -69,6 +67,6 @@ class ParametersController(BaseController):
                 error = "Le dossier source ne contient aucune image au format .jpg"
 
         if error is None:
-            self.clickedChangeToAnalysisWidget.emit(self._parameters, images)
+            self.changeWidget[str, object].emit("/analysis", (self._parameters, images))
         else:
             QMessageBox.warning(self, "Erreur", error)

@@ -41,7 +41,7 @@ class ImageComponent(QGroupBox):
     def update(self, processed_image: ProcessedImage):
         dest_folder = self._parameters.destFolder() if self._parameters.saveProcessedImages() else None
 
-        self._highlight_detections_thread.start(processed_image, dest_folder)
+        self._highlight_detections_thread.start(self._parameters.selectedMorphotypes(), processed_image, dest_folder)
         self._filename_label.setText(processed_image.fileName())
 
     @pyqtSlot(QImage)

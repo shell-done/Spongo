@@ -8,7 +8,7 @@ class Analysis:
         self._parameters = parameters
 
         self._images_filenames = images_filenames
-        self._detected_sponges = {key:0 for key in parameters.morphotypesNames()}
+        self._detected_sponges = {key:0 for key in parameters.selectedMorphotypes()}
 
         self._current_img_index = 0
         self._start_datetime = QDateTime.currentDateTime()

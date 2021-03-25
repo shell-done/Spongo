@@ -12,12 +12,13 @@ class HighlightDetectionsThread(QThread):
         self._abort = False
         self._processed_image = None
 
-    def start(self, processed_image: ProcessedImage, dest_folder: str):
+    def start(self, morphotypes: list, processed_image: ProcessedImage, dest_folder: str):
         self._abort = True
 
         if self.isRunning:
             self.wait()
 
+        self._morphotypes = morphotypes
         self._processed_image = processed_image
         self._dest_folder = dest_folder
         self._abort = False
@@ -30,20 +31,12 @@ class HighlightDetectionsThread(QThread):
         if self._abort:
             return
 
-        colors = {
-            0: [76, 177, 34],
-            1: [164, 73, 163],
-            2: [155, 105, 0],
-            3: [0, 0, 230],
-            4: [0, 168, 217],
-            5: [100, 0, 0]
-        }
-
         for d in self._processed_image.detections():
             x, y, w, h = d.boundingBox()
             label = "%s : %.2f" % (d.className(), d.confidence())
 
-            color = colors[d.classId()]
+            morphotype_color = self._morphotypes[d.classId()].color()
+            color = [morphotype_color.blue(), morphotype_color.green(), morphotype_color.red()]
             labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
 
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 6)

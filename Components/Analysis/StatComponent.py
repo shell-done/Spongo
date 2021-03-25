@@ -19,6 +19,7 @@ class StatComponent(QGroupBox):
         self._legend_items = {}
 
         self.setTitle("Statistiques")
+        self.setProperty("qss-var", "pb-0")
 
         self._total_label = QLabel()
         
@@ -45,14 +46,19 @@ class StatComponent(QGroupBox):
         self._chart.removeAllSeries()
         self._legend_items = {}
         self._series = {}
-        for i,n in parameters.morphotypesNames().items():
+        for i,m in parameters.selectedMorphotypes().items():
             self._series[i] = QSplineSeries(self)
-            self._series[i].setName(n)
-            self._series[i].pen().setWidth(2)
+            self._series[i].setName(m.name())
+            self._series[i].setColor(m.color())
+
+            pen = QPen(m.color(), 3)
+            pen.setCapStyle(Qt.RoundCap)
+            self._series[i].setPen(pen)
+            
             self._series[i].append(0, 0)
             self._chart.addSeries(self._series[i])
 
-            self._legend_items[i] = ChartLegendItem(n, self._series[i].color(), self)
+            self._legend_items[i] = ChartLegendItem(m.name(), m.color(), self)
             self._legend_items[i].toggled.connect(self._legendItemToggled)
 
         for i,k in enumerate(self._legend_items.keys()):
@@ -61,10 +67,10 @@ class StatComponent(QGroupBox):
 
             self._legend_layout.addWidget(self._legend_items[k], row, col)
 
-        axis_pen = QPen(QColor(Loader.QSSVariable("@dark")))
+        axis_pen = QPen(Loader.QSSColor("@dark"))
         axis_pen.setWidth(2)
 
-        grid_line_pen = QPen(QColor(Loader.QSSVariable("@light-gray")))
+        grid_line_pen = QPen(Loader.QSSColor("@light-gray"))
 
         labels_font = QFont(Loader.QSSVariable("@font"))
         labels_font.setPointSize(10)
@@ -92,7 +98,7 @@ class StatComponent(QGroupBox):
         title_font = QFont(Loader.QSSVariable("@font"))
         title_font.setPointSize(14)
         self._chart.setTitleFont(title_font)
-        self._chart.setTitleBrush(QBrush(QColor(Loader.QSSVariable("@dark"))))
+        self._chart.setTitleBrush(QBrush(Loader.QSSColor("@dark")))
 
         chart_view = QChartView(self._chart)
         chart_view.setRenderHint(QPainter.Antialiasing)
@@ -126,7 +132,7 @@ class StatComponent(QGroupBox):
         self._analysis = analysis
         points = len(list(self._series.values())[0])
 
-        for class_id in self._parameters.morphotypesNames():
+        for class_id in self._parameters.selectedMorphotypes():
             self._series[class_id].append(points, analysis.cumulativeDetectionsFor(class_id))
             self._legend_items[class_id].setValue(str(analysis.cumulativeDetectionsFor(class_id)))
 

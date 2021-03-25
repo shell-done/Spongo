@@ -17,8 +17,6 @@ from Components.Analysis.ImageComponent import ImageComponent
 from Components.Analysis.ProgressComponent import ProgressComponent
 
 class AnalysisController(BaseController):
-    clickedChangeWidget = pyqtSignal(str)
-    clickedChangeToHistoryWidget = pyqtSignal(Analysis)
 
     def __init__(self):
         super().__init__()
@@ -74,8 +72,12 @@ class AnalysisController(BaseController):
         self._progress_component.reset(self._analysis.imagesCount())
 
         self._title.setText("Analyse en cours")
+        
         self._return_button.setText("Annuler")
         self._return_button.setObjectName("yellow")
+        self.style().unpolish(self._return_button)
+        self.style().polish(self._return_button)
+
         self._export_button.setVisible(False)
 
         self._analysis_thread.start(parameters, images)
@@ -104,13 +106,13 @@ class AnalysisController(BaseController):
     @pyqtSlot()
     def _returnClick(self):
         if self._analysis.isFinished():
-            self.clickedChangeToHistoryWidget.emit(self._analysis)
+            self.changeWidget[str, object].emit("/history", self._analysis)
         else:
             cancel_message_box = CancelMessageBox(self)
 
             if cancel_message_box.exec_():
                 self._analysis_thread.stop()
-                self.clickedChangeWidget.emit("MENU")
+                self.changeWidget.emit("/menu")
 
     @pyqtSlot()
     def _exportReport(self):
@@ -127,5 +129,7 @@ class AnalysisController(BaseController):
         self._title.setText("Analyse terminée")
         self._return_button.setText("Continuer")
         self._return_button.setObjectName("blue")
+        self.style().unpolish(self._return_button)
+        self.style().polish(self._return_button)
         self._export_button.setVisible(True)
 

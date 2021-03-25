@@ -23,7 +23,7 @@ class AnalysisThread(QThread):
         if self.isRunning():
             self.wait()
 
-        self._morphotypes = parameters.morphotypesNames().copy()
+        self._morphotypes = parameters.selectedMorphotypes().copy()
         self._threshold = parameters.threshold()
         self._srcPath = parameters.srcFolder()
         self._destPath = parameters.destFolder()

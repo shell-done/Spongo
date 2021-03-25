@@ -63,7 +63,13 @@ class ProgressComponent(QGroupBox):
 
     def update(self, next_image: str, value: int, time_left: QTime):
         self._progress_bar_animation.stop()
-        self._progress_bar_animation.setStartValue(self._progress_bar_animation.currentValue())
+        
+        start_value = self._progress_bar.value()
+        if self._progress_bar_animation.currentValue():
+            if self._progress_bar_animation.currentValue() < self._progress_bar.value():
+                start_value = self._progress_bar_animation.currentValue()
+        
+        self._progress_bar_animation.setStartValue(start_value)
         self._progress_bar_animation.setEndValue(value*10)
         self._progress_bar_animation.start()
 

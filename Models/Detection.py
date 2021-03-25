@@ -21,7 +21,7 @@ class Detection:
         return self._class_id
 
     def className(self) -> str:
-        return Loader.SpongesClasses()[self._class_id]
+        return Loader.SpongesMorphotypes()[self._class_id].name()
 
     def confidence(self) -> float:
         return self._confidence

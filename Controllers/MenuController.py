@@ -5,7 +5,6 @@ from Controllers.BaseController import BaseController
 from Components.Widgets.StylizedButton import StylizedButton
 
 class MenuController(BaseController):
-    clickedChangeWidget = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -44,7 +43,7 @@ class MenuController(BaseController):
 
     @pyqtSlot()
     def _startButtonClicked(self):
-        self.clickedChangeWidget.emit("PARAMETERS")
+        self.changeWidget.emit("/parameters")
 
     @pyqtSlot()
     def _historyButtonClicked(self):
