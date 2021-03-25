@@ -72,33 +72,55 @@ class HistoryController(BaseController):
 
         self._data = self._data.replace("{{DETECTED_SPONGES}}", str(analysis.totalDetections()))
 
-        self._data = self._data.replace("{{SPONGES_PER_IMAGE}}", str(float(analysis.totalDetections() / len(analysis.processedImages()))))
+        self._data = self._data.replace("{{SPONGES_PER_IMAGE}}", "{:.1f}".format(analysis.totalDetections() / len(analysis.processedImages())))
 
-        sponge_element, legend_element = "", ""
+        odd_nb_of_sponges = 0
+        sponge_element = ""
+        legend_element = ""
+        colors = ["red", "blue", "green", "yellow"]
+
         for k, v in analysis._parameters.morphotypes().items():
             if v:
-                sponge_element += """<div class="sponge_element">
+                odd_nb_of_sponges += 1
+
+                sponge_element += """
+                    <div class="sponge_element">
                         <div class="info_line">
                             <h3>{{SPONGE_NAME}} : </h3>
                             <h3 class="percent">{{NUMBER_SPONGE}} ({{PERCENT}}%)</h3>
                         </div>
                         <div class="progress_element">
-                            <div class="progress_bar"></div>
+                            <div class="progress_bar {{COLOR}}" style="width: {{PERCENT}}%;"></div>
                         </div>
-                    </div>"""
+                    </div>
+                """
+
+                legend_element += """
+                    <div class="legend_element">
+                        <div class="color {{COLOR}}"></div>
+                        <h3>{{SPONGE_NAME}}</h3>
+                    </div>
+                """
 
                 sponge_element = sponge_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.morphotypesNames()[k]))
-                sponge_element = sponge_element.replace("{{NUMBER_SPONGE}}", str(analysis.cumulativeDetectionsFor(k)))
+                legend_element = legend_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.morphotypesNames()[k]))
 
-                percent = analysis.cumulativeDetectionsFor(k) * 100 / analysis.totalDetections()
+                sponge_element = sponge_element.replace("{{NUMBER_SPONGE}}", str(analysis.cumulativeDetectionsFor(k)))                    
+
+                if analysis.totalDetections() != 0:
+                    percent = analysis.cumulativeDetectionsFor(k) * 100 / analysis.totalDetections()
+                else:
+                    percent = 0
+                    
                 sponge_element = sponge_element.replace("{{PERCENT}}", "{:.1f}".format(percent))
 
-                legend_element += """<div class="legend_element">
-                        <div class="color"></div>
-                        <h3>{{SPONGE_NAME}}</h3>
-                    </div>"""
+                sponge_element = sponge_element.replace("{{COLOR}}", colors[k%4])
+                legend_element = legend_element.replace("{{COLOR}}", colors[k%4])
 
-                legend_element = legend_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.morphotypesNames()[k]))
+        if odd_nb_of_sponges%2 != 0:
+            sponge_element += """
+                <div class="sponge_element"></div>
+            """
 
         self._data = self._data.replace("{{SPONGE_ELEMENT}}", sponge_element)
         self._data = self._data.replace("{{LEGEND_ELEMENT}}", legend_element)
