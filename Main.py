@@ -11,6 +11,7 @@ if __name__ == "__main__":
 
     QFontDatabase.addApplicationFont("Resources/fonts/mulish.ttf")
     App.setStyleSheet(Loader.PreprocessedQSS())
+    Loader.SpongesMorphotypes()
 
     window = WindowController()
 

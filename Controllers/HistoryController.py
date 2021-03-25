@@ -86,7 +86,7 @@ class HistoryController(BaseController):
                         </div>
                     </div>"""
 
-                sponge_element = sponge_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.morphotypesNames()[k]))
+                sponge_element = sponge_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.selectedMorphotypes()[k].name()))
                 sponge_element = sponge_element.replace("{{NUMBER_SPONGE}}", str(analysis.cumulativeDetectionsFor(k)))
 
                 percent = analysis.cumulativeDetectionsFor(k) * 100 / analysis.totalDetections()
@@ -97,7 +97,7 @@ class HistoryController(BaseController):
                         <h3>{{SPONGE_NAME}}</h3>
                     </div>"""
 
-                legend_element = legend_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.morphotypesNames()[k]))
+                legend_element = legend_element.replace("{{SPONGE_NAME}}", str(analysis._parameters.selectedMorphotypes()[k].name()))
 
         self._data = self._data.replace("{{SPONGE_ELEMENT}}", sponge_element)
         self._data = self._data.replace("{{LEGEND_ELEMENT}}", legend_element)

@@ -32,8 +32,8 @@ class ParametersComponent(QGroupBox):
         morphotype_layout.addWidget(QLabel("Morphotypes à détecter :"), 0, 0, 1, 4)
 
         self._tab_cbox = {}
-        for k,v in Loader.SpongesClasses().items():
-            sponge_cbox = QCheckBox(v)
+        for k,m in Loader.SpongesMorphotypes().items():
+            sponge_cbox = QCheckBox(m.name())
             self._tab_cbox[k] = sponge_cbox
 
             x = k%2 + 1

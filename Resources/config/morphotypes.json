@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Ball",
+        "color": "#99CA53"
+    },
+    {
+        "name": "Vase",
+        "color": "#A249A5"
+    },
+    {
+        "name": "Corona",
+        "color": "#F6A625"
+    },
+    {
+        "name": "Red",
+        "color": "#BC3F38"
+    },
+    {
+        "name": "Crown",
+        "color": "#117FB2"
+    },
+    {
+        "name": "Grey_white",
+        "color": "#000062"
+    }
+]

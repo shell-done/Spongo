@@ -1,3 +1,6 @@
+from Models.Morphotype import Morphotype
+import json
+
 from PyQt5.QtGui import QColor
 import Resources.Resources
 from PyQt5.QtCore import QFile
@@ -5,22 +8,22 @@ from PyQt5 import QtCore
 
 class Loader:
     CLASSES_FILE_PATH = "data/parameters/classes.names"
+    MORPHOTYPES_FILE_PATH = "Resources/config/morphotypes.json"
     STYLE_FILE_PATH = "Resources/style/style.qss"
 
-    _sponges_classes = {}
+    _sponges_morphotypes = {}
     _qss_variables = {}
 
     @staticmethod
-    def SpongesClasses() -> dict:
-        if len(Loader._sponges_classes) == 0:
+    def SpongesMorphotypes() -> dict:
+        if len(Loader._sponges_morphotypes) == 0:
+            with open(Loader.MORPHOTYPES_FILE_PATH, 'rt') as f:
+                obj = json.loads(f.read())
 
-            with open(Loader.CLASSES_FILE_PATH, 'rt') as f:
-                for i, name in enumerate(f.readlines()):
-                    name = name.rstrip("\n")
-                    Loader._sponges_classes[i] = name
+            for i,m in enumerate(obj):
+                Loader._sponges_morphotypes[i] = Morphotype(m["name"], QColor(m["color"]))
 
-        return Loader._sponges_classes
-
+        return Loader._sponges_morphotypes
 
     @staticmethod
     def PreprocessedQSS() -> str:

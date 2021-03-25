@@ -32,7 +32,8 @@ class TextReportWriter(ReportWriter):
             lines.append("\tDossier des images analysées : %s" % self._analysis.parameters().destFolder())
         lines.append("\tSeuil de confiance : %.1f%%" % (self._analysis.parameters().threshold()*100))
         
-        lines.append("\tMorphotypes recherchés : %s " % ", ".join(self._analysis.parameters().morphotypesNames().values()))
+        selected_morphotypes_names = [m.name() for m in self._analysis.parameters().selectedMorphotypes().values()]
+        lines.append("\tMorphotypes recherchés : %s " % ", ".join(selected_morphotypes_names))
         lines.append("")
         lines.append("")
 
@@ -45,9 +46,9 @@ class TextReportWriter(ReportWriter):
         lines.append("-"*25)
 
         total = self._analysis.totalDetections()
-        for class_id, class_name in self._analysis.parameters().morphotypesNames().items():
-            detections = self._analysis.cumulativeDetections()[class_id]
-            lines.append("\t%s : %d (%.1f%%)" % (class_name, detections, detections*100/total))
+        for morphotype_id, morphotype in self._analysis.parameters().selectedMorphotypes().items():
+            detections = self._analysis.cumulativeDetections()[morphotype_id]
+            lines.append("\t%s : %d (%.1f%%)" % (morphotype.name(), detections, detections*100/total))
 
         lines.append("")
         lines.append("\tTotal : %d" % total)

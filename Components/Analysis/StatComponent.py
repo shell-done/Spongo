@@ -46,14 +46,19 @@ class StatComponent(QGroupBox):
         self._chart.removeAllSeries()
         self._legend_items = {}
         self._series = {}
-        for i,n in parameters.morphotypesNames().items():
+        for i,m in parameters.selectedMorphotypes().items():
             self._series[i] = QSplineSeries(self)
-            self._series[i].setName(n)
-            self._series[i].pen().setWidth(2)
+            self._series[i].setName(m.name())
+            self._series[i].setColor(m.color())
+
+            pen = QPen(m.color(), 3)
+            pen.setCapStyle(Qt.RoundCap)
+            self._series[i].setPen(pen)
+            
             self._series[i].append(0, 0)
             self._chart.addSeries(self._series[i])
 
-            self._legend_items[i] = ChartLegendItem(n, self._series[i].color(), self)
+            self._legend_items[i] = ChartLegendItem(m.name(), m.color(), self)
             self._legend_items[i].toggled.connect(self._legendItemToggled)
 
         for i,k in enumerate(self._legend_items.keys()):
@@ -127,7 +132,7 @@ class StatComponent(QGroupBox):
         self._analysis = analysis
         points = len(list(self._series.values())[0])
 
-        for class_id in self._parameters.morphotypesNames():
+        for class_id in self._parameters.selectedMorphotypes():
             self._series[class_id].append(points, analysis.cumulativeDetectionsFor(class_id))
             self._legend_items[class_id].setValue(str(analysis.cumulativeDetectionsFor(class_id)))
 

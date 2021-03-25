@@ -9,7 +9,7 @@ class Parameters:
         self._display_processed_images = True
 
         self._morphotypes = {}
-        for i in Loader.SpongesClasses():
+        for i in Loader.SpongesMorphotypes():
             self._morphotypes[i] = True
 
         self._save_processed_images = False
@@ -45,11 +45,11 @@ class Parameters:
     def setMorphotypes(self, morphotypes: dict):
         self._morphotypes = morphotypes
 
-    def morphotypesNames(self) -> dict:
+    def selectedMorphotypes(self) -> dict:
         ret = {}
         for k,v in self._morphotypes.items():
             if v:
-                ret[k] = Loader.SpongesClasses()[k]
+                ret[k] = Loader.SpongesMorphotypes()[k]
 
         return ret
 
