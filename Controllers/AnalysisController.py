@@ -74,8 +74,12 @@ class AnalysisController(BaseController):
         self._progress_component.reset(self._analysis.imagesCount())
 
         self._title.setText("Analyse en cours")
+        
         self._return_button.setText("Annuler")
         self._return_button.setObjectName("yellow")
+        self.style().unpolish(self._return_button)
+        self.style().polish(self._return_button)
+
         self._export_button.setVisible(False)
 
         self._analysis_thread.start(parameters, images)
@@ -127,5 +131,7 @@ class AnalysisController(BaseController):
         self._title.setText("Analyse terminée")
         self._return_button.setText("Continuer")
         self._return_button.setObjectName("blue")
+        self.style().unpolish(self._return_button)
+        self.style().polish(self._return_button)
         self._export_button.setVisible(True)
 
