@@ -19,6 +19,7 @@ class StatComponent(QGroupBox):
         self._legend_items = {}
 
         self.setTitle("Statistiques")
+        self.setProperty("qss-var", "pb-0")
 
         self._total_label = QLabel()
         
