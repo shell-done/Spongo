@@ -19,71 +19,55 @@ class WindowController(QMainWindow):
         self.setFixedSize(1280, 720)
         self.setWindowIcon(QIcon("Resources/img/icon.png"))
 
-        self.stackedWidget = QStackedWidget()
-        self.setCentralWidget(self.stackedWidget)
+        self.stacked_widget = QStackedWidget()
+        self.setCentralWidget(self.stacked_widget)
 
-        self.menu = MenuController()
-        self.parameters = ParametersController()
-        self.analysis = AnalysisController()
-        self.history = HistoryController()
+        self._widgets = {
+            "/menu": MenuController(),
+            "/parameters": ParametersController(),
+            "/analysis": AnalysisController(),
+            "/history": HistoryController()
+        }
 
-        self.stackedWidget.addWidget(self.menu)
-        self.stackedWidget.addWidget(self.parameters)
-        self.stackedWidget.addWidget(self.analysis)
-        self.stackedWidget.addWidget(self.history)
+        for w in self._widgets.values():
+            self.stacked_widget.addWidget(w)
+            w.changeWidget[str].connect(self._route)
+            w.changeWidget[str, object].connect(self._route)
 
-        self.stackedWidget.setCurrentWidget(self.menu)
-
-        self.menu.clickedChangeWidget.connect(self.changeWidget)
-        self.parameters.clickedChangeWidget.connect(self.changeWidget)
-        self.parameters.clickedChangeToAnalysisWidget.connect(self.changetoAnalysisWidget)
-        self.analysis.clickedChangeWidget.connect(self.changeWidget)
-        self.analysis.clickedChangeToHistoryWidget.connect(self.changetoHistoryWidget)
-        self.history.clickedChangeWidget.connect(self.changeWidget)
+        self.stacked_widget.setCurrentWidget(self._widgets["/menu"])
 
         self.show()
 
     def closeEvent(self, event: QCloseEvent):
-        ask_exit = self.stackedWidget.currentWidget().askExit()
+        ask_exit = self.stacked_widget.currentWidget().askExit()
 
         if ask_exit:
             event.accept()
         else:
             event.ignore()
 
-    @pyqtSlot(Parameters, list)
-    def changetoAnalysisWidget(self, parameters, images):
-        current_widget = self.stackedWidget.currentWidget()
-        current_widget.stop()
-
-        self.stackedWidget.setCurrentWidget(self.analysis)
-        self.analysis.start(parameters, images)
-
-    @pyqtSlot(Analysis)
-    def changetoHistoryWidget(self, analysis):
-        current_widget = self.stackedWidget.currentWidget()
-        current_widget.stop()
-
-        self.stackedWidget.setCurrentWidget(self.history)
-        self.history.start(analysis)
-
     @pyqtSlot(str)
-    def changeWidget(self, nameWidget):
+    @pyqtSlot(str, object)
+    def _route(self, route_name: str, parameters: object = None):
         next_widget = None
-        if(nameWidget == "MENU"):
-            next_widget = self.menu
-        if(nameWidget == "PARAMETERS"):
-            next_widget = self.parameters
-        if(nameWidget == "ANALYSIS"):
-            next_widget = self.analysis
+        
+        for r,w in self._widgets.items():
+            if r == route_name:
+                next_widget = w
+                break
 
         if next_widget is None:
             print("[WARNING] Unknown widget : %s" % str(next_widget))
             return
-        
-        current_widget = self.stackedWidget.currentWidget()
+
+        current_widget = self.stacked_widget.currentWidget()
         current_widget.stop()
 
-        self.stackedWidget.setCurrentWidget(next_widget)
-        next_widget.start()
+        self.stacked_widget.setCurrentWidget(next_widget)
 
+        if route_name == "/analysis":
+            next_widget.start(parameters[0], parameters[1])
+        elif route_name == "/history":
+            next_widget.start(parameters)
+        else:
+            next_widget.start()

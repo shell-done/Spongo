@@ -17,8 +17,6 @@ from Components.Analysis.ImageComponent import ImageComponent
 from Components.Analysis.ProgressComponent import ProgressComponent
 
 class AnalysisController(BaseController):
-    clickedChangeWidget = pyqtSignal(str)
-    clickedChangeToHistoryWidget = pyqtSignal(Analysis)
 
     def __init__(self):
         super().__init__()
@@ -108,13 +106,13 @@ class AnalysisController(BaseController):
     @pyqtSlot()
     def _returnClick(self):
         if self._analysis.isFinished():
-            self.clickedChangeToHistoryWidget.emit(self._analysis)
+            self.changeWidget[str, object].emit("/history", self._analysis)
         else:
             cancel_message_box = CancelMessageBox(self)
 
             if cancel_message_box.exec_():
                 self._analysis_thread.stop()
-                self.clickedChangeWidget.emit("MENU")
+                self.changeWidget.emit("/menu")
 
     @pyqtSlot()
     def _exportReport(self):

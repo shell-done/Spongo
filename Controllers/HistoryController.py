@@ -9,7 +9,6 @@ from Controllers.BaseController import BaseController
 from Components.History.ResumeComponent import ResumeComponent
 
 class HistoryController(BaseController):
-    clickedChangeWidget = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -53,11 +52,11 @@ class HistoryController(BaseController):
 
     @pyqtSlot()
     def _returnClick(self):
-        self.clickedChangeWidget.emit("ANALYSIS")
+        pass
 
     @pyqtSlot()
     def _quitClick(self):
-        self.clickedChangeWidget.emit("MENU")
+        self.changeWidget.emit("/menu")
 
     def replaceString(self, analysis):
         self._data = self._data.replace("{{TITLE}}", analysis._parameters.name())
