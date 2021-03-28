@@ -1,5 +1,7 @@
+import cv2
+
 from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QImage, QPixmap
 
 from Models.ProcessedImage import ProcessedImage
 from Services.Images.AnalysisImagesGenerator import AnalysisImagesGenerator
@@ -26,6 +28,9 @@ class HighlightDetectionsThread(QThread):
         super().start()
 
     def run(self):
+        #qImg = QImage(cvImg.data, width, height, bytesPerLine, QImage.Format_RGB888)
+
+        # pixmap = QPixmap(500, 200) #QPixmap(self._processed_image.filePath())
         pixmap = AnalysisImagesGenerator.highlightDetections(self._processed_image)
 
         if self._abort:

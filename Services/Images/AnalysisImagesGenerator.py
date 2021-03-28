@@ -1,5 +1,7 @@
+import cv2
+
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPixmap
+from PyQt5.QtGui import QBrush, QColor, QFont, QImage, QPainter, QPen, QPixmap
 
 from Models.ProcessedImage import ProcessedImage
 from Models.Analysis import Analysis
@@ -8,7 +10,14 @@ from Services.Loader import Loader
 class AnalysisImagesGenerator:
     @staticmethod
     def highlightDetections(processed_image: ProcessedImage) -> QPixmap:
-        img = QPixmap(processed_image.filePath())
+        cvImg = cv2.imread(processed_image.filePath())
+        height, width, channel = cvImg.shape
+        bytesPerLine = 3 * width
+        qImg = QImage(cvImg.data, width, height, bytesPerLine, QImage.Format_RGB888)
+
+        img = QPixmap.fromImage(qImg)
+
+        #img = QPixmap(processed_image.filePath())
         painter = QPainter(img)
         painter.setFont(QFont(Loader.QSSVariable("@font"), 30))
         
