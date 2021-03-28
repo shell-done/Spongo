@@ -29,6 +29,6 @@ class ProcessedImage:
     def interestScore(self) -> float:
         s = 0
         for v in self.detectionsCount().values():
-            s += s**0.5
+            s += v**0.5
 
         return s
