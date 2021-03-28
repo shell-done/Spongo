@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="author" content="Spongo">
+        <link rel="stylesheet" href="style/report_style.css">
+        <title>Résumé de l'analyse</title>
+    </head>
+    <body>
+        <main>
+            <div class="page">
+            <header>
+                <div class="header-side f-center">
+                    <img src="img/spongo_logo.png">
+                </div>
+                <div class="header-center">
+                    <h1>Rapport d'analyse</h1>
+                    <h3 class="subtitle">{{TITLE}}</h3>
+                </div>
+                <div class="header-side">
+                    <img src="img/ifremer_logo.png">
+                </div>
+            </header>
+            <section id="resume">
+                <h2>Résumé</h2>
+                <table>
+                    <tr>
+                        <td width="40%">Nom de l'analyse :</td>
+                        <td>{{TITLE}}</td>
+                    </tr>
+                    <tr>
+                        <td>Images analysées :</td>
+                        <td>{{ANALYSED_IMAGES}}</td>
+                    </tr>
+                    <tr>
+                        <td>Commencé le :</td>
+                        <td>{{START_DATE}}</td>
+                    </tr>
+                    <tr>
+                        <td>Terminé le :</td>
+                        <td>{{END_DATE}}</td>
+                    </tr>
+                </table>
+
+                <h2>Paramètres</h2>
+                <table>
+                    <tr>
+                        <td width="40%">Dossier analysé :</td>
+                        <td>{{ANALYSED_FOLDER}}</td>
+                    </tr>
+                    <tr>
+                        <td>Seuil de confiance :</td>
+                        <td>{{CONFIDENCE_THRESHOLD}}</td>
+                    </tr>
+                    <tr>
+                        <td>Morphotypes recherchés :</td>
+                        <td>{{SELECTED_MORPHOTYPES}}</td>
+                    </tr>
+                    <tr class="opt" data-show="{{OPT_SAVE_PROCESSED_IMAGES}}">
+                        <td>Dossier des images analysées :</td>
+                        <td>{{PROCESSED_IMAGES_FOLDER}}</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="summary">
+                <h2>Détails</h2>
+
+                <div class="morphotypes-stats">
+                    {{MORPHOTYPES_STATS}}
+                    <!-- <div class="stat-item">
+                        <div class="stat-item-header">
+                            <span class="name">Éponge A</span>
+                            <span class="count">12</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress" style='width: 60%'></div>
+                        </div>
+                    </div> -->
+                </div>
+                
+                <div class="total-stats">
+                    <div class="stat-item">
+                        <div class="stat-item-header">
+                            <span class="name">Total</span>
+                            <span class="count">{{TOTAL_DETECTIONS}}</span>
+                        </div>
+                        <div class="progress-container">
+                            {{TOTAL_PROGRESS}}
+                            <!-- <div class="progress" style='width: 60%'></div>
+                            <div class="progress" style='width: 30%'></div> -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="fill"></div>
+
+            <footer>
+                <div>{{TITLE}}</div>
+                <div>Page 1/2</div>
+            </footer>
+            
+            </div>
+            
+            <div class="page">
+            <section id="chart">
+                <h2>Détections cumulées</h2>
+                
+                <div class="chart-container">
+                    <!--<img src="chart.png">-->
+                </div>
+                <div class="chart-legend">
+                    {{LEGEND_ITEMS}}
+                    <!-- <div class="legend-item">
+                        <div class="legend-item-color-container">
+                            <div class="legend-item-color"></div>
+                        </div>
+                        <div class="legend-item-name">Éponge A</div>
+                    </div> -->
+                </div>
+            </section>
+
+            <section id="interests">
+                <h2>Images d'intérêt</h2>
+
+                <div class="images-container">
+                    {{IMAGE_ITEMS}}
+                    <!-- <div class="images-item">
+                        <div class="images-item-container">
+                            <img src="img/example.jpg">
+                            <span>EXAMPLE.jpg</span>
+                        </div>
+                    </div> -->
+                </div>
+            </section>
+
+            <div class="fill"></div>
+
+            <footer>
+                <div>{{TITLE}}</div>
+                <div>Page 2/2</div>
+            </footer>
+            </div>
+        </main>
+</body>
+
+</html>

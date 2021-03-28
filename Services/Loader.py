@@ -9,7 +9,7 @@ from PyQt5 import QtCore
 class Loader:
     CLASSES_FILE_PATH = "data/parameters/classes.names"
     MORPHOTYPES_FILE_PATH = "Resources/config/morphotypes.json"
-    STYLE_FILE_PATH = "Resources/style/style.qss"
+    STYLE_FILE_PATH = "Resources/style/app_style.qss"
 
     _sponges_morphotypes = {}
     _qss_variables = {}

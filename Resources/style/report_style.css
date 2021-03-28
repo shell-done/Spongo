@@ -1,0 +1,255 @@
+@font-face { 
+    font-family: 'Mulish';
+    src: url('/fonts/mulish.ttf') format('truetype');
+}
+
+/*
+ * General
+ */
+body {
+    margin: 50px;
+    font-family: Mulish;
+    color: #373F41;
+    -webkit-print-color-adjust: exact !important;
+}
+
+h2 {
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+.opt[data-show="False"] {
+    display: none;
+}
+
+footer {
+    display: none;
+}
+
+@media print {
+    @page {margin: 0;}
+    body { margin: 0;}
+
+    .page {
+        width: auto;
+        height: calc(100vh - 3.2cm);
+        margin: 1.6cm;
+        display: flex;
+        flex-direction: column;
+        page-break-after: always;
+    }
+
+    section:first-child h2 {
+        margin-top: 0;
+    }
+
+    .fill {
+        flex-grow: 1;
+    }
+
+    @media print {
+        footer {
+            display: flex;
+            justify-content: space-between;
+            color: #ACACAC;
+        }
+    }
+}
+
+/*
+ * Header
+ */
+header {
+    display: flex;
+}
+
+.header-side {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-side img {
+    width: 70%;
+}
+
+.header-center {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-center h1 {
+    margin-bottom: 0;
+}
+
+.header-center h3 {
+    color: gray;
+}
+
+/*
+ * Resume
+ */
+
+table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+table td, th {
+    border: 0;
+    border-top: 1px solid #DEE2E6;
+    text-align: left;
+    padding: 6px;
+}
+
+tr:nth-child(even) {
+    background-color: #F2F2F2;
+}
+
+/*
+ * Summary
+ */
+.morphotypes-stats {
+    margin-top: -10px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.morphotypes-stats::after {
+    content: "";
+    flex: auto;
+}
+
+.stat-item {
+    width: 46%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-item-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.stat-item-header .count {
+    color: #ACACAC;
+}
+
+.progress-container {
+    display: flex;
+    margin-top: 5px;
+    border: 2px solid #ACACAC;
+    height: 20px;
+}
+
+.progress {
+    display: inline;
+    width: 28%;
+    height: 100%;
+    background-color: red;
+}
+
+
+.total-stats {
+    margin-top: 25px;
+}
+
+.total-stats .stat-item {
+    width: 96%;
+}
+
+/*
+ * Chart
+ */
+.chart-container {
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.chart-container img {
+    width: 90%;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 15%;
+    margin-right: 15%;
+    flex-wrap: wrap;
+}
+
+.chart-legend::after {
+    content: "";
+    flex: auto;
+}
+
+.legend-item {
+    flex: 0 0 33.333333%;
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.legend-item-color-container {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #ACACAC;
+}
+
+.legend-item-color {
+    width: 100%;
+    height: 100%;
+    background-color: red;
+}
+
+/*
+ * Interest
+ */
+.images-container {
+    margin-top: -10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.images-container::after {
+    content: "";
+    flex: auto;
+}
+
+.images-item {
+    margin-top: 30px;
+    flex: 0 0 50%;
+}
+
+.images-item-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 8%;
+    margin-right: 8%;
+}
+
+.images-item span {
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.images-item img {
+    width: 100%;
+    border: 2px solid #A0A0A0;
+    border-radius: 5px;
+}

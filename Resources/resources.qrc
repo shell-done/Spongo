@@ -1,7 +1,13 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
-        <file>style/style.qss</file>
-        <file>img/icon.png</file>
+        <file>fonts/mulish.ttf</file>
+        <file>style/app_style.qss</file>
+        <file>style/report_style.css</file>
+        <file>img/spongo_icon.png</file>
+        <file>img/spongo_logo.png</file>
+        <file>img/ifremer_logo.png</file>
+        <file>img/isen_logo.png</file>
+        <file>img/example.jpg</file>
     </qresource>
 </RCC>

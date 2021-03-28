@@ -2,7 +2,7 @@ from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
 from Models.ProcessedImage import ProcessedImage
-from Services.Images.HighlightDetections import HighlightDetections
+from Services.Images.AnalysisImagesGenerator import AnalysisImagesGenerator
 
 class HighlightDetectionsThread(QThread):
     imageLoadedSignal = pyqtSignal(QPixmap)
@@ -26,7 +26,7 @@ class HighlightDetectionsThread(QThread):
         super().start()
 
     def run(self):
-        pixmap = HighlightDetections.generate(self._processed_image)
+        pixmap = AnalysisImagesGenerator.highlightDetections(self._processed_image)
 
         if self._abort:
             return
