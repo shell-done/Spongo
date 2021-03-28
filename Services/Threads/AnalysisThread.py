@@ -46,6 +46,7 @@ class AnalysisThread(QThread):
         t0 = time.time()
         for image_name in self._images:
             if self._abort:
+                self._network = None
                 return
 
             detections = []
@@ -57,6 +58,7 @@ class AnalysisThread(QThread):
                 detections.append(Detection(det[0], det[1], det[2]))
 
             if self._abort:
+                self._network = None
                 return
 
             processed_image = ProcessedImage(self._srcPath, image_name, detections)
@@ -64,4 +66,5 @@ class AnalysisThread(QThread):
 
         print("Predictions complete on %d images in %.2fs" % (len(self._images), time.time() - t0))
 
+        self._network = None
         self.onAnalysisFinishedSignal.emit()

@@ -12,6 +12,7 @@ class AnalysisImagesGenerator:
     def highlightDetections(processed_image: ProcessedImage) -> QPixmap:
         cvImg = cv2.imread(processed_image.filePath())
         height, width, channel = cvImg.shape
+        cv2.cvtColor(cvImg, cv2.COLOR_BGR2RGB, cvImg)
         bytesPerLine = 3 * width
         qImg = QImage(cvImg.data, width, height, bytesPerLine, QImage.Format_RGB888)
 
