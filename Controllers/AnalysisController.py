@@ -62,6 +62,7 @@ class AnalysisController(BaseController):
         self._return_button.clicked.connect(self._returnClick)
 
         self._analysis_thread = AnalysisThread()
+        self._analysis_thread.initialized.connect(self._neuralNetworkInitialized)
         self._analysis_thread.imageProcessed.connect(self._imageProcessed)
         self._analysis_thread.completed.connect(self._analysisFinished)
 
@@ -71,12 +72,12 @@ class AnalysisController(BaseController):
     def start(self, parameters: Parameters, images: list):
         self._analysis = Analysis(parameters, images)
 
+        self._title.setText("Initialisation de l'analyse")
+
         self._stat_component.reset(parameters)
         self._image_component.reset(parameters)
         self._progress_component.reset(self._analysis.imagesCount())
 
-        self._title.setText("Analyse en cours")
-        
         self._return_button.setText("Annuler")
         self._return_button.setObjectName("yellow")
         self.style().unpolish(self._return_button)
@@ -125,6 +126,10 @@ class AnalysisController(BaseController):
 
         writer = CSVReportWriter(self._analysis, shape="rectangle")
         writer.write("report.csv")
+
+    @pyqtSlot()
+    def _neuralNetworkInitialized(self):
+        self._title.setText("Analyse en cours")
 
     @pyqtSlot()
     def _analysisFinished(self):

@@ -10,6 +10,7 @@ from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
 
 class AnalysisThread(QThread):
+    initialized = pyqtSignal()
     imageProcessed = pyqtSignal(ProcessedImage)
     completed = pyqtSignal()
 
@@ -43,6 +44,8 @@ class AnalysisThread(QThread):
 
         self._network = NeuralNetwork(cfg_file=modelConfiguration, weights_file=modelWeights, threshold=self._threshold)
         
+        self.initialized.emit()
+
         t0 = time.time()
         for image_name in self._images:
             if self._abort:

@@ -9,15 +9,23 @@ from Services.Images.ImageConverter import ImageConverter
 
 class ImagePainter:
     @staticmethod
-    def drawDetections(processed_image: ProcessedImage) -> QPixmap:
+    def drawDetections(processed_image: ProcessedImage, width=2048) -> QPixmap:
         cv_mat = cv2.imread(processed_image.filePath())        
         pixmap = ImageConverter.CVToQPixmap(cv_mat)
 
+        original_width = pixmap.width()
+        original_height = pixmap.height()
+
+        pixmap = pixmap.scaledToWidth(width)
+
+        x_ratio = pixmap.width()/original_width
+        y_ratio = pixmap.height()/original_height
+
         painter = QPainter(pixmap)
-        painter.setFont(QFont(Loader.QSSVariable("@font"), 30))
+        painter.setFont(QFont(Loader.QSSVariable("@font"), 20))
         
         pen = QPen()
-        pen.setWidth(14)
+        pen.setWidth(8)
         pen.setJoinStyle(Qt.MiterJoin)
         pen.setColor(QColor("red"))
         painter.setPen(pen)
@@ -27,10 +35,14 @@ class ImagePainter:
 
         for d in processed_image.detections():
             x, y, w, h = d.boundingBox()
+            x *= x_ratio
+            w *= x_ratio
+            y *= y_ratio
+            h *= y_ratio
             label = "%s : %.2f" % (d.className(), d.confidence())
             
             morphotype_color = Loader.SpongesMorphotypes()[d.classId()].color()
-            bounding_rect = painter.boundingRect(x, y - 57, 200, 50, Qt.AlignLeft, label)
+            bounding_rect = painter.boundingRect(x, y - 44, 200, 40, Qt.AlignLeft, label)
 
             pen.setColor(morphotype_color)
             painter.setPen(pen)

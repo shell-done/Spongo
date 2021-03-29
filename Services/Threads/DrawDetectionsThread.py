@@ -1,5 +1,3 @@
-import cv2
-
 from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QPixmap
 
@@ -31,9 +29,8 @@ class DrawDetectionsThread(QThread):
     def run(self):
         pixmap = ImagePainter.drawDetections(self._processed_image)
 
-        if self._dest_folder:
-            cv_mat = ImageConverter.QPixmapToCV(pixmap)
-            cv2.imwrite(self._dest_folder + "/" + self._processed_image.fileName(), cv_mat)
+        if self._dest_folder and self._processed_image.hasDetections():
+            pixmap.save(self._dest_folder + "/" + self._processed_image.fileName())
 
         if self._label_size:
             pixmap = pixmap.scaled(self._label_size, Qt.KeepAspectRatio)

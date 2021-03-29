@@ -39,17 +39,17 @@ class ImageConverter:
 
     @staticmethod
     def QImageToCV(image: QImage) -> np.ndarray:
-        image = image.rgbSwapped()
-
         if image.format() != QImage.Format_RGB888:
             image = image.convertToFormat(QImage.Format_RGB888)
+
+        image = image.convertToFormat(4)
 
         width = image.width()
         height = image.height()
 
         ptr = image.bits()
         ptr.setsize(image.byteCount())
-        arr = np.array(ptr).reshape(height, width, 3)
+        arr = np.array(ptr).reshape(height, width, 4)
 
         return arr
 
