@@ -1,12 +1,13 @@
 import cv2
 
 from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QPixmap
 
 from Models.ProcessedImage import ProcessedImage
-from Services.Images.AnalysisImagesGenerator import AnalysisImagesGenerator
+from Services.Images.ImageConverter import ImageConverter
+from Services.Images.ImagePainter import ImagePainter
 
-class HighlightDetectionsThread(QThread):
+class DrawDetectionsThread(QThread):
     imageLoadedSignal = pyqtSignal(QPixmap)
 
     def __init__(self):
@@ -28,16 +29,11 @@ class HighlightDetectionsThread(QThread):
         super().start()
 
     def run(self):
-        #qImg = QImage(cvImg.data, width, height, bytesPerLine, QImage.Format_RGB888)
-
-        # pixmap = QPixmap(500, 200) #QPixmap(self._processed_image.filePath())
-        pixmap = AnalysisImagesGenerator.highlightDetections(self._processed_image)
-
-        if self._abort:
-            return
+        pixmap = ImagePainter.drawDetections(self._processed_image)
 
         if self._dest_folder:
-            pixmap.toImage().save(self._dest_folder + "/" + self._processed_image.fileName(), quality=85)
+            cv_mat = ImageConverter.QPixmapToCV(pixmap)
+            cv2.imwrite(self._dest_folder + "/" + self._processed_image.fileName(), cv_mat)
 
         if self._label_size:
             pixmap = pixmap.scaled(self._label_size, Qt.KeepAspectRatio)

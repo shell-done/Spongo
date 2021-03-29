@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QGridLayout, QGroupBox, QSizePolicy, QWidget, QLabel
 
 from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
-from Services.Threads.HighlightDetectionsThread import HighlightDetectionsThread
+from Services.Threads.DrawDetectionsThread import DrawDetectionsThread
 
 class ImageComponent(QGroupBox):
 
@@ -29,7 +29,7 @@ class ImageComponent(QGroupBox):
 
         self.setLayout(main_layout)
 
-        self._highlight_detections_thread = HighlightDetectionsThread()
+        self._highlight_detections_thread = DrawDetectionsThread()
         self._highlight_detections_thread.imageLoadedSignal.connect(self._highlightedImageReceived)
 
     def reset(self, parameters: Parameters):

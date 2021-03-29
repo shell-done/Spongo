@@ -1,3 +1,4 @@
+from Services.Threads.PostAnalysisThread import PostAnalysisThread
 from Components.Widgets.StylizedButton import StylizedButton
 from Components.Widgets.PageTitle import PageTitle
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
@@ -23,7 +24,7 @@ class AnalysisController(BaseController):
 
         self._analysis = None
 
-        self._title = PageTitle("Démarrer une analyse", False, self)
+        self._title = PageTitle("Initialisation de l'analyse", False, self)
 
         self._stat_component = StatComponent()
         self._image_component = ImageComponent()
@@ -61,8 +62,11 @@ class AnalysisController(BaseController):
         self._return_button.clicked.connect(self._returnClick)
 
         self._analysis_thread = AnalysisThread()
-        self._analysis_thread.imageProcessedSignal.connect(self._imageProcessed)
-        self._analysis_thread.onAnalysisFinishedSignal.connect(self._analysisFinished)
+        self._analysis_thread.imageProcessed.connect(self._imageProcessed)
+        self._analysis_thread.completed.connect(self._analysisFinished)
+
+        self._post_analysis_thread = PostAnalysisThread()
+        self._post_analysis_thread.completed.connect(self._postAnalysisFinished)
 
     def start(self, parameters: Parameters, images: list):
         self._analysis = Analysis(parameters, images)
@@ -126,6 +130,11 @@ class AnalysisController(BaseController):
     def _analysisFinished(self):
         self._analysis.finish()
 
+        self._title.setText("Post analyse en cours")
+        self._post_analysis_thread.start(self._analysis)
+
+    @pyqtSlot()
+    def _postAnalysisFinished(self):
         self._title.setText("Analyse terminée")
         self._return_button.setText("Continuer")
         self._return_button.setObjectName("blue")

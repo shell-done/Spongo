@@ -10,8 +10,8 @@ from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
 
 class AnalysisThread(QThread):
-    imageProcessedSignal = pyqtSignal(ProcessedImage)
-    onAnalysisFinishedSignal = pyqtSignal()
+    imageProcessed = pyqtSignal(ProcessedImage)
+    completed = pyqtSignal()
 
     def __init__(self):
         super(QThread, self).__init__()
@@ -62,9 +62,9 @@ class AnalysisThread(QThread):
                 return
 
             processed_image = ProcessedImage(self._srcPath, image_name, detections)
-            self.imageProcessedSignal.emit(processed_image)
+            self.imageProcessed.emit(processed_image)
 
         print("Predictions complete on %d images in %.2fs" % (len(self._images), time.time() - t0))
 
         self._network = None
-        self.onAnalysisFinishedSignal.emit()
+        self.completed.emit()

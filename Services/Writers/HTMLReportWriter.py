@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QBuffer, QByteArray
-from Services.Images.AnalysisImagesGenerator import AnalysisImagesGenerator
+
 from Models.ProcessedImage import ProcessedImage
 from Models.Analysis import Analysis
 from Services.Writers.ReportWriter import ReportWriter
@@ -72,12 +72,7 @@ class HTMLReportWriter(ReportWriter):
 
         # Interest
         image_items = ""
-        for processed_image, pixmap in AnalysisImagesGenerator.mostInterestingHiglightedImages(self._analysis, 4).items():
-            byte_array = QByteArray()
-            buffer = QBuffer(byte_array)
-            pixmap.scaledToWidth(1080).save(buffer, "jpeg")
-            base64_img = "data:image/jpeg;base64," + str(byte_array.toBase64())[2:-1]
-
+        for processed_image, base64_img in self._analysis.mostInterestingBase64Images().items():
             image_items += """
                 <div class="images-item">
                     <div class="images-item-container">

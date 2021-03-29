@@ -1,25 +1,19 @@
 import cv2
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QBrush, QColor, QFont, QImage, QPainter, QPen, QPixmap
+from PyQt5.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPixmap
 
 from Models.ProcessedImage import ProcessedImage
-from Models.Analysis import Analysis
 from Services.Loader import Loader
+from Services.Images.ImageConverter import ImageConverter
 
-class AnalysisImagesGenerator:
+class ImagePainter:
     @staticmethod
-    def highlightDetections(processed_image: ProcessedImage) -> QPixmap:
-        cvImg = cv2.imread(processed_image.filePath())
-        height, width, channel = cvImg.shape
-        cv2.cvtColor(cvImg, cv2.COLOR_BGR2RGB, cvImg)
-        bytesPerLine = 3 * width
-        qImg = QImage(cvImg.data, width, height, bytesPerLine, QImage.Format_RGB888)
+    def drawDetections(processed_image: ProcessedImage) -> QPixmap:
+        cv_mat = cv2.imread(processed_image.filePath())        
+        pixmap = ImageConverter.CVToQPixmap(cv_mat)
 
-        img = QPixmap.fromImage(qImg)
-
-        #img = QPixmap(processed_image.filePath())
-        painter = QPainter(img)
+        painter = QPainter(pixmap)
         painter.setFont(QFont(Loader.QSSVariable("@font"), 30))
         
         pen = QPen()
@@ -53,16 +47,4 @@ class AnalysisImagesGenerator:
 
         painter.end()
 
-        return img
-
-    @staticmethod
-    def mostInterestingHiglightedImages(analysis: Analysis, count: int) -> dict:
-        sorted_by_interest = sorted(analysis.processedImages(), key=ProcessedImage.interestScore)
-
-        best_images = sorted_by_interest[-count:] if len(sorted_by_interest) > count else sorted_by_interest
-
-        ret = {}
-        for b in best_images:
-            ret[b] = AnalysisImagesGenerator.highlightDetections(b).toImage()
-
-        return ret
+        return pixmap
