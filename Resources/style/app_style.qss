@@ -123,6 +123,10 @@ QGroupBox QCheckBox {
     spacing: 12px;
 }
 
+QComboBox QAbstractItemView:disabled {
+    color: @gray;
+}
+
 ChartLegendItem QLabel#item-icon {
     border: 1px solid @gray;
     padding: 0;

@@ -6,6 +6,7 @@ class Parameters:
         self._name = "Analyse de la plongée"
         self._src_folder = ""
         self._threshold = 0.5
+        self._device_id = ""
         self._display_processed_images = True
 
         self._morphotypes = {}
@@ -32,6 +33,12 @@ class Parameters:
 
     def setThreshold(self, threshold: float):
         self._threshold = threshold
+
+    def deviceId(self) -> str:
+        return self._device_id
+
+    def setDeviceId(self, device_id: str):
+        self._device_id = device_id
 
     def displayProcessedImages(self) -> bool:
         return self._display_processed_images

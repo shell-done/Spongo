@@ -5,8 +5,22 @@ from Services.NeuralNetwork.tool.torch_utils import do_detect
 from Services.NeuralNetwork.tool.darknet2pytorch import Darknet
 
 class NeuralNetwork:
-    def __init__(self, cfg_file: str, weights_file: str, threshold: float) -> None:
+    @staticmethod
+    def getAvailableCalculationDevices() -> dict:
+        devices = {}
+        devices["cpu"] = "CPU"
+
+        if torch.cuda.is_available():
+            for device_idx in range(torch.cuda.device_count()):
+                devices["cuda:%d" % device_idx] = "GPU (%s)" % torch.cuda.get_device_name(device_idx)
+
+        return devices
+
+    def __init__(self, cfg_file: str, weights_file: str, threshold: float, device_id: str) -> None:
         with torch.no_grad():
+            self._obj_thresh = threshold
+            self._device_id = device_id
+
             self._model = Darknet(cfg_file)
             
             if(self._model is None):
@@ -15,9 +29,7 @@ class NeuralNetwork:
             #self._model.print_network()
             self._model.load_weights(weights_file)
 
-            self._model = self._model.to('cuda:0' if torch.cuda.is_available() else 'cpu')
-
-            self._obj_thresh = threshold
+            self._model = self._model.to(device_id)
 
     def process(self, image_file: str):
         with torch.no_grad():
@@ -29,8 +41,7 @@ class NeuralNetwork:
                 return
 
             self._model.eval()
-            device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-            boxes = do_detect(self._model, sized, self._obj_thresh, 0.4, device)
+            boxes = do_detect(self._model, sized, self._obj_thresh, 0.4, self._device_id)
 
             detections = []
             img_height, img_width = img.shape[:2]

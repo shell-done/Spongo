@@ -27,6 +27,7 @@ class AnalysisThread(QThread):
 
         self._morphotypes = parameters.selectedMorphotypes().copy()
         self._threshold = parameters.threshold()
+        self._device_id = parameters.deviceId()
         self._srcPath = parameters.srcFolder()
         self._destPath = parameters.destFolder()
         self._images = images
@@ -42,7 +43,7 @@ class AnalysisThread(QThread):
         modelConfiguration = "data/parameters/yolov4_custom_test.cfg"
         modelWeights = "data/parameters/yolov4_custom_train_last.weights"
 
-        self._network = NeuralNetwork(cfg_file=modelConfiguration, weights_file=modelWeights, threshold=self._threshold)
+        self._network = NeuralNetwork(modelConfiguration, modelWeights, self._threshold, self._device_id)
         
         self.initialized.emit()
 

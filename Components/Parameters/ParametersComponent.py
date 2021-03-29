@@ -1,6 +1,9 @@
-from PyQt5.QtWidgets import QFormLayout, QGridLayout, QGroupBox, QSizePolicy, QSpinBox, QCheckBox, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtWidgets import QComboBox, QFormLayout, QGridLayout, QGroupBox, QSizePolicy, QSpinBox, QCheckBox, QLabel, QVBoxLayout, QHBoxLayout
 
 from Services.Loader import Loader
+from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork
 from Models.Parameters import Parameters
 
 class ParametersComponent(QGroupBox):
@@ -22,9 +25,14 @@ class ParametersComponent(QGroupBox):
         self._threshold_sbox = QSpinBox()
         self._threshold_sbox.setRange(1, 99)
         self._threshold_sbox.setSuffix(" %")
-        self._threshold_sbox.setMaximumWidth(150)
+        self._threshold_sbox.setMaximumWidth(250)
         left_layout.addRow("Seuil de détection :", self._threshold_sbox)
 
+        self._devices_list = QComboBox()
+        self._devices_list.setMaximumWidth(250)
+        self._setDevicesList()
+
+        left_layout.addRow("Processeur à utiliser :", self._devices_list)
 
         morphotype_layout = QGridLayout()
         morphotype_layout.setSpacing(5)
@@ -48,6 +56,19 @@ class ParametersComponent(QGroupBox):
 
         self.setLayout(main_layout)
 
+    def _setDevicesList(self):
+        self._devices_list.clear()
+        available_devices = NeuralNetwork.getAvailableCalculationDevices()
+
+        for device_id, device_name in available_devices.items():
+            self._devices_list.addItem(device_name, device_id)
+
+        if len(available_devices) == 1:
+            self._devices_list.addItem("GPU (Indisponible)", None)
+            self._devices_list.model().item(1).setEnabled(False)
+        else:
+            self._devices_list.setCurrentIndex(1)
+
     def reset(self, parameters: Parameters):
         self._threshold_sbox.setValue(parameters.threshold()*100)
         # self._detection_box_cbox.setChecked(parameters.displayProcessedImages())
@@ -57,6 +78,7 @@ class ParametersComponent(QGroupBox):
 
     def updateParameters(self, parameters: Parameters):
         parameters.setThreshold(self._threshold_sbox.value()/100)
+        parameters.setDeviceId(self._devices_list.currentData())
         # parameters.setDisplayProcessedImages(self._detection_box_cbox.isChecked())
 
         for k in parameters.morphotypes():
