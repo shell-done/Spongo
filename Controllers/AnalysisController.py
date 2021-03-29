@@ -39,7 +39,7 @@ class AnalysisController(BaseController):
         components_layout.addWidget(self._image_component, 0, 1)
         components_layout.addWidget(self._progress_component, 1, 0, 1, 2)
 
-        self._export_button = StylizedButton("Télécharger les données", "blue")
+        self._export_button = StylizedButton("Exporter les données", "blue")
         self._export_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
         self._return_button = StylizedButton("Annuler", "yellow")
