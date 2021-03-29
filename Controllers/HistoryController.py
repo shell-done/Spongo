@@ -1,3 +1,5 @@
+from Components.History.ReportListComponent import ReportListComponent
+from Models.Analysis import Analysis
 from Services.Writers.HTMLReportWriter import HTMLReportWriter
 from Services.Writers.ReportWriter import ReportWriter
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -6,12 +8,11 @@ from PyQt5.QtCore import QDir, QFile, QUrl, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout
 from PyQt5.QtPrintSupport import QPrinter
-import html
 from shutil import copyfile
 
 from Models.Parameters import Parameters
 from Controllers.BaseController import BaseController
-from Components.History.ResumeComponent import ResumeComponent
+from Components.History.ReportComponent import ReportComponent
 
 class HistoryController(BaseController):
 
@@ -21,24 +22,24 @@ class HistoryController(BaseController):
         title = PageTitle("Historique des analyses")
         title.backArrowClicked.connect(self._returnClicked)
 
-        self._web_view = QWebEngineView(self)
-        self._web_view.loadFinished.connect(self._viewLoaded)
+        components_layout = QHBoxLayout()
+        components_layout.setSpacing(20)
+
+        self._report_component = ReportComponent()
+        self._report_list_component = ReportListComponent()
+
+        components_layout.addWidget(self._report_list_component, 2)
+        components_layout.addWidget(self._report_component, 4)
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(title)
-        main_layout.addWidget(self._web_view)
+        main_layout.addLayout(components_layout)
 
         self.setLayout(main_layout)
 
     def start(self, analysis):
-        html_report_writer = HTMLReportWriter(analysis)
-        html = html_report_writer.text()
-        self._web_view.setHtml(html, QUrl("qrc:/"))
-
-
-    @pyqtSlot()
-    def _viewLoaded(self):
-        self._web_view.page().printToPdf("test.pdf")
+        self._report_list_component.reset()
+        self._report_component.reset(analysis)
 
     @pyqtSlot()
     def _returnClicked(self):

@@ -2,7 +2,9 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QPaintEvent, QPainter, QPixmap
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QStyle, QStyleOption, QWidget
 
-class ChartLegendItem(QWidget):
+from Components.Widgets.StylizableWidget import StylizableWidget
+
+class ChartLegendItem(StylizableWidget):
     toggled = pyqtSignal(bool)
 
     def __init__(self, label: str, color: QColor, parent: QWidget = None):
@@ -44,12 +46,3 @@ class ChartLegendItem(QWidget):
 
     def setValue(self, value: str):
         self._count.setText(value)
-
-    def paintEvent(self, a0: QPaintEvent):
-        o = QStyleOption()
-        o.initFrom(self)
-
-        p = QPainter(self)
-        self.style().drawPrimitive(QStyle.PE_Widget, o, p, self)
-
-        return super().paintEvent(a0)
