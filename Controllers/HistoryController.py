@@ -1,18 +1,10 @@
-from Components.Widgets.StylizedButton import StylizedButton
-from Components.History.ReportListComponent import ReportListComponent
-from Models.Analysis import Analysis
-from Services.Writers.HTMLReportWriter import HTMLReportWriter
-from Services.Writers.ReportWriter import ReportWriter
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-from Components.Widgets.PageTitle import PageTitle
-from PyQt5.QtCore import Qt, QDir, QFile, QUrl, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QVBoxLayout
-from PyQt5.QtPrintSupport import QPrinter
-from shutil import copyfile
+from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
 
-from Models.Parameters import Parameters
 from Controllers.BaseController import BaseController
+from Components.Widgets.StylizedButton import StylizedButton
+from Components.Widgets.PageTitle import PageTitle
+from Components.History.ReportListComponent import ReportListComponent
 from Components.History.ReportComponent import ReportComponent
 
 class HistoryController(BaseController):
