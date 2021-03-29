@@ -6,7 +6,7 @@ from Services.Images.ImageConverter import ImageConverter
 from Services.Images.ImagePainter import ImagePainter
 
 class DrawDetectionsThread(QThread):
-    imageLoadedSignal = pyqtSignal(QPixmap)
+    imageLoadedSignal = pyqtSignal(ProcessedImage, QPixmap)
 
     def __init__(self):
         super(QThread, self).__init__()
@@ -38,4 +38,4 @@ class DrawDetectionsThread(QThread):
         if self._abort:
             return
 
-        self.imageLoadedSignal.emit(pixmap)
+        self.imageLoadedSignal.emit(self._processed_image, pixmap)

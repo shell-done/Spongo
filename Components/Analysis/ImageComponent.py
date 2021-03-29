@@ -41,10 +41,11 @@ class ImageComponent(QGroupBox):
     def update(self, processed_image: ProcessedImage):
         dest_folder = self._parameters.destFolder() if self._parameters.saveProcessedImages() else None
 
-        self._highlight_detections_thread.start(processed_image, self._image_label.size(), dest_folder)
-        self._filename_label.setText(processed_image.fileName())
+        if processed_image.hasDetections():
+            self._highlight_detections_thread.start(processed_image, self._image_label.size(), dest_folder)
 
-    @pyqtSlot(QPixmap)
-    def _highlightedImageReceived(self, pixmap: QPixmap):
+    @pyqtSlot(ProcessedImage, QPixmap)
+    def _highlightedImageReceived(self, processed_image: ProcessedImage, pixmap: QPixmap):
         self._image_label.setFixedSize(pixmap.size())
         self._image_label.setPixmap(pixmap)
+        self._filename_label.setText(processed_image.fileName())
