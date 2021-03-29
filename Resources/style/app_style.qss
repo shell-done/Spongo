@@ -137,3 +137,7 @@ ImageComponent QLabel#image {
     border: 2px solid @gray;
     border-radius: 5px;
 }
+
+#WebView {
+    border: 1px solid #828790;
+}
