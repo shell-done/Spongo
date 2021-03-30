@@ -32,10 +32,9 @@ class CSVReportWriter(ReportWriter):
 
         return "\n".join(lines)
 
+    def text(self) -> str:
+        return self._fileHeader() + self._detections()
+
     def write(self, filepath: str):
         with open(filepath, "w", encoding='utf-8') as file:
-            file.write(self._fileHeader())
-            file.write(self._detections())
-
-        print("Report downloaded")
-    
+            file.write(self.text())

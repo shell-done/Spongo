@@ -122,7 +122,7 @@ class AnalysisController(BaseController):
     @pyqtSlot()
     def _exportReport(self):
         writer = TextReportWriter(self._analysis)
-        writer.writeSummary("report.txt")
+        writer.write("report.txt")
 
         writer = CSVReportWriter(self._analysis, shape="rectangle")
         writer.write("report.csv")

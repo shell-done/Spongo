@@ -87,3 +87,7 @@ class HTMLReportWriter(ReportWriter):
         content = content.replace("{{IMAGE_ITEMS}}", image_items)
 
         return content
+
+    def write(self, filepath: str):
+        with open(filepath, "w", encoding='utf-8') as file:
+            file.write(self.text())
