@@ -52,8 +52,8 @@ class NeuralNetwork:
                 y2 = int(box[3] * img_height)
 
                 xywh = (x1, y1, x2-x1, y2-y1)
-                conf = box[5]
-                id = box[6]
+                conf = float(box[5])
+                id = int(box[6])
 
                 detections.append([xywh, id, conf])
 
