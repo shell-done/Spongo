@@ -18,8 +18,10 @@ class HistoryController(BaseController):
         components_layout = QHBoxLayout()
         components_layout.setSpacing(20)
 
-        self._report_component = ReportComponent()
         self._report_list_component = ReportListComponent()
+        self._report_list_component.currentAnalysisChanged.connect(self._currentAnalysisChanged)
+
+        self._report_component = ReportComponent()
 
         components_layout.addWidget(self._report_list_component, 2)
         components_layout.addWidget(self._report_component, 4)
@@ -45,3 +47,7 @@ class HistoryController(BaseController):
     @pyqtSlot()
     def _returnClicked(self):
         self.changeWidget.emit("/menu")
+
+    @pyqtSlot(str)
+    def _currentAnalysisChanged(self, file: str):
+        print(file)
