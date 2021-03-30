@@ -4,6 +4,7 @@ from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis, QSplineSe
 
 from Models.Analysis import Analysis
 from Services.Loader import Loader
+from Services.HistoryManager import HistoryManager
 from Services.Images.ImageConverter import ImageConverter
 from Services.Images.ImagePainter import ImagePainter
 
@@ -31,6 +32,8 @@ class PostAnalysisThread(QThread):
     def run(self):
         self._highlightMostInterestingImages()
 
+        HistoryManager.saveAnalysis(self._analysis)
+
         self.completed.emit()
 
     def _highlightMostInterestingImages(self):
@@ -40,7 +43,7 @@ class PostAnalysisThread(QThread):
             image = ImagePainter.drawDetections(processed_image)
             base64_image = ImageConverter.QPixmapToBase64(image, format="jpeg", width=1080, with_header=True)
 
-            base64_highlighted_images[processed_image] = base64_image
+            base64_highlighted_images[processed_image.fileName()] = base64_image
 
         self._analysis.setMostInterestingBase64Images(base64_highlighted_images)
 

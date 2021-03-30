@@ -74,7 +74,7 @@ class HTMLReportWriter(ReportWriter):
 
         # Interest
         image_items = ""
-        for processed_image, base64_img in self._analysis.mostInterestingBase64Images().items():
+        for processed_image_filename, base64_img in self._analysis.mostInterestingBase64Images().items():
             image_items += """
                 <div class="images-item">
                     <div class="images-item-container">
@@ -82,7 +82,7 @@ class HTMLReportWriter(ReportWriter):
                         <span>%s</span>
                     </div>
                 </div>
-            """ % (base64_img, processed_image.fileName())
+            """ % (base64_img, processed_image_filename)
 
         content = content.replace("{{IMAGE_ITEMS}}", image_items)
 

@@ -1,7 +1,18 @@
+from Models.Detection import Detection
+import json
+
 class ProcessedImage:
+    @staticmethod
+    def fromJSON(obj):
+        detections = []
+        for d in obj["_detections"]:
+            detections.append(Detection.fromJSON(d))
+
+        return ProcessedImage(obj["_folder_path"], obj["_file_name"], detections)
+
     def __init__(self, folder_path: str, file_name: str, detections: list):
-        self._file_name = file_name
         self._folder_path = folder_path
+        self._file_name = file_name
         self._detections = detections
 
     def folderPath(self) -> str:
@@ -32,3 +43,6 @@ class ProcessedImage:
             s += v**0.5
 
         return s
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)

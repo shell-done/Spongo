@@ -1,13 +1,37 @@
-from PyQt5.QtCore import QDateTime, QTime
+import json
+from PyQt5.QtCore import Qt, QDateTime, QTime
 
 from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage
 
 class Analysis:
-    def __init__(self, parameters: Parameters, images_filenames: list):
+    @staticmethod
+    def fromJSON(obj):
+        params = Parameters.fromJSON(obj["_parameters"])
+        analysis = Analysis(params)
+
+        for k,v in obj.items():
+            if k == "_parameters":
+                pass
+
+            elif k == "_processed_images":
+                analysis.__dict__[k] = []
+                for img in obj["_processed_images"]:
+                    analysis.__dict__[k].append(ProcessedImage.fromJSON(img))
+
+            elif k in ["_start_datetime", "_end_datetime"]:
+                analysis.__dict__[k] = QDateTime.fromString(v, Qt.ISODate)
+
+            else:
+                analysis.__dict__[k] = v
+
+        return analysis
+
+    def __init__(self, parameters: Parameters, images_filenames: list = []):
         self._parameters = parameters
 
         self._images_filenames = images_filenames
+        self._images_count = len(images_filenames)
         self._detected_sponges = {key:0 for key in parameters.selectedMorphotypes()}
 
         self._current_img_index = 0
@@ -15,7 +39,7 @@ class Analysis:
         self._end_datetime = None
         self._base64_chart_image = None
         self._processed_images = []
-        self._most_interesting_base64_images = []
+        self._most_interesting_base64_images = {}
 
     def parameters(self) -> Parameters:
         return self._parameters
@@ -41,7 +65,7 @@ class Analysis:
         return sum(self._detected_sponges.values())
 
     def imagesCount(self) -> int:
-        return len(self._images_filenames)
+        return self._images_count
 
     def currentImageIndex(self) -> int:
         return self._current_img_index
@@ -106,3 +130,12 @@ class Analysis:
         time = QTime(0, 0).addSecs(seconds_elapsed)
 
         return time
+
+    def toJSON(self):
+        obj = self.__dict__.copy()
+
+        del obj["_images_filenames"]
+        obj["_start_datetime"] = self._start_datetime.toString(Qt.ISODate)
+        obj["_end_datetime"] = self._end_datetime.toString(Qt.ISODate)
+
+        return json.dumps(obj, default=lambda o: o.__dict__, sort_keys=True, indent=4)

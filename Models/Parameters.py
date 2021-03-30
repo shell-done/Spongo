@@ -1,7 +1,20 @@
+import json
+
 from PyQt5.QtCore import QFileInfo
 from Services.Loader import Loader
 
 class Parameters:
+    @staticmethod
+    def fromJSON(obj):
+        parameters = Parameters()
+        for k,v in obj.items():
+            if k == "_morphotypes":
+                parameters.__dict__[k] = {int(i):m for i,m in v.items()}
+            else:
+                parameters.__dict__[k] = v
+
+        return parameters
+
     def __init__(self):
         self._name = "Analyse de la plongée"
         self._src_folder = ""
@@ -95,3 +108,6 @@ class Parameters:
                 return "Le dossier de destination est protégé en écriture, veuillez sélectionner un autre dossier"
 
         return None
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
