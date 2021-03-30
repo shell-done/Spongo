@@ -27,7 +27,7 @@ class HTMLReportWriter(ReportWriter):
         if self._analysis.parameters().saveProcessedImages():
             content = content.replace("{{PROCESSED_IMAGES_FOLDER}}", self._analysis.parameters().destFolder())
         
-        # Summary
+        # Detections
         morphotypes_stats = ""
         total_progress = ""
 
@@ -57,6 +57,8 @@ class HTMLReportWriter(ReportWriter):
 
 
         # Chart
+        content = content.replace("{{CHART_IMAGE}}", self._analysis.base64ChartImage())
+
         legend_items = ""
         for morphotype_id, morphotype in self._analysis.parameters().selectedMorphotypes().items():
             legend_items += """

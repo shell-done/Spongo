@@ -13,6 +13,7 @@ class Analysis:
         self._current_img_index = 0
         self._start_datetime = QDateTime.currentDateTime()
         self._end_datetime = None
+        self._base64_chart_image = None
         self._processed_images = []
         self._most_interesting_base64_images = []
 
@@ -65,6 +66,12 @@ class Analysis:
 
     def setMostInterestingBase64Images(self, base64_images: dict):
         self._most_interesting_base64_images = base64_images
+
+    def base64ChartImage(self) -> str:
+        return self._base64_chart_image
+
+    def setBase64ChartImage(self, base64_image: str):
+        self._base64_chart_image = base64_image
 
     def startDateTime(self) -> QDateTime:
         return self._start_datetime
