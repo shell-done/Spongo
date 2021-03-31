@@ -27,7 +27,7 @@ class HTMLReportWriter(ReportWriter):
         if self._analysis.parameters().saveProcessedImages():
             content = content.replace("{{PROCESSED_IMAGES_FOLDER}}", self._analysis.parameters().destFolder())
         
-        # Summary
+        # Detections
         morphotypes_stats = ""
         total_progress = ""
 
@@ -57,6 +57,8 @@ class HTMLReportWriter(ReportWriter):
 
 
         # Chart
+        content = content.replace("{{CHART_IMAGE}}", self._analysis.base64ChartImage())
+
         legend_items = ""
         for morphotype_id, morphotype in self._analysis.parameters().selectedMorphotypes().items():
             legend_items += """
@@ -72,7 +74,7 @@ class HTMLReportWriter(ReportWriter):
 
         # Interest
         image_items = ""
-        for processed_image, base64_img in self._analysis.mostInterestingBase64Images().items():
+        for processed_image_filename, base64_img in self._analysis.mostInterestingBase64Images().items():
             image_items += """
                 <div class="images-item">
                     <div class="images-item-container">
@@ -80,8 +82,12 @@ class HTMLReportWriter(ReportWriter):
                         <span>%s</span>
                     </div>
                 </div>
-            """ % (base64_img, processed_image.fileName())
+            """ % (base64_img, processed_image_filename)
 
         content = content.replace("{{IMAGE_ITEMS}}", image_items)
 
         return content
+
+    def write(self, filepath: str):
+        with open(filepath, "w", encoding='utf-8') as file:
+            file.write(self.text())

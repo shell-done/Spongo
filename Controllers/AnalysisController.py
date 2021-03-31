@@ -130,4 +130,3 @@ class AnalysisController(BaseController):
         self._return_button.setObjectName("blue")
         self.style().unpolish(self._return_button)
         self.style().polish(self._return_button)
-

@@ -56,10 +56,9 @@ class TextReportWriter(ReportWriter):
 
         return "\n".join(lines) 
 
-    def writeSummary(self, filepath: str):
-        with open(filepath, "w", encoding='utf-8') as file:
-            file.write(self._fileHeader())
-            file.write(self._detectionParameters())
-            file.write(self._detectionSummary())
+    def text(self) -> str:
+        return self._fileHeader() + self._detectionParameters() + self._detectionSummary()
 
-        print("Report downloaded")
+    def write(self, filepath: str):
+        with open(filepath, "w", encoding='utf-8') as file:
+            file.write(self.text())

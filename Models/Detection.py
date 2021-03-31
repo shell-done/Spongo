@@ -1,3 +1,5 @@
+import json
+
 from Services.Loader import Loader
 
 class Detection:
@@ -8,6 +10,10 @@ class Detection:
     @staticmethod
     def DefaultDetectionShape() -> str:
         return Detection.DetectionShapes()[0]
+
+    @staticmethod
+    def fromJSON(obj):
+        return Detection(obj["_boundingBox"], obj["_class_id"], obj["_confidence"])
 
     def __init__(self, bouding_box: list, class_id: int, confidence: float):
         self._boundingBox = bouding_box
@@ -37,3 +43,6 @@ class Detection:
 
         else:
             return None
+
+    def toJSON(self) -> str:
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)

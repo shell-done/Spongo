@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QBoxLayout, QGridLayout, QLabel, QMessageBox, QVBoxLayout
 
+from Services.HistoryManager import HistoryManager
 from Controllers.BaseController import BaseController
 from Components.Widgets.StylizedButton import StylizedButton
 
@@ -17,7 +18,7 @@ class MenuController(BaseController):
         subtitle.setObjectName("subtitle")
 
         start_button = StylizedButton("Commencer une analyse", "blue")
-        history_button = StylizedButton("Historique des analyses", "blue")
+        self._history_button = StylizedButton("Historique des analyses", "blue")
         about_button = StylizedButton("À propos", "blue")
         exit_button = StylizedButton("Quitter", "yellow")
 
@@ -29,7 +30,7 @@ class MenuController(BaseController):
         main_layout.addWidget(title, 0, 0, 1, 2)
         main_layout.addWidget(subtitle, 1, 0, 1, 2)
         main_layout.addWidget(start_button, 2, 0, 1, 2)
-        main_layout.addWidget(history_button, 3, 0, 1, 2)
+        main_layout.addWidget(self._history_button, 3, 0, 1, 2)
         main_layout.addWidget(about_button, 4, 0)
         main_layout.addWidget(exit_button, 4, 1)
 
@@ -37,9 +38,12 @@ class MenuController(BaseController):
 
         # Button slots
         start_button.clicked.connect(self._startButtonClicked)
-        history_button.clicked.connect(self._historyButtonClicked)
+        self._history_button.clicked.connect(self._historyButtonClicked)
         about_button.clicked.connect(self._aboutButtonClicked)
         exit_button.clicked.connect(self._exitButtonClicked)
+
+    def start(self):
+        self._history_button.setEnabled(HistoryManager.hasAnalysis())
 
     @pyqtSlot()
     def _startButtonClicked(self):
@@ -47,7 +51,8 @@ class MenuController(BaseController):
 
     @pyqtSlot()
     def _historyButtonClicked(self):
-        print("[WIP]")
+        last_analysis = HistoryManager.loadLastAnalysis()
+        self.changeWidget[str, object].emit("/history", last_analysis)
 
     @pyqtSlot()
     def _aboutButtonClicked(self):
