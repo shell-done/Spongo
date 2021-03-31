@@ -86,6 +86,12 @@ QLabel#subtitle {
     margin-bottom: 40px;
 }
 
+QLabel#info {
+    qproperty-wordWrap: true;
+
+    color: @gray;
+}
+
 PageTitle QLabel {
     font-weight: bold;
     font-size: 50px;
@@ -121,6 +127,11 @@ QGroupBox QLabel {
 QGroupBox QCheckBox {
     font-weight: bold;
     spacing: 12px;
+}
+
+QMessageBox QLabel {
+    font-weight: normal;
+    font-size: 15px;
 }
 
 QComboBox QAbstractItemView:disabled {

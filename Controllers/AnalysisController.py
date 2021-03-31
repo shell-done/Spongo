@@ -1,12 +1,12 @@
-from Services.Threads.PostAnalysisThread import PostAnalysisThread
-from Components.Widgets.StylizedButton import StylizedButton
-from Components.Widgets.PageTitle import PageTitle
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QBoxLayout, QGridLayout, QSizePolicy, QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
 
 from Models.Parameters import Parameters
 from Services.Threads.AnalysisThread import AnalysisThread
+from Services.Threads.PostAnalysisThread import PostAnalysisThread
+from Components.Widgets.StylizedButton import StylizedButton
+from Components.Widgets.PageTitle import PageTitle
 from Services.Writers.TextReportWriter import TextReportWriter
 from Services.Writers.CSVReportWriter import CSVReportWriter
 from Models.ProcessedImage import ProcessedImage
@@ -39,16 +39,12 @@ class AnalysisController(BaseController):
         components_layout.addWidget(self._image_component, 0, 1)
         components_layout.addWidget(self._progress_component, 1, 0, 1, 2)
 
-        self._export_button = StylizedButton("Exporter les données", "blue")
-        self._export_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-
         self._return_button = StylizedButton("Annuler", "yellow")
         self._return_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
         button_layout = QHBoxLayout()
         button_layout.setAlignment(Qt.AlignRight)
         button_layout.setSpacing(35)
-        button_layout.addWidget(self._export_button)
         button_layout.addWidget(self._return_button)
 
         main_layout = QVBoxLayout()
@@ -58,7 +54,6 @@ class AnalysisController(BaseController):
 
         self.setLayout(main_layout)
 
-        self._export_button.clicked.connect(self._exportReport)
         self._return_button.clicked.connect(self._returnClick)
 
         self._analysis_thread = AnalysisThread()
@@ -82,8 +77,6 @@ class AnalysisController(BaseController):
         self._return_button.setObjectName("yellow")
         self.style().unpolish(self._return_button)
         self.style().polish(self._return_button)
-
-        self._export_button.setVisible(False)
 
         self._analysis_thread.start(parameters, images)
 
@@ -120,14 +113,6 @@ class AnalysisController(BaseController):
                 self.changeWidget.emit("/menu")
 
     @pyqtSlot()
-    def _exportReport(self):
-        writer = TextReportWriter(self._analysis)
-        writer.writeSummary("report.txt")
-
-        writer = CSVReportWriter(self._analysis, shape="rectangle")
-        writer.write("report.csv")
-
-    @pyqtSlot()
     def _neuralNetworkInitialized(self):
         self._title.setText("Analyse en cours")
 
@@ -145,5 +130,4 @@ class AnalysisController(BaseController):
         self._return_button.setObjectName("blue")
         self.style().unpolish(self._return_button)
         self.style().polish(self._return_button)
-        self._export_button.setVisible(True)
 
