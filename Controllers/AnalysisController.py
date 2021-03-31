@@ -1,3 +1,4 @@
+from Services.Writers.JSONReportWriter import JSONReportWriter
 from Services.Threads.PostAnalysisThread import PostAnalysisThread
 from Components.Widgets.StylizedButton import StylizedButton
 from Components.Widgets.PageTitle import PageTitle
@@ -126,6 +127,9 @@ class AnalysisController(BaseController):
 
         writer = CSVReportWriter(self._analysis, shape="rectangle")
         writer.write("report.csv")
+
+        writer = JSONReportWriter(self._analysis, shape="rectangle")
+        writer.write("report.json")
 
     @pyqtSlot()
     def _neuralNetworkInitialized(self):
