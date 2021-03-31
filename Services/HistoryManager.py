@@ -29,6 +29,12 @@ class HistoryManager:
             f.write(json_str)
 
     @staticmethod
+    def hasAnalysis() -> bool:
+        files = QDir(HistoryManager.appDirectory()).entryList(["*.json"], QDir.Files | QDir.Readable)
+        
+        return len(files) > 0
+
+    @staticmethod
     def analysisList() -> list:
         files = QDir(HistoryManager.appDirectory()).entryList(["*.json"], QDir.Files | QDir.Readable)
 
@@ -45,3 +51,23 @@ class HistoryManager:
             names.append(analysis[k])
 
         return names
+
+    @staticmethod
+    def loadAnalysis(filename: str) -> Analysis:
+        if not filename.endswith(".json"):
+            filename += ".json"
+
+        filepath = "%s/%s" % (HistoryManager.appDirectory(), filename)
+
+        with open(filepath, "r", encoding="utf-8") as f:
+            json_str = f.read()
+
+        json_obj = json.loads(json_str)
+        return Analysis.fromJSON(json_obj)
+
+    @staticmethod
+    def loadLastAnalysis() -> Analysis:
+        filename = HistoryManager.analysisList()[0]["file"]
+        
+        return HistoryManager.loadAnalysis(filename)
+        

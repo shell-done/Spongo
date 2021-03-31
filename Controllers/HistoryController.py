@@ -1,3 +1,4 @@
+from Models.Analysis import Analysis
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
 
@@ -48,6 +49,6 @@ class HistoryController(BaseController):
     def _returnClicked(self):
         self.changeWidget.emit("/menu")
 
-    @pyqtSlot(str)
-    def _currentAnalysisChanged(self, file: str):
-        print(file)
+    @pyqtSlot(Analysis)
+    def _currentAnalysisChanged(self, analysis: Analysis):
+        self._report_component.reset(analysis)

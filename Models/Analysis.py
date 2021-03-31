@@ -14,6 +14,9 @@ class Analysis:
             if k == "_parameters":
                 pass
 
+            elif k == "_detected_sponges":
+                analysis.__dict__[k] = {int(i):m for i,m in v.items()}
+
             elif k == "_processed_images":
                 analysis.__dict__[k] = []
                 for img in obj["_processed_images"]:

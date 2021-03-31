@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QGroupBox, QListWidget, QListWidgetItem, QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout
 
 class ReportListComponent(QGroupBox):
-    currentAnalysisChanged = pyqtSignal(str)
+    currentAnalysisChanged = pyqtSignal(Analysis)
 
     def __init__(self):
         super().__init__()
@@ -33,14 +33,17 @@ class ReportListComponent(QGroupBox):
 
     @pyqtSlot(int)
     def _currentAnalysisChanged(self, row: int):
-        new_analysis = self._list.item(row).data(Qt.UserRole)
+        if row < 0:
+            return
+        
+        new_analysis_file = self._list.item(row).data(Qt.UserRole)
 
-        if self._current_analysis_file == new_analysis:
+        if self._current_analysis_file == new_analysis_file:
             return
 
         if self._current_analysis_file is None:
-            self._current_analysis_file = new_analysis
+            self._current_analysis_file = new_analysis_file
             return
 
-        self._current_analysis_file = new_analysis
-        self.currentAnalysisChanged.emit(new_analysis)
+        self._current_analysis_file = new_analysis_file
+        self.currentAnalysisChanged.emit(HistoryManager.loadAnalysis(new_analysis_file))
