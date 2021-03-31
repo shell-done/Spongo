@@ -8,9 +8,7 @@ from Models.Detection import Detection
 from Services.Writers.ReportWriter import ReportWriter
 
 class JSONReportWriter(ReportWriter):
-    def __init__(self, analysis: Analysis, indent=4, shape=Detection.DefaultDetectionShape()):
-        self._indent = indent
-        
+    def __init__(self, analysis: Analysis, shape=Detection.DefaultDetectionShape()):
         if shape in Detection.DetectionShapes():
             self._shape = shape
         else:
@@ -72,7 +70,7 @@ class JSONReportWriter(ReportWriter):
             "images": self._detections()
         }
 
-        return json.dumps(obj, indent=self._indent, ensure_ascii=False)
+        return json.dumps(obj, indent=4, ensure_ascii=False)
 
     def write(self, filepath: str):
         with open(filepath, "w", encoding='utf-8') as file:
