@@ -8,6 +8,8 @@ from Components.Widgets.PageTitle import PageTitle
 from Components.History.ReportListComponent import ReportListComponent
 from Components.History.ReportComponent import ReportComponent
 
+from Models.Analysis import Analysis
+
 class HistoryController(BaseController):
 
     def __init__(self):
