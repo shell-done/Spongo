@@ -47,6 +47,10 @@ StylizedButton {
     color: @white;
 }
 
+StylizedButton:disabled {
+    color: @white;
+}
+
 StylizedButton#blue {background-color: @primary-blue;}
 StylizedButton#blue:hover {background-color: @primary-blue-dark;}
 StylizedButton#blue:pressed {background-color: @primary-blue-darker;}
