@@ -141,4 +141,4 @@ class Analysis:
         obj["_start_datetime"] = self._start_datetime.toString(Qt.ISODate)
         obj["_end_datetime"] = self._end_datetime.toString(Qt.ISODate)
 
-        return json.dumps(obj, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        return json.dumps(obj, default=lambda o: o.__dict__, indent=4, ensure_ascii=False)
