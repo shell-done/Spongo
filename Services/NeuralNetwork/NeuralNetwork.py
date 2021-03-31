@@ -6,6 +6,10 @@ from Services.NeuralNetwork.tool.darknet2pytorch import Darknet
 
 class NeuralNetwork:
     @staticmethod
+    def isCudaAvailable() -> bool:
+        return torch.cuda.is_available()
+
+    @staticmethod
     def getAvailableCalculationDevices() -> dict:
         devices = {}
         devices["cpu"] = "CPU"
@@ -34,7 +38,7 @@ class NeuralNetwork:
     def process(self, image_file: str):
         with torch.no_grad():
             img = cv2.imread(image_file)
-            sized = cv2.resize(img, (self._model.width, self._model.height))
+            sized = cv2.resize(img, (416, 416))
             sized = cv2.cvtColor(sized, cv2.COLOR_BGR2RGB)
 
             if(img is None):
