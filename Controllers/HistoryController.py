@@ -1,4 +1,4 @@
-from Models.Analysis import Analysis
+from Controllers.DownloadController import DownloadController
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
 
@@ -7,6 +7,8 @@ from Components.Widgets.StylizedButton import StylizedButton
 from Components.Widgets.PageTitle import PageTitle
 from Components.History.ReportListComponent import ReportListComponent
 from Components.History.ReportComponent import ReportComponent
+
+from Models.Analysis import Analysis
 
 class HistoryController(BaseController):
 
@@ -41,9 +43,21 @@ class HistoryController(BaseController):
 
         self.setLayout(main_layout)
 
+        # Signals
+        self._export_button.clicked.connect(self._exportReport)
+
     def start(self, analysis):
+        self._analysis = analysis
+
         self._report_list_component.reset()
-        self._report_component.reset(analysis)
+        self._report_component.reset(self._analysis)
+
+    @pyqtSlot()
+    def _exportReport(self):
+        download_dialog = DownloadController(self)
+        download_dialog.start(self._analysis)
+
+        download_dialog.exec_()
 
     @pyqtSlot()
     def _returnClicked(self):
