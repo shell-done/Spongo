@@ -1,3 +1,4 @@
+from Services.Writers.XMLReportWriter import XMLReportWriter
 from Services.Writers.JSONReportWriter import JSONReportWriter
 from Services.Threads.PostAnalysisThread import PostAnalysisThread
 from Components.Widgets.StylizedButton import StylizedButton
@@ -130,6 +131,9 @@ class AnalysisController(BaseController):
 
         writer = JSONReportWriter(self._analysis, shape="rectangle")
         writer.write("report.json")
+
+        writer = XMLReportWriter(self._analysis, shape="rectangle")
+        writer.write("report.xml")
 
     @pyqtSlot()
     def _neuralNetworkInitialized(self):
