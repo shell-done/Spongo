@@ -1,3 +1,4 @@
+from Services.Loader import Loader
 import json
 
 from PyQt5.QtCore import QDateTime, QDir, Qt, QStandardPaths
@@ -9,12 +10,13 @@ class HistoryManager:
 
     @staticmethod
     def appDirectory():
-        directory = QStandardPaths.standardLocations(QStandardPaths.AppDataLocation)[0]
-        if True:
+        directory = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        
+        if Loader.isDevMode():
             directory = directory.replace("python", "Spongo")
 
-            if not QDir().exists(directory):
-                QDir().mkdir(directory)
+        if not QDir().exists(directory):
+            QDir().mkdir(directory)
 
         return directory
 
@@ -31,7 +33,7 @@ class HistoryManager:
     @staticmethod
     def hasAnalysis() -> bool:
         files = QDir(HistoryManager.appDirectory()).entryList(["*.json"], QDir.Files | QDir.Readable)
-        
+
         return len(files) > 0
 
     @staticmethod
