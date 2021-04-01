@@ -150,10 +150,10 @@ class DownloadComponent(QGroupBox):
                 writer = CSVReportWriter(self._analysis, self._separator_cbox.currentData(), self._detection_shape_cbox.currentData())
 
             elif format_text == "JSON":
-                writer = JSONReportWriter(self._analysis)
+                writer = JSONReportWriter(self._analysis, shape=self._detection_shape_cbox.currentData())
             
             elif format_text == "XML":
-                writer = XMLReportWriter(self._analysis)
+                writer = XMLReportWriter(self._analysis, shape=self._detection_shape_cbox.currentData())
 
             elif format_text == "PDF":
                 pass
