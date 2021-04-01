@@ -1,14 +1,14 @@
-from pathlib import Path
+from Models.Analysis import Analysis
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QStandardPaths, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QPushButton, QComboBox, QLabel, QHBoxLayout, QLineEdit
 
-from Models.Analysis import Analysis
-from Components.Widgets.StylizedButton import StylizedButton
 from Services.Writers.CSVReportWriter import CSVReportWriter
 from Services.Writers.JSONReportWriter import JSONReportWriter
 from Services.Writers.XMLReportWriter import XMLReportWriter
 from Services.Writers.TextReportWriter import TextReportWriter
+
+from Components.Widgets.StylizedButton import StylizedButton
 
 class DownloadComponent(QGroupBox):
     changeFormat = pyqtSignal([str])
@@ -119,7 +119,7 @@ class DownloadComponent(QGroupBox):
             self._detection_shape_cbox.show()
     
     pyqtSlot()
-    def _reportFormatChanged(self, format):
+    def _reportFormatChanged(self, format: int):
         self.changeFormat[str].emit(format)
 
         self._filepath_text.setText("")
@@ -127,7 +127,7 @@ class DownloadComponent(QGroupBox):
         if format == "CSV":
             self._separator_label.show()
             self._separator_cbox.show()
-        else: # JSON & XML
+        else: # JSON & XSML
             self._separator_label.hide()
             self._separator_cbox.hide()
 
@@ -145,34 +145,23 @@ class DownloadComponent(QGroupBox):
     def _exportReport(self):
         format_text = self._report_format_cbox.currentText()
 
-        folder_path = "/".join(self._filepath_text.text().split("/")[0:-1])
-        path = Path(folder_path)
-
         if self._filepath_text.text() != "":
-            if path.exists():
-                if format_text == "CSV":
-                    writer = CSVReportWriter(self._analysis, self._separator_cbox.currentData(), self._detection_shape_cbox.currentData())
+            if format_text == "CSV":
+                writer = CSVReportWriter(self._analysis, self._separator_cbox.currentData(), self._detection_shape_cbox.currentData())
 
-                elif format_text == "JSON":
-                    writer = JSONReportWriter(self._analysis, shape=self._detection_shape_cbox.currentData())
-                
-                elif format_text == "XML":
-                    writer = XMLReportWriter(self._analysis, shape=self._detection_shape_cbox.currentData())
-
-                elif format_text == "PDF":
-                    # Temporaire
-                    QMessageBox.warning(self, "Erreur", "L'exportation en PDF n'est pas encore mise en place.")
-                
-                elif format_text == "Texte":
-                    writer = TextReportWriter(self._analysis)
-                
-                # Temporaire
-                if format_text != "PDF":
-                    writer.write(self._filepath_text.text())
-                    QMessageBox.information(self, "Succès", "Téléchargement effectué")
+            elif format_text == "JSON":
+                writer = JSONReportWriter(self._analysis, shape=self._detection_shape_cbox.currentData())
             
-            else:
-                QMessageBox.warning(self, "Erreur", "Le dossier sélectionné n'existe pas. Veuillez choisir un dossier existant.")
+            elif format_text == "XML":
+                writer = XMLReportWriter(self._analysis, shape=self._detection_shape_cbox.currentData())
+
+            elif format_text == "PDF":
+                pass
+            
+            elif format_text == "Texte":
+                writer = TextReportWriter(self._analysis)
+            
+            writer.write(self._filepath_text.text())
             
         else:
-            QMessageBox.warning(self, "Erreur", "Vous n'avez pas sélectionné de dossier destination pour le rapport.")
+            QMessageBox.warning(self, "Erreur", "Vous n'avez pas sélectionné de dossier destination pour le rapport")
