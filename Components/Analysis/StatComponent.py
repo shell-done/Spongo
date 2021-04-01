@@ -125,6 +125,9 @@ class StatComponent(QGroupBox):
             
             maxY = max(maxY, self._analysis.cumulativeDetectionsFor(k))
 
+        # Add 5% to show the top series below the top line
+        maxY = round(1.05*maxY)
+
         maxY = max(maxY, 4)
         self._chart.axisY().setRange(0, maxY)
 
