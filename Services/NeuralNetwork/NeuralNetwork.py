@@ -34,6 +34,7 @@ class NeuralNetwork:
             self._model.load_weights(weights_file)
 
             self._model = self._model.to(device_id)
+            self._model.eval()
 
     def process(self, image_file: str):
         with torch.no_grad():
@@ -44,7 +45,6 @@ class NeuralNetwork:
             if(img is None):
                 return
 
-            self._model.eval()
             boxes = do_detect(self._model, sized, self._obj_thresh, 0.4, self._device_id)
 
             detections = []

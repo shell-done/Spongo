@@ -25,7 +25,7 @@ class AnalysisThread(QThread):
         if self.isRunning():
             self.wait()
 
-        self._morphotypes = parameters.selectedMorphotypes().copy()
+        self._morphotypes = parameters.selectedMorphotypes().keys()
         self._threshold = parameters.threshold()
         self._device_id = parameters.deviceId()
         self._srcPath = parameters.srcFolder()
@@ -59,7 +59,8 @@ class AnalysisThread(QThread):
             network_output = self._network.process(filepath)
 
             for det in network_output:
-                detections.append(Detection(det[0], det[1], det[2]))
+                if det[1] in self._morphotypes:
+                    detections.append(Detection(det[0], det[1], det[2]))
 
             if self._abort:
                 self._network = None
