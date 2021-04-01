@@ -1,10 +1,11 @@
 from Models.Analysis import Analysis
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QPushButton, QComboBox, QLabel, QHBoxLayout, QLineEdit
+from PyQt5.QtCore import QStandardPaths, Qt, pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QPushButton, QComboBox, QLabel, QHBoxLayout, QLineEdit
 
 from Services.Writers.CSVReportWriter import CSVReportWriter
-from Services.Writers.HTMLReportWriter import HTMLReportWriter
+from Services.Writers.JSONReportWriter import JSONReportWriter
+from Services.Writers.XMLReportWriter import XMLReportWriter
 from Services.Writers.TextReportWriter import TextReportWriter
 
 from Components.Widgets.StylizedButton import StylizedButton
@@ -19,7 +20,9 @@ class DownloadComponent(QGroupBox):
                             "Le rapport complet inclu les statistiques détaillées sur les images analysées"]
         self._report_types = ["Résumé", "Complet"]
         self._resume_report_formats = ["PDF", "Texte"]
-        self._complete_report_formats = ["CSV", "JSON", "XSML"]
+        self._resume_report_formats_extensions = ["*.pdf", "*.txt"]
+        self._complete_report_formats = ["CSV", "JSON", "XML"]
+        self._complete_report_formats_extensions = ["*.csv", "*.json", "*.xml"]
 
         self.setTitle("Paramètres")
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
@@ -37,7 +40,8 @@ class DownloadComponent(QGroupBox):
         main_layout.addRow(self._info_text)
 
         self._report_format_cbox = QComboBox()
-        self._report_format_cbox.addItems(self._resume_report_formats)
+        for i in range(len(self._resume_report_formats)):
+            self._report_format_cbox.addItem(self._resume_report_formats[i], self._resume_report_formats_extensions[i])
         main_layout.addRow("Format du rapport :", self._report_format_cbox)
 
         self._detection_shape_label = QLabel("Détection :")
@@ -104,17 +108,21 @@ class DownloadComponent(QGroupBox):
 
         self._report_format_cbox.clear()
         if index == 0: # Résumé
-            self._report_format_cbox.addItems(self._resume_report_formats)
+            for i in range(len(self._resume_report_formats)):
+                self._report_format_cbox.addItem(self._resume_report_formats[i], self._resume_report_formats_extensions[i])
             self._detection_shape_label.hide()
             self._detection_shape_cbox.hide()
         else: # Complet
-            self._report_format_cbox.addItems(self._complete_report_formats)
+            for i in range(len(self._complete_report_formats)):
+                self._report_format_cbox.addItem(self._complete_report_formats[i], self._complete_report_formats_extensions[i])
             self._detection_shape_label.show()
             self._detection_shape_cbox.show()
     
     pyqtSlot()
     def _reportFormatChanged(self, format: int):
         self.changeFormat[str].emit(format)
+
+        self._filepath_text.setText("")
 
         if format == "CSV":
             self._separator_label.show()
@@ -125,11 +133,13 @@ class DownloadComponent(QGroupBox):
 
     @pyqtSlot()
     def filepathBrowse(self):
-        #dialog = QFileDialog()
-        #path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
-        path = "./data/output"
-    
-        self._filepath_text.setText(path)
+        dialog = QFileDialog()
+       
+        filename = self._analysis.parameters().name().replace(" ", "_")
+        directory = QStandardPaths.standardLocations(QStandardPaths.DocumentsLocation)[0]
+        path = dialog.getSaveFileName(self, "Sélectionner un fichier", directory + "/" + filename, self._report_format_cbox.currentData())
+
+        self._filepath_text.setText(path[0])
 
     @pyqtSlot()
     def _exportReport(self):
@@ -138,23 +148,20 @@ class DownloadComponent(QGroupBox):
         if self._filepath_text.text() != "":
             if format_text == "CSV":
                 writer = CSVReportWriter(self._analysis, self._separator_cbox.currentData(), self._detection_shape_cbox.currentData())
-                writer.write(self._filepath_text.text() + "/report.csv")
 
             elif format_text == "JSON":
-                pass
+                writer = JSONReportWriter(self._analysis)
             
             elif format_text == "XML":
-                pass
+                writer = XMLReportWriter(self._analysis)
 
             elif format_text == "PDF":
                 pass
             
             elif format_text == "Texte":
                 writer = TextReportWriter(self._analysis)
-                writer.writeSummary(self._filepath_text.text() + "/report.txt")
-
-            else:
-                QMessageBox.warning(self, "Erreur", "Le format de téléchargement n'est pas valide")
+            
+            writer.write(self._filepath_text.text())
             
         else:
             QMessageBox.warning(self, "Erreur", "Vous n'avez pas sélectionné de dossier destination pour le rapport")
