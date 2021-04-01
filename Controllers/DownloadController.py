@@ -39,11 +39,16 @@ class DownloadController(QDialog):
 
         # Slots
         self._download_component.reportFormatChanged.connect(self._preview_component.update)
+        self._download_component.saveCompleted.connect(self._saveCompleted)
 
     def start(self, analysis: Analysis):
         self._analysis = analysis
 
         self._download_component.reset(self._analysis)
+
+    @pyqtSlot(bool)
+    def _saveCompleted(self, sucess: bool):
+        self.close()
 
     @pyqtSlot()
     def _returnClicked(self):
