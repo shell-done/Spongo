@@ -1,7 +1,7 @@
 from Services.Writers.ReportWriter import ReportWriter
 from Models.Analysis import Analysis
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QFileInfo, QRegExp, QStandardPaths, Qt, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QFileInfo, QObject, QRegExp, QStandardPaths, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QPushButton, QComboBox, QLabel, QHBoxLayout, QLineEdit
 
 from Services.Writers.CSVReportWriter import CSVReportWriter
@@ -21,13 +21,22 @@ class DownloadComponent(QGroupBox):
 
         self._report_writer = None
 
-        self._info_texts = ["Le résumé inclu les statistiques générales sur les images analysées",
-                            "Le rapport complet inclu les statistiques détaillées sur les images analysées"]
-        self._report_types = ["Résumé", "Complet"]
-        self._summary_report_formats = ["PDF", "Texte"]
-        self._summary_report_formats_extensions = ["*.pdf", "*.txt"]
-        self._complete_report_formats = ["CSV", "JSON", "XML"]
-        self._complete_report_formats_extensions = ["*.csv", "*.json", "*.xml"]
+        self._report_types = {
+            "summary": {"name": "Résumé", "description": "Le résumé inclu les statistiques générales sur les images analysées"},
+            "full": {"name": "Complet", "description": "Le rapport complet inclu les statistiques détaillées sur les images analysées"}
+        }
+        self._report_formats = {
+            "summary": {
+                "PDF": {"type": "Document PDF", "extension": "*.pdf"},
+                "Texte": {"type": "Fichier texte", "extension": "*.txt"}
+            },
+            "full": {
+                "CSV": {"type": "Fichier CSV", "extension": "*.csv"},
+                "JSON": {"type": "Fichier JSON", "extension": "*.json"},
+                "XML": {"type": "Fichier XML", "extension": "*.xml"}
+            }
+        }
+        self._default_report_type = "summary"
 
         self.setTitle("Paramètres")
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
@@ -37,16 +46,19 @@ class DownloadComponent(QGroupBox):
         main_layout.setVerticalSpacing(14)
 
         self._report_type_cbox = QComboBox()
-        self._report_type_cbox.addItems(self._report_types)
+        for report_type, v in self._report_types.items():
+            self._report_type_cbox.addItem(v["name"], report_type)
+
         main_layout.addRow("Type de rapport :", self._report_type_cbox)
 
-        self._info_text = QLabel(self._info_texts[0])
+        self._info_text = QLabel(self._report_types[self._default_report_type]["description"])
         self._info_text.setObjectName("info")
         main_layout.addRow(self._info_text)
 
         self._report_format_cbox = QComboBox()
-        for i in range(len(self._summary_report_formats)):
-            self._report_format_cbox.addItem(self._summary_report_formats[i], self._summary_report_formats_extensions[i])
+        for format, data in self._report_formats[self._default_report_type].items():
+            self._report_format_cbox.addItem(format, data)
+
         main_layout.addRow("Format du rapport :", self._report_format_cbox)
 
         self._detection_shape_label = QLabel("Détection :")
@@ -85,7 +97,6 @@ class DownloadComponent(QGroupBox):
         self.setLayout(main_layout)
 
         # Signals
-        #filepath_button.clicked.connect(self.filepathBrowse)
         download_button.clicked.connect(self._exportReport)
         self._report_type_cbox.currentIndexChanged.connect(self._reportTypeChanged)
         self._report_format_cbox.currentTextChanged.connect(self._reportFormatChanged)
@@ -120,21 +131,21 @@ class DownloadComponent(QGroupBox):
 
     pyqtSlot(int)
     def _reportTypeChanged(self, index: int):
-        self._info_text.setText(self._info_texts[index])
+        report_type = self.sender().currentData()
+        self._info_text.setText(self._report_types[report_type]["description"])
 
         self._report_format_cbox.clear()
-        if index == 0: # Résumé
-            for i in range(len(self._summary_report_formats)):
-                self._report_format_cbox.addItem(self._summary_report_formats[i], self._summary_report_formats_extensions[i])
+        for format, data in self._report_formats[report_type].items():
+            self._report_format_cbox.addItem(format, data)
+
+        if report_type == "summary":
             self._detection_shape_label.hide()
             self._detection_shape_cbox.hide()
-        else: # Complet
-            for i in range(len(self._complete_report_formats)):
-                self._report_format_cbox.addItem(self._complete_report_formats[i], self._complete_report_formats_extensions[i])
+        else:
             self._detection_shape_label.show()
             self._detection_shape_cbox.show()
     
-    @pyqtSlot(int)
+    @pyqtSlot(str)
     def _reportFormatChanged(self, format: str):
         if format == "CSV":
             self._separator_label.show()
@@ -152,9 +163,10 @@ class DownloadComponent(QGroupBox):
     @pyqtSlot()
     def _exportReport(self):
         filename = self._analysis.parameters().name()
+        report_format = self._report_format_cbox.currentData()
 
         path = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation) + "/" + filename
-        filter = "Fichier %s (%s)" % (self._report_format_cbox.currentText(), self._report_format_cbox.currentData())
+        filter = "Fichier %s (%s)" % (report_format["type"], report_format["extension"])
 
         result = QFileDialog.getSaveFileName(self, caption="Enregistrer le fichier", directory=path, filter=filter)
         
