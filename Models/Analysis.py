@@ -38,7 +38,6 @@ class Analysis:
         self._detected_sponges = {key:0 for key in parameters.selectedMorphotypes()}
 
         self._current_img_index = 0
-        self._start_datetime = QDateTime.currentDateTime()
         self._end_datetime = None
         self._base64_chart_image = None
         self._processed_images = []
@@ -99,6 +98,9 @@ class Analysis:
 
     def setBase64ChartImage(self, base64_image: str):
         self._base64_chart_image = base64_image
+
+    def start(self):
+        self._start_datetime = QDateTime.currentDateTime()
 
     def startDateTime(self) -> QDateTime:
         return self._start_datetime

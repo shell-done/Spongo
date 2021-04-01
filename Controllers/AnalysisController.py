@@ -115,6 +115,7 @@ class AnalysisController(BaseController):
     @pyqtSlot()
     def _neuralNetworkInitialized(self):
         self._title.setText("Analyse en cours")
+        self._analysis.start()
 
     @pyqtSlot()
     def _analysisFinished(self):
