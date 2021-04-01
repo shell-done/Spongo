@@ -129,7 +129,7 @@ class DownloadComponent(QGroupBox):
 
         self.reportFormatChanged.emit(self._report_writer)
 
-    pyqtSlot(int)
+    @pyqtSlot(int)
     def _reportTypeChanged(self, index: int):
         report_type = self.sender().currentData()
         self._info_text.setText(self._report_types[report_type]["description"])
