@@ -83,3 +83,17 @@ class XMLReportWriter(ReportWriter):
     def write(self, filepath: str):
         with open(filepath, "w", encoding='utf-8') as file:
             file.write(self.text())
+
+    def toHTML(self):
+        text = self.text()
+        escape = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "\"": "&quot;",
+            "'": "&apos;"
+        }
+        for k,v in escape.items():
+            text = text.replace(k, v)
+
+        return super().toHTML(text)

@@ -9,4 +9,16 @@ class ReportWriter():
 
     def write(self, filepath: str):
         return None
+
+    def toHTML(self, text):
+        return """
+        <html>
+            <head>
+                <meta charset='utf-8'>
+            </head>
+            <body>
+                <pre>%s</pre>
+            </body>
+        </html>
+        """ % text
     

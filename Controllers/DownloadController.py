@@ -1,3 +1,4 @@
+from Services.Writers.ReportWriter import ReportWriter
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDialog, QGridLayout, QHBoxLayout, QVBoxLayout
@@ -10,8 +11,6 @@ from Components.Download.PreviewComponent import PreviewComponent
 from Models.Analysis import Analysis
 
 class DownloadController(QDialog):
-    changeWidget = pyqtSignal([str], [str, object])
-
     def __init__(self, parent = None):
         super().__init__(parent)
         self.setWindowTitle("Spongo")
@@ -39,21 +38,13 @@ class DownloadController(QDialog):
         self.setLayout(main_layout)
 
         # Slots
-        self._download_component.changeFormat.connect(self._format)
+        self._download_component.reportFormatChanged.connect(self._preview_component.update)
 
     def start(self, analysis: Analysis):
         self._analysis = analysis
 
         self._download_component.reset(self._analysis)
-        self._preview_component.reset(self._analysis)
-
-    def askExit(self) -> bool:
-        return True
 
     @pyqtSlot()
     def _returnClicked(self):
-        self.changeWidget.emit("/menu")
-
-    @pyqtSlot(str)
-    def _format(self, format):
-        self._preview_component.update(format)
+        self.close()

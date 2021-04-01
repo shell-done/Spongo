@@ -1,7 +1,7 @@
+from Services.Writers.ReportWriter import ReportWriter
 from Components.Widgets.StylizableWidget import StylizableWidget
 from Services.Writers.HTMLReportWriter import HTMLReportWriter
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from Models.Analysis import Analysis
 from PyQt5.QtCore import Qt, QUrl, pyqtSlot
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout
@@ -27,18 +27,8 @@ class PreviewComponent(QGroupBox):
 
         main_layout.addWidget(web_view_container)
 
-    def reset(self, analysis: Analysis):
-        self._analysis = analysis
-
-        self.update("PDF")
-
-    def update(self, format):
-
-        if format == "PDF":
-            html_report_writer = HTMLReportWriter(self._analysis)
-            html = html_report_writer.text()
-            self._web_view.setHtml(html, QUrl("qrc:/"))
-        else:
-            html_report_writer = HTMLReportWriter(self._analysis)
-            html = ""
-            self._web_view.setHtml(html, QUrl("qrc:/"))
+    @pyqtSlot(ReportWriter)
+    def update(self, report_writer: ReportWriter):
+        html = report_writer.toHTML()
+        self._web_view.setHtml(html, QUrl("qrc:/"))
+    
