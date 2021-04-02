@@ -46,7 +46,7 @@ class HistoryManager:
             name, date_str = "@".join(f.split("@")[:-1]), f.split("@")[-1]
 
             date = QDateTime.fromString(date_str, HistoryManager.DATE_FORMAT)
-            analysis[date] = {"name": name, "file": f}
+            analysis[date] = {"name": name, "file": f, "date": date.toString("dd/MM/yyyy")}
 
         names = []
         for k in sorted(analysis.keys(), reverse=True):

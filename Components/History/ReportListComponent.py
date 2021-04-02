@@ -25,7 +25,7 @@ class ReportListComponent(QGroupBox):
 
         self._list.clear()
         for analysis in HistoryManager.analysisList():
-            item = QListWidgetItem(analysis["name"])
+            item = QListWidgetItem("%s (%s)" % (analysis["name"], analysis["date"]))
             item.setData(Qt.UserRole, analysis["file"])
             self._list.addItem(item)
         
