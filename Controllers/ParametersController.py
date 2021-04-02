@@ -22,6 +22,8 @@ class ParametersController(BaseController):
         self._parameters_component = ParametersComponent()
         self._options_component = OptionsComponent()
 
+        self._input_component.analysisNameStateChanged.connect(self._analysisNameStateChanged)
+
         self._start_button = StylizedButton("Démarrer", "blue")
         self._start_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
@@ -48,6 +50,10 @@ class ParametersController(BaseController):
         self._input_component.reset(self._parameters)
         self._parameters_component.reset(self._parameters)
         self._options_component.reset(self._parameters)
+
+    @pyqtSlot(bool)
+    def _analysisNameStateChanged(self, ok: bool):
+        self._start_button.setEnabled(ok)
 
     @pyqtSlot()
     def _returnClicked(self):
