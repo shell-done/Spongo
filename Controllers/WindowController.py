@@ -34,7 +34,7 @@ class WindowController(QMainWindow):
             w.changeWidget[str].connect(self._route)
             w.changeWidget[str, object].connect(self._route)
 
-        self.stacked_widget.setCurrentWidget(self._widgets["/menu"])
+        self._route("/menu")
 
         self.show()
 

@@ -23,6 +23,7 @@ class AnalysisController(BaseController):
         super().__init__()
 
         self._analysis = None
+        self._cancel_message_box = None
 
         self._title = PageTitle("Initialisation de l'analyse", False, self)
 
@@ -106,11 +107,13 @@ class AnalysisController(BaseController):
         if self._analysis.isFinished():
             self.changeWidget[str, object].emit("/history", self._analysis)
         else:
-            cancel_message_box = CancelMessageBox(self)
+            self._cancel_message_box = CancelMessageBox(self)
 
-            if cancel_message_box.exec_():
+            if self._cancel_message_box.exec_():
                 self._analysis_thread.stop()
                 self.changeWidget.emit("/menu")
+
+            self._cancel_message_box = None
 
     @pyqtSlot()
     def _neuralNetworkInitialized(self):
@@ -126,6 +129,9 @@ class AnalysisController(BaseController):
 
     @pyqtSlot()
     def _postAnalysisFinished(self):
+        if self._cancel_message_box:
+            self._cancel_message_box.close()
+
         self._title.setText("Analyse terminée")
         self._return_button.setText("Continuer")
         self._return_button.setObjectName("blue")

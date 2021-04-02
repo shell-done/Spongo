@@ -1,5 +1,6 @@
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QFormLayout, QGroupBox, QSizePolicy, QHBoxLayout, QLineEdit, QPushButton
+from Services.Loader import Loader
+from PyQt5.QtCore import QStandardPaths, pyqtSlot
+from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QHBoxLayout, QLineEdit, QPushButton
 
 from Models.Parameters import Parameters
 
@@ -43,8 +44,12 @@ class InputComponent(QGroupBox):
 
     @pyqtSlot()
     def filepathBrowse(self):
-        #dialog = QFileDialog()
-        #path = dialog.getExistingDirectory(self, 'Sélectionner un dossier')
-        path = "./data/images"
+        path = None
+
+        if Loader.isDevMode():
+            path = "./data/images"
+        else:
+            img_dir = QStandardPaths.writableLocation(QStandardPaths.PicturesLocation)
+            path = QFileDialog.getExistingDirectory(self, "Sélectionner un dossier", img_dir)
     
         self._filepath_text.setText(path)
