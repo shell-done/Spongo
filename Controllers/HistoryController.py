@@ -65,4 +65,5 @@ class HistoryController(BaseController):
 
     @pyqtSlot(Analysis)
     def _currentAnalysisChanged(self, analysis: Analysis):
+        self._analysis = analysis
         self._report_component.reset(analysis)
