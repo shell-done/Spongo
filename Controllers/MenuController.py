@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QPixmap
 from Services.AppInfo import AppInfo
 from Services.Loader import Loader
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
@@ -13,6 +14,9 @@ class MenuController(BaseController):
         super().__init__()
 
         # Main Layout
+        main_layout = QHBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+
         title = QLabel("Sp<font color='#419DD1'>o</font>ng<font color='#F4D05C'>o</font>")
         title.setObjectName("title")
 
@@ -24,28 +28,45 @@ class MenuController(BaseController):
         about_button = StylizedButton("À propos", "blue")
         exit_button = StylizedButton("Quitter", "yellow")
 
-        center_layout = QGridLayout()
+        buttons_layout = QGridLayout()
+        buttons_layout.setAlignment(Qt.AlignCenter)
+        buttons_layout.setVerticalSpacing(24)
+        buttons_layout.setHorizontalSpacing(30)
+
+        buttons_layout.addWidget(start_button, 0, 0, 1, 2)
+        buttons_layout.addWidget(self._history_button, 1, 0, 1, 2)
+        buttons_layout.addWidget(about_button, 2, 0)
+        buttons_layout.addWidget(exit_button, 2, 1)
+
+        version_label = QLabel(AppInfo.version())
+        version_label.setAlignment(Qt.AlignCenter)
+        version_label.setObjectName("version")
+
+        center_layout = QVBoxLayout()
         center_layout.setAlignment(Qt.AlignCenter)
-        center_layout.setVerticalSpacing(24)
-        center_layout.setHorizontalSpacing(30)
+        center_layout.setContentsMargins(15, 15, 15, 15)
+        center_layout.addStretch(4)
+        center_layout.addWidget(title)
+        center_layout.addWidget(subtitle)
+        center_layout.addLayout(buttons_layout)
+        center_layout.addStretch(5)
+        center_layout.addWidget(version_label)
 
-        center_layout.addWidget(title, 0, 0, 1, 2)
-        center_layout.addWidget(subtitle, 1, 0, 1, 2)
-        center_layout.addWidget(start_button, 2, 0, 1, 2)
-        center_layout.addWidget(self._history_button, 3, 0, 1, 2)
-        center_layout.addWidget(about_button, 4, 0)
-        center_layout.addWidget(exit_button, 4, 1)
-        center_layout.addItem(QSpacerItem(0, 40), 5, 0)
-
-        main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(0, 11, 0, 5)
+        isen_logo = QLabel()
+        isen_logo.setPixmap(QPixmap(":/img/isen_logo.png").scaledToWidth(180, Qt.SmoothTransformation))
 
         left_layout = QVBoxLayout()
-        version_label = QLabel(AppInfo.version())
-        version_label.setObjectName("version")
-        left_layout.addWidget(version_label, alignment=Qt.AlignBottom)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        left_layout.addWidget(isen_logo, alignment=Qt.AlignBottom)
+
+        ifremer_logo = QLabel()
+        ifremer_logo.setAlignment(Qt.AlignRight)
+        ifremer_logo.setPixmap(QPixmap(":/img/ifremer_logo.png").scaledToWidth(180, Qt.SmoothTransformation))
 
         right_layout = QVBoxLayout()
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        right_layout.addWidget(ifremer_logo, alignment=Qt.AlignBottom)
+
 
         main_layout.addLayout(left_layout, 1)
         main_layout.addLayout(center_layout, 3)
