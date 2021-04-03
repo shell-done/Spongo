@@ -1,5 +1,7 @@
+from Services.AppInfo import AppInfo
+from Services.Loader import Loader
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QBoxLayout, QGridLayout, QLabel, QMessageBox, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QBoxLayout, QGridLayout, QHBoxLayout, QLabel, QMessageBox, QSpacerItem, QVBoxLayout
 
 from Services.HistoryManager import HistoryManager
 from Controllers.BaseController import BaseController
@@ -22,17 +24,32 @@ class MenuController(BaseController):
         about_button = StylizedButton("À propos", "blue")
         exit_button = StylizedButton("Quitter", "yellow")
 
-        main_layout = QGridLayout()
-        main_layout.setAlignment(Qt.AlignCenter)
-        main_layout.setVerticalSpacing(24)
-        main_layout.setHorizontalSpacing(30)
+        center_layout = QGridLayout()
+        center_layout.setAlignment(Qt.AlignCenter)
+        center_layout.setVerticalSpacing(24)
+        center_layout.setHorizontalSpacing(30)
 
-        main_layout.addWidget(title, 0, 0, 1, 2)
-        main_layout.addWidget(subtitle, 1, 0, 1, 2)
-        main_layout.addWidget(start_button, 2, 0, 1, 2)
-        main_layout.addWidget(self._history_button, 3, 0, 1, 2)
-        main_layout.addWidget(about_button, 4, 0)
-        main_layout.addWidget(exit_button, 4, 1)
+        center_layout.addWidget(title, 0, 0, 1, 2)
+        center_layout.addWidget(subtitle, 1, 0, 1, 2)
+        center_layout.addWidget(start_button, 2, 0, 1, 2)
+        center_layout.addWidget(self._history_button, 3, 0, 1, 2)
+        center_layout.addWidget(about_button, 4, 0)
+        center_layout.addWidget(exit_button, 4, 1)
+        center_layout.addItem(QSpacerItem(0, 40), 5, 0)
+
+        main_layout = QHBoxLayout(self)
+        main_layout.setContentsMargins(0, 11, 0, 5)
+
+        left_layout = QVBoxLayout()
+        version_label = QLabel(AppInfo.version())
+        version_label.setObjectName("version")
+        left_layout.addWidget(version_label, alignment=Qt.AlignBottom)
+
+        right_layout = QVBoxLayout()
+
+        main_layout.addLayout(left_layout, 1)
+        main_layout.addLayout(center_layout, 3)
+        main_layout.addLayout(right_layout, 1)
 
         self.setLayout(main_layout)
 

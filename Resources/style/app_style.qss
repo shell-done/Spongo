@@ -96,6 +96,11 @@ QLabel#info {
     color: @gray;
 }
 
+QLabel#version {
+    font-size: 17px;
+    color: @gray;
+}
+
 PageTitle QLabel {
     font-weight: bold;
     font-size: 50px;
