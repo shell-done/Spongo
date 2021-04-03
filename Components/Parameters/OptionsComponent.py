@@ -1,3 +1,4 @@
+from Services.AppInfo import AppInfo
 from Services.Loader import Loader
 from PyQt5.QtCore import QStandardPaths, pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QLineEdit, QPushButton, QHBoxLayout
@@ -53,7 +54,7 @@ class OptionsComponent(QGroupBox):
     def _filepathClick(self):
         path = None
 
-        if Loader.isDevMode():
+        if AppInfo.isDevMode():
             path = "./data/predictions"
         else:
             img_dir = QStandardPaths.writableLocation(QStandardPaths.PicturesLocation)

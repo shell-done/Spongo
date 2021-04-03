@@ -1,3 +1,4 @@
+from Services.AppInfo import AppInfo
 from PyQt5.QtGui import QRegExpValidator
 from Services.Loader import Loader
 from PyQt5.QtCore import QPoint, QRegExp, QStandardPaths, pyqtSignal, pyqtSlot
@@ -61,7 +62,7 @@ class InputComponent(QGroupBox):
     def filepathBrowse(self):
         path = None
 
-        if Loader.isDevMode():
+        if AppInfo.isDevMode():
             path = "./data/images"
         else:
             img_dir = QStandardPaths.writableLocation(QStandardPaths.PicturesLocation)

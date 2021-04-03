@@ -14,10 +14,6 @@ class Loader:
     _qss_variables = {}
 
     @staticmethod
-    def isDevMode() -> bool:
-        return True
-
-    @staticmethod
     def SpongesMorphotypes() -> dict:
         if len(Loader._sponges_morphotypes) == 0:
             with open(Loader.MORPHOTYPES_FILE_PATH, 'rt') as f:

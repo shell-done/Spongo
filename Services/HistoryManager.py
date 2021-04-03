@@ -1,3 +1,4 @@
+from Services.AppInfo import AppInfo
 from Services.Loader import Loader
 import json
 
@@ -12,7 +13,7 @@ class HistoryManager:
     def appDirectory():
         directory = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
         
-        if Loader.isDevMode():
+        if AppInfo.isDevMode():
             directory = directory.replace("python", "Spongo")
 
         if not QDir().exists(directory):
