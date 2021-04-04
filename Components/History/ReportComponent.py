@@ -2,8 +2,8 @@ from Components.Widgets.StylizableWidget import StylizableWidget
 from Services.Writers.HTMLReportWriter import HTMLReportWriter
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from Models.Analysis import Analysis
-from PyQt5.QtCore import Qt, QUrl, pyqtSlot
-from PyQt5.QtGui import QFont
+from PyQt5.QtCore import QEvent, Qt, QUrl, pyqtSlot
+from PyQt5.QtGui import QFont, QWheelEvent
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout
 
 class ReportComponent(QGroupBox):
@@ -17,7 +17,6 @@ class ReportComponent(QGroupBox):
 
         self._web_view = QWebEngineView(self)
         self._web_view.setContextMenuPolicy(Qt.NoContextMenu)
-        self._web_view.setZoomFactor(1)
 
         web_view_container = StylizableWidget()
         web_view_container.setObjectName("WebView")
@@ -35,3 +34,4 @@ class ReportComponent(QGroupBox):
         html_report_writer = HTMLReportWriter(analysis)
         html = html_report_writer.text()
         self._web_view.setHtml(html, QUrl("qrc:/"))
+        self._web_view.setZoomFactor(1)

@@ -31,4 +31,5 @@ class PreviewComponent(QGroupBox):
     def update(self, report_writer: ReportWriter):
         html = report_writer.toHTML()
         self._web_view.setHtml(html, QUrl("qrc:/"))
+        self._web_view.setZoomFactor(1)
     
