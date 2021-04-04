@@ -49,8 +49,9 @@ class HistoryController(BaseController):
     def start(self, analysis):
         self._analysis = analysis
 
-        self._report_list_component.reset()
+        self._report_list_component.reset(self._analysis)
         self._report_component.reset(self._analysis)
+        self._export_button.setEnabled(True)
 
     @pyqtSlot()
     def _exportReport(self):
@@ -67,3 +68,6 @@ class HistoryController(BaseController):
     def _currentAnalysisChanged(self, analysis: Analysis):
         self._analysis = analysis
         self._report_component.reset(analysis)
+
+        has_analysis = True if analysis else False
+        self._export_button.setEnabled(has_analysis)

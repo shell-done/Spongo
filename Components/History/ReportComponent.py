@@ -28,6 +28,10 @@ class ReportComponent(QGroupBox):
         main_layout.addWidget(web_view_container)
 
     def reset(self, analysis: Analysis):
+        if analysis is None:
+            self._web_view.setHtml("<html></html>", QUrl("qrc:/"))
+            return
+
         html_report_writer = HTMLReportWriter(analysis)
         html = html_report_writer.text()
         self._web_view.setHtml(html, QUrl("qrc:/"))

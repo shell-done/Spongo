@@ -2,7 +2,7 @@ from Services.AppInfo import AppInfo
 from Services.Loader import Loader
 import json
 
-from PyQt5.QtCore import QDateTime, QDir, Qt, QStandardPaths
+from PyQt5.QtCore import QDateTime, QDir, QFile, Qt, QStandardPaths
 
 from Models.Analysis import Analysis
 
@@ -23,13 +23,23 @@ class HistoryManager:
 
     @staticmethod
     def saveAnalysis(analysis: Analysis):
-        filename = "%s@%s.json" % (analysis.parameters().name(), QDateTime.currentDateTime().toString(HistoryManager.DATE_FORMAT))
+        filename = "%s@%s.json" % (analysis.parameters().name(), analysis.startDateTime().toString(HistoryManager.DATE_FORMAT))
         
         filepath = "%s/%s" % (HistoryManager.appDirectory(), filename)
 
         with open(filepath, "w", encoding="utf-8") as f:
             json_str = analysis.toJSON()
             f.write(json_str)
+
+    @staticmethod
+    def deleteAnalysis(filename: str):
+        filepath = "%s/%s.json" % (HistoryManager.appDirectory(), filename)
+        QFile.remove(filepath)
+
+    @staticmethod
+    def renameAnalysis(current_filename: str, analysis: Analysis):
+        HistoryManager.deleteAnalysis(current_filename)
+        HistoryManager.saveAnalysis(analysis)
 
     @staticmethod
     def hasAnalysis() -> bool:
