@@ -19,6 +19,7 @@ class ReportListComponent(QGroupBox):
         self._list.setContextMenuPolicy(Qt.CustomContextMenu)
         self._list.customContextMenuRequested.connect(self._showItemMenu)
         self._list.currentRowChanged.connect(self._currentAnalysisChanged)
+        self._list.itemDoubleClicked.connect(lambda item: self._renameItem())
 
         self._analysis = None
 
@@ -69,8 +70,20 @@ class ReportListComponent(QGroupBox):
     def _renameItem(self):
         item = self._list.currentItem()
         
-        new_name, ok = QInputDialog.getText(self, "Renommer l'analyse", "Nouveau nom pour '%s' :" % item.data(Qt.UserRole + 1), text=item.data(Qt.UserRole + 1))
-        if not ok or self._analysis is None:
+        input_dialog = QInputDialog(self)
+        input_dialog.setInputMode(QInputDialog.TextInput)
+        input_dialog.setWindowTitle("Renommer l'analyse")
+        input_dialog.setLabelText("Nouveau nom pour '%s' :" % item.data(Qt.UserRole + 1))
+        input_dialog.setTextValue(item.data(Qt.UserRole + 1))
+        input_dialog.setOkButtonText("Ok")
+        input_dialog.setCancelButtonText("Annuler")
+
+        if not input_dialog.exec_():
+            return
+        
+        new_name = input_dialog.textValue()
+
+        if self._analysis is None:
             return
 
         if new_name == self._analysis.parameters().name():
