@@ -16,7 +16,7 @@
 
 @font: 'Mulish';
 
-QWidget {
+BaseController QWidget {
     font-family: @font;
     color: @dark;
 }
@@ -26,15 +26,15 @@ QStackedWidget {
     background-color: #F0F0F0;
 }
 
-QPushButton {
+BaseController QPushButton {
     color: @black;
 }
 
-QPushButton:disabled {
+BaseController QPushButton:disabled {
     color: @gray;
 }
 
-StylizedButton {
+BaseController StylizedButton {
     padding: 8px 25px;
     margin-top: 15px;
     margin-bottom: 5px;
@@ -47,7 +47,7 @@ StylizedButton {
     color: @white;
 }
 
-StylizedButton:disabled {
+BaseController StylizedButton:disabled {
     color: @white;
 }
 
@@ -107,7 +107,7 @@ PageTitle QLabel {
 }
 
 
-QGroupBox {
+BaseController QGroupBox {
     border: 2px solid @dark;
     font-weight: bold;
     font-size: 28px;
@@ -115,35 +115,35 @@ QGroupBox {
     padding: 15px;
 }
 
-QGroupBox[qss-var="pb-0"] {
+BaseController QGroupBox[qss-var="pb-0"] {
     padding-bottom: 0;
 }
 
-QGroupBox::title {
+BaseController QGroupBox::title {
     subcontrol-origin: margin;
     left: 35px;
     padding: 0px 8px;
 }
 
-QGroupBox QWidget {
+BaseController QGroupBox QWidget {
     font-size: 18px;
 }
 
-QGroupBox QLabel {
+BaseController QGroupBox QLabel {
     font-weight: bold;
 }
 
-QGroupBox QCheckBox {
+BaseController QGroupBox QCheckBox {
     font-weight: bold;
     spacing: 12px;
 }
 
-QMessageBox QLabel {
+BaseController QMessageBox QLabel {
     font-weight: normal;
     font-size: 15px;
 }
 
-QComboBox QAbstractItemView:disabled {
+BaseController QComboBox QAbstractItemView:disabled {
     color: @gray;
 }
 

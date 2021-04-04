@@ -72,6 +72,9 @@ class ReportListComponent(QGroupBox):
         new_name, ok = QInputDialog.getText(self, "Renommer l'analyse", "Nouveau nom pour '%s' :" % item.data(Qt.UserRole + 1), text=item.data(Qt.UserRole + 1))
         if not ok or self._analysis is None:
             return
+
+        if new_name == self._analysis.parameters().name():
+            return
         
         regexp = QRegExp("^[a-zA-Z0-9_-éèêëàîï ]{5,30}$")
         
