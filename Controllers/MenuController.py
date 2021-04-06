@@ -1,3 +1,4 @@
+from Controllers.MessageBox.AboutMessageBox import AboutMessageBox
 from PyQt5.QtGui import QPixmap
 from Services.AppInfo import AppInfo
 from Services.Loader import Loader
@@ -94,7 +95,8 @@ class MenuController(BaseController):
 
     @pyqtSlot()
     def _aboutButtonClicked(self):
-        QMessageBox.aboutQt(self, "About qt")
+        AboutMessageBox.show(self)
+        #QMessageBox.aboutQt(self, "aa")
 
     @pyqtSlot()
     def _exitButtonClicked(self):
