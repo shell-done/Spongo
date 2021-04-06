@@ -16,7 +16,7 @@ class CSVReportWriter(ReportWriter):
         super().__init__(analysis)
 
     def _fileHeader(self) -> str:
-        labels = ["id", "morphotype_id", "morphotype_name", "filename", "shape", "points", "confidence"]
+        labels = ["id", "morphotype_id", "morphotype_name", "filename", "confidence", "shape", "points"]
         return self._separator.join(labels) + "\n"
 
     def _detections(self) -> str:
@@ -26,7 +26,7 @@ class CSVReportWriter(ReportWriter):
         for img in self._analysis.processedImages():
             for d in img.detections():
                 points = "\"[%s]\"" % ",".join([str(p) for p in d.toPointsList(self._shape)])
-                line = [str(id), str(d.classId()), d.className(), img.fileName(), self._shape, points, "%.3f" % d.confidence()]
+                line = [str(id), str(d.classId()), d.className(), img.fileName(), "%.3f" % d.confidence(), self._shape, points]
                 lines.append(self._separator.join(line))
                 id += 1
 

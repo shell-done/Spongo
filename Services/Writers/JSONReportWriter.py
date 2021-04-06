@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import json
 
 from PySide2.QtCore import Qt
@@ -18,7 +19,7 @@ class JSONReportWriter(ReportWriter):
         super().__init__(analysis)
 
     def _fileHeader(self) -> dict:
-        informations = {}
+        informations = OrderedDict()
         
         informations["analysis_name"] = self._analysis.parameters().name()
         informations["analysed_images"] = self._analysis.imagesCount()
@@ -28,7 +29,7 @@ class JSONReportWriter(ReportWriter):
         return informations
 
     def _detectionParameters(self) -> dict:
-        parameters = {}
+        parameters = OrderedDict()
         
         parameters["src_folder"] = self._analysis.parameters().srcFolder()
         if self._analysis.parameters().saveProcessedImages():
@@ -43,19 +44,20 @@ class JSONReportWriter(ReportWriter):
 
         id = 0
         for processed_image in self._analysis.processedImages():
-            img = {}
+            img = OrderedDict()
             img["filename"] = processed_image.fileName()
 
             detections = []
             for d in processed_image.detections():
-                detections.append({
-                    "id": id,
-                    "morphotype_id": d.classId(),
-                    "morphotype_name": d.className(),
-                    "shape": self._shape,
-                    "points": d.toPointsList(self._shape)
-                })
-
+                od = OrderedDict()
+                od["id"] = id
+                od["morphotype_id"] = d.classId()
+                od["morphotype_name"] = d.className()
+                od["confidence"] = float("%.3f" % d.confidence())
+                od["shape"] = self._shape
+                od["points"] = {"point": d.toPointsList(self._shape)}
+                
+                detections.append(od)
                 id += 1
             
             img["detections"] = detections
@@ -64,11 +66,10 @@ class JSONReportWriter(ReportWriter):
         return images
 
     def text(self) -> str:
-        obj = {
-            "informations": self._fileHeader(),
-            "parameters": self._detectionParameters(),
-            "images": self._detections()
-        }
+        obj = OrderedDict()
+        obj["informations"] = self._fileHeader()
+        obj["parameters"] = self._detectionParameters()
+        obj["images"] = self._detections()
 
         return json.dumps(obj, indent=4, ensure_ascii=False)
 
