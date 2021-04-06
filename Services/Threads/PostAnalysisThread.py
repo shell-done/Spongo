@@ -100,7 +100,7 @@ class PostAnalysisThread(QThread):
             current_series[i].setPen(pen)
 
         chart.axisX().setRange(0, max(len(self._analysis.processedImages()), 4))
-        chart.axisY().setRange(0, max(round(max_s*1.05), 4))
+        chart.axisY().setRange(0, max(round(max_s), 4)*1.05)
 
         chart_view = QtCharts.QChartView(chart)
         chart_view.setRenderHint(QPainter.Antialiasing)

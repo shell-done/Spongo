@@ -105,18 +105,34 @@ class StatComponent(QGroupBox):
 
         return chart_view
 
-    @Slot(bool)
-    def _legendItemToggled(self, state: bool):
-        for k,v in self._legend_items.items():
-            if v == self.sender():
-                self._series[k].setVisible(state)
-                break
+    def update(self, analysis: Analysis):
+        self._analysis = analysis
+        #points = list(self._series.values())[0].count()
+
+        for class_id in self._parameters.selectedMorphotypes():
+            last_idx = self._series[class_id].count() - 1
+
+            new_x = self._series[class_id].at(last_idx).x() + 1
+            new_y = analysis.cumulativeDetectionsFor(class_id)
+
+            if last_idx >= 0:
+                if self._series[class_id].at(last_idx).y() == new_y:
+                    self._series[class_id].replace(last_idx, new_x, new_y)
+                    continue
+
+            self._series[class_id].append(new_x, new_y)
+            self._legend_items[class_id].setValue(str(new_y))
+
+        self._total_label.setText("Éponges détectées : %d" % analysis.totalDetections())
 
         self._recalculateAxis()
 
     def _recalculateAxis(self):
-        points = list(self._series.values())[0].count()
-        self._chart.axisX().setRange(0, max(points - 1, 4))
+        #points = list(self._series.values())[0].count()
+        last_idx = self._series[0].count() - 1
+        x = self._series[0].at(last_idx).x()
+
+        self._chart.axisX().setRange(0, max(x, 4))
 
         maxY = 0
         for k in self._series:
@@ -125,20 +141,18 @@ class StatComponent(QGroupBox):
             
             maxY = max(maxY, self._analysis.cumulativeDetectionsFor(k))
 
+        maxY = max(maxY, 4)
+
         # Add 5% to show the top series below the top line
         maxY = round(1.05*maxY)
 
-        maxY = max(maxY, 4)
         self._chart.axisY().setRange(0, maxY)
 
-    def update(self, analysis: Analysis):
-        self._analysis = analysis
-        points = list(self._series.values())[0].count()
-
-        for class_id in self._parameters.selectedMorphotypes():
-            self._series[class_id].append(points, analysis.cumulativeDetectionsFor(class_id))
-            self._legend_items[class_id].setValue(str(analysis.cumulativeDetectionsFor(class_id)))
-
-        self._total_label.setText("Éponges détectées : %d" % analysis.totalDetections())
+    @Slot(bool)
+    def _legendItemToggled(self, state: bool):
+        for k,v in self._legend_items.items():
+            if v == self.sender():
+                self._series[k].setVisible(state)
+                break
 
         self._recalculateAxis()
