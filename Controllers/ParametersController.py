@@ -57,7 +57,7 @@ class ParametersController(BaseController):
 
     @Slot()
     def _returnClicked(self):
-        self.changeWidget.emit("/menu")
+        self.changeWidget.emit("/menu", None)
 
     @Slot()
     def _startClick(self):

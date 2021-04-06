@@ -10,7 +10,17 @@ class ReportWriter():
     def write(self, filepath: str):
         return None
 
-    def toHTML(self, text):
+    def toHTML(self, text, truncate = True):
+        if truncate:
+            threshold = 10000
+            lines = text.split("\n")
+            if len(lines) > threshold:
+                lines = lines[:threshold]
+                lines.append("")
+                lines.append("<p style='text-align: center; font-weight: bold;'>Aperçu tronqué aux %d premières lignes.</p>" % threshold)
+                lines.append("")
+                text = "\n".join(lines)
+
         return """
         <html>
             <head>
