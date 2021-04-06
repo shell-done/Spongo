@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QColor
+from PySide2.QtGui import QColor
 
 class Morphotype:
     def __init__(self, name:str, color: QColor):

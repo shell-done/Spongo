@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt, pyqtSlot
-from PyQt5.QtGui import QFont, QPixmap, QImage
-from PyQt5.QtWidgets import QGridLayout, QGroupBox, QSizePolicy, QWidget, QLabel, QVBoxLayout, QHBoxLayout
+from PySide2.QtCore import Qt, Slot
+from PySide2.QtGui import QFont, QPixmap, QImage
+from PySide2.QtWidgets import QGridLayout, QGroupBox, QSizePolicy, QWidget, QLabel, QVBoxLayout, QHBoxLayout
 
 from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
@@ -44,7 +44,7 @@ class ImageComponent(QGroupBox):
         if processed_image.hasDetections():
             self._highlight_detections_thread.start(processed_image, self._image_label.size(), dest_folder)
 
-    @pyqtSlot(ProcessedImage, QPixmap)
+    @Slot(ProcessedImage, QPixmap)
     def _highlightedImageReceived(self, processed_image: ProcessedImage, pixmap: QPixmap):
         self._image_label.setFixedSize(pixmap.size())
         self._image_label.setPixmap(pixmap)

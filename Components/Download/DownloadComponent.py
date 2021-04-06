@@ -1,8 +1,8 @@
 from Services.Writers.ReportWriter import ReportWriter
 from Models.Analysis import Analysis
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QFileInfo, QObject, QRegExp, QStandardPaths, Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QPushButton, QComboBox, QLabel, QHBoxLayout, QLineEdit
+from PySide2 import QtWidgets
+from PySide2.QtCore import QFileInfo, QObject, QRegExp, QStandardPaths, Qt, Signal, Slot
+from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QPushButton, QComboBox, QLabel, QHBoxLayout, QLineEdit
 
 from Services.Writers.CSVReportWriter import CSVReportWriter
 from Services.Writers.JSONReportWriter import JSONReportWriter
@@ -13,8 +13,8 @@ from Services.Writers.PDFReportWriter import PDFReportWriter
 from Components.Widgets.StylizedButton import StylizedButton
 
 class DownloadComponent(QGroupBox):
-    reportFormatChanged = pyqtSignal(ReportWriter)
-    saveCompleted = pyqtSignal(bool)
+    reportFormatChanged = Signal(ReportWriter)
+    saveCompleted = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -129,7 +129,7 @@ class DownloadComponent(QGroupBox):
 
         self.reportFormatChanged.emit(self._report_writer)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _reportTypeChanged(self, index: int):
         report_type = self.sender().currentData()
         self._info_text.setText(self._report_types[report_type]["description"])
@@ -145,7 +145,7 @@ class DownloadComponent(QGroupBox):
             self._detection_shape_label.show()
             self._detection_shape_cbox.show()
     
-    @pyqtSlot(str)
+    @Slot(str)
     def _reportFormatChanged(self, format: str):
         if format == "CSV":
             self._separator_label.show()
@@ -156,11 +156,11 @@ class DownloadComponent(QGroupBox):
 
         self._loadWriter()
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _reportParamsChanged(self, index: int):
         self._loadWriter()
 
-    @pyqtSlot()
+    @Slot()
     def _exportReport(self):
         filename = self._analysis.parameters().name()
         report_format = self._report_format_cbox.currentData()
@@ -168,7 +168,7 @@ class DownloadComponent(QGroupBox):
         path = QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation) + "/" + filename
         filter = "Fichier %s (%s)" % (report_format["type"], report_format["extension"])
 
-        result = QFileDialog.getSaveFileName(self, caption="Enregistrer le fichier", directory=path, filter=filter)
+        result = QFileDialog.getSaveFileName(self, "Enregistrer le fichier", path, filter)
         
         filepath = result[0]
         if filepath == '':

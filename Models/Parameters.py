@@ -1,6 +1,6 @@
 import json
 
-from PyQt5.QtCore import QFileInfo
+from PySide2.QtCore import QFileInfo
 from Services.Loader import Loader
 
 class Parameters:

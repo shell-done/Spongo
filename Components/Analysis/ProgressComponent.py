@@ -1,9 +1,9 @@
-from PyQt5.QtCore import QPropertyAnimation, QTime
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QGroupBox, QWidget, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
+from PySide2.QtCore import QPropertyAnimation, QTime
+from PySide2.QtGui import QFont
+from PySide2.QtWidgets import QGroupBox, QWidget, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
 
 try:
-    from PyQt5.QtWinExtras import QWinTaskbarButton
+    from PySide2.QtWinExtras import QWinTaskbarButton
     _QT_WIN_EXTRAS_LOADED = True
 except ModuleNotFoundError:
     _QT_WIN_EXTRAS_LOADED = False

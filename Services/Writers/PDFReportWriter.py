@@ -1,7 +1,7 @@
-from PyQt5.QtCore import QUrl
+from PySide2.QtCore import QUrl
 from Services.Writers.HTMLReportWriter import HTMLReportWriter
 from Services.Writers.ReportWriter import ReportWriter
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PySide2.QtWebEngineWidgets import QWebEngineView
 
 from Models.Analysis import Analysis
 

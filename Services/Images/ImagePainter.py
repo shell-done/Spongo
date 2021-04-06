@@ -1,7 +1,7 @@
 import cv2
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPixmap
+from PySide2.QtCore import Qt
+from PySide2.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPixmap
 
 from Models.ProcessedImage import ProcessedImage
 from Services.Loader import Loader

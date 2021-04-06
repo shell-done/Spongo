@@ -1,13 +1,13 @@
 from Services.AppInfo import AppInfo
-from PyQt5.QtGui import QRegExpValidator
+from PySide2.QtGui import QRegExpValidator
 from Services.Loader import Loader
-from PyQt5.QtCore import QPoint, QRegExp, QStandardPaths, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QHBoxLayout, QLineEdit, QPushButton, QToolTip
+from PySide2.QtCore import QPoint, QRegExp, QStandardPaths, Signal, Slot
+from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QHBoxLayout, QLineEdit, QPushButton, QToolTip
 
 from Models.Parameters import Parameters
 
 class InputComponent(QGroupBox):
-    analysisNameStateChanged = pyqtSignal(bool)
+    analysisNameStateChanged = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -49,16 +49,16 @@ class InputComponent(QGroupBox):
         parameters.setName(self._name_text.text())
         parameters.setSrcFolder(self._filepath_text.text())
 
-    @pyqtSlot(str)
+    @Slot(str)
     def _analysisNameChanged(self, text: str):
         self.analysisNameStateChanged.emit(self._name_text.hasAcceptableInput())
 
-    @pyqtSlot()
+    @Slot()
     def _analysisNameError(self):
         text = "Caractères autorisés : alphanumérique, espace, - et _\nLongueur maximale : 30 caractères"
         QToolTip.showText(self._name_text.mapToGlobal(QPoint()) + self._name_text.cursorRect().topLeft(), text, self)
 
-    @pyqtSlot()
+    @Slot()
     def filepathBrowse(self):
         path = None
 

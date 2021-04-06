@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QPushButton
+from PySide2.QtCore import Qt
+from PySide2.QtGui import QColor
+from PySide2.QtWidgets import QGraphicsDropShadowEffect, QPushButton
 
 class StylizedButton(QPushButton):
     def __init__(self, text: str, object_name: str = "blue"):
@@ -11,7 +11,7 @@ class StylizedButton(QPushButton):
         if object_name:
             self.setObjectName(object_name)
 
-        effect = QGraphicsDropShadowEffect()
+        effect = QGraphicsDropShadowEffect(self)
         effect.setColor(QColor(0,0,0, 0.25*255))
         effect.setOffset(2, 4)
         effect.setBlurRadius(4)

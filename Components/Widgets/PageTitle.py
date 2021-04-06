@@ -1,11 +1,11 @@
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QWidget
 
 from Components.Widgets.StylizableWidget import StylizableWidget
 
 class PageTitle(StylizableWidget):
-    backArrowClicked = pyqtSignal()
+    backArrowClicked = Signal()
 
     def __init__(self, text: str, show_back_arrow: bool = True, parent: QWidget = None):
         super().__init__(parent)

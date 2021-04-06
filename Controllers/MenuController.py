@@ -1,9 +1,9 @@
 from Controllers.MessageBox.AboutMessageBox import AboutMessageBox
-from PyQt5.QtGui import QPixmap
+from PySide2.QtGui import QPixmap
 from Services.AppInfo import AppInfo
 from Services.Loader import Loader
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QBoxLayout, QGridLayout, QHBoxLayout, QLabel, QMessageBox, QSpacerItem, QVBoxLayout
+from PySide2.QtCore import Qt, Signal, Slot
+from PySide2.QtWidgets import QApplication, QBoxLayout, QGridLayout, QHBoxLayout, QLabel, QMessageBox, QSpacerItem, QVBoxLayout
 
 from Services.HistoryManager import HistoryManager
 from Controllers.BaseController import BaseController
@@ -84,20 +84,20 @@ class MenuController(BaseController):
     def start(self):
         self._history_button.setEnabled(HistoryManager.hasAnalysis())
 
-    @pyqtSlot()
+    @Slot()
     def _startButtonClicked(self):
-        self.changeWidget.emit("/parameters")
+        self.changeWidget.emit("/parameters", None)
 
-    @pyqtSlot()
+    @Slot()
     def _historyButtonClicked(self):
         last_analysis = HistoryManager.loadLastAnalysis()
-        self.changeWidget[str, object].emit("/history", last_analysis)
+        self.changeWidget.emit("/history", last_analysis)
 
-    @pyqtSlot()
+    @Slot()
     def _aboutButtonClicked(self):
         AboutMessageBox.show(self)
         #QMessageBox.aboutQt(self, "aa")
 
-    @pyqtSlot()
+    @Slot()
     def _exitButtonClicked(self):
         QApplication.exit(0)

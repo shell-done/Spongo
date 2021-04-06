@@ -1,6 +1,6 @@
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QIcon, QCloseEvent
-from PyQt5.QtWidgets import QMainWindow, QStackedWidget
+from PySide2.QtCore import Slot
+from PySide2.QtGui import QIcon, QCloseEvent
+from PySide2.QtWidgets import QMainWindow, QStackedWidget
 
 import Resources.Resources
 
@@ -32,8 +32,7 @@ class WindowController(QMainWindow):
 
         for w in self._widgets.values():
             self.stacked_widget.addWidget(w)
-            w.changeWidget[str].connect(self._route)
-            w.changeWidget[str, object].connect(self._route)
+            w.changeWidget.connect(self._route)
 
         self._route("/menu")
 
@@ -47,8 +46,7 @@ class WindowController(QMainWindow):
         else:
             event.ignore()
 
-    @pyqtSlot(str)
-    @pyqtSlot(str, object)
+    @Slot(str, object)
     def _route(self, route_name: str, parameters: object = None):
         next_widget = None
         

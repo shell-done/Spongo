@@ -1,15 +1,15 @@
-from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QPixmap
+from PySide2.QtCore import QSize, Qt, QThread, Signal
+from PySide2.QtGui import QPixmap
 
 from Models.ProcessedImage import ProcessedImage
 from Services.Images.ImageConverter import ImageConverter
 from Services.Images.ImagePainter import ImagePainter
 
 class DrawDetectionsThread(QThread):
-    imageLoadedSignal = pyqtSignal(ProcessedImage, QPixmap)
+    imageLoadedSignal = Signal(ProcessedImage, QPixmap)
 
     def __init__(self):
-        super(QThread, self).__init__()
+        super().__init__()
         self._abort = False
         self._processed_image = None
 

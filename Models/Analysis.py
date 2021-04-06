@@ -1,5 +1,5 @@
 import json
-from PyQt5.QtCore import Qt, QDateTime, QTime
+from PySide2.QtCore import Qt, QDateTime, QTime
 
 from Models.Parameters import Parameters
 from Models.ProcessedImage import ProcessedImage

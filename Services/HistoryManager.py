@@ -2,7 +2,7 @@ from Services.AppInfo import AppInfo
 from Services.Loader import Loader
 import json
 
-from PyQt5.QtCore import QDateTime, QDir, QFile, Qt, QStandardPaths
+from PySide2.QtCore import QDateTime, QDir, QFile, Qt, QStandardPaths
 
 from Models.Analysis import Analysis
 

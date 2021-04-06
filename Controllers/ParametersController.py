@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt, QDir, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QVBoxLayout
+from PySide2.QtCore import Qt, QDir, Signal, Slot
+from PySide2.QtGui import QFont
+from PySide2.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QVBoxLayout
 
 from Models.Parameters import Parameters
 from Components.Widgets.PageTitle import PageTitle
@@ -51,15 +51,15 @@ class ParametersController(BaseController):
         self._parameters_component.reset(self._parameters)
         self._options_component.reset(self._parameters)
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def _analysisNameStateChanged(self, ok: bool):
         self._start_button.setEnabled(ok)
 
-    @pyqtSlot()
+    @Slot()
     def _returnClicked(self):
         self.changeWidget.emit("/menu")
 
-    @pyqtSlot()
+    @Slot()
     def _startClick(self):
         self._parameters_component.updateParameters(self._parameters)
         self._input_component.updateParameters(self._parameters)
@@ -73,6 +73,6 @@ class ParametersController(BaseController):
                 error = "Le dossier source ne contient aucune image au format .jpg"
 
         if error is None:
-            self.changeWidget[str, object].emit("/analysis", (self._parameters, images))
+            self.changeWidget.emit("/analysis", (self._parameters, images))
         else:
             QMessageBox.warning(self, "Erreur", error)

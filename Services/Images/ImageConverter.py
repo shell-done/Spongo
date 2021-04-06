@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-from PyQt5.QtCore import QBuffer, QByteArray
-from PyQt5.QtGui import QImage, QPixmap
+from PySide2.QtCore import QBuffer, QByteArray
+from PySide2.QtGui import QImage, QPixmap
 
 class ImageConverter:
     @staticmethod

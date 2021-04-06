@@ -1,10 +1,10 @@
 from math import ceil
 
 from Components.Widgets.ChartLegendItem import ChartLegendItem
-from PyQt5.QtCore import QMargins, Qt, pyqtSlot
-from PyQt5.QtGui import QBrush, QColor, QFont, QPainter, QPen
-from PyQt5.QtWidgets import QGridLayout, QGroupBox, QWidget, QLabel, QVBoxLayout
-from PyQt5.QtChart import QChart, QChartView, QSplineSeries
+from PySide2.QtCore import QMargins, Qt, Slot
+from PySide2.QtGui import QBrush, QColor, QFont, QPainter, QPen
+from PySide2.QtWidgets import QGridLayout, QGroupBox, QWidget, QLabel, QVBoxLayout
+from PySide2.QtCharts import QtCharts
 
 from Models.Parameters import Parameters
 from Models.Analysis import Analysis
@@ -47,7 +47,7 @@ class StatComponent(QGroupBox):
         self._legend_items = {}
         self._series = {}
         for i,m in parameters.selectedMorphotypes().items():
-            self._series[i] = QSplineSeries(self)
+            self._series[i] = QtCharts.QSplineSeries(self)
             self._series[i].setName(m.name())
             self._series[i].setColor(m.color())
 
@@ -85,10 +85,10 @@ class StatComponent(QGroupBox):
             axis.setLabelsFont(labels_font)
             
 
-    def _createLineChart(self) -> QChartView:
-        self._chart = QChart()
+    def _createLineChart(self) -> QtCharts.QChartView:
+        self._chart = QtCharts.QChart()
         
-        self._chart.setAnimationOptions(QChart.SeriesAnimations)
+        self._chart.setAnimationOptions(QtCharts.QChart.SeriesAnimations)
 
         self._chart.setTitle("Détections cumulées")
         self._chart.legend().setVisible(False)
@@ -100,12 +100,12 @@ class StatComponent(QGroupBox):
         self._chart.setTitleFont(title_font)
         self._chart.setTitleBrush(QBrush(Loader.QSSColor("@dark")))
 
-        chart_view = QChartView(self._chart)
+        chart_view = QtCharts.QChartView(self._chart)
         chart_view.setRenderHint(QPainter.Antialiasing)
 
         return chart_view
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def _legendItemToggled(self, state: bool):
         for k,v in self._legend_items.items():
             if v == self.sender():
@@ -115,7 +115,7 @@ class StatComponent(QGroupBox):
         self._recalculateAxis()
 
     def _recalculateAxis(self):
-        points = len(list(self._series.values())[0])
+        points = list(self._series.values())[0].count()
         self._chart.axisX().setRange(0, max(points - 1, 4))
 
         maxY = 0
@@ -133,7 +133,7 @@ class StatComponent(QGroupBox):
 
     def update(self, analysis: Analysis):
         self._analysis = analysis
-        points = len(list(self._series.values())[0])
+        points = list(self._series.values())[0].count()
 
         for class_id in self._parameters.selectedMorphotypes():
             self._series[class_id].append(points, analysis.cumulativeDetectionsFor(class_id))

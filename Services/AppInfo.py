@@ -1,7 +1,7 @@
 class AppInfo:
     @staticmethod
     def isDevMode():
-        return True
+        return False
 
     @staticmethod
     def version():

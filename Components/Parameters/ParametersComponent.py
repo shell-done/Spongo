@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QComboBox, QFormLayout, QGridLayout, QGroupBox, QSizePolicy, QSpinBox, QCheckBox, QLabel, QVBoxLayout, QHBoxLayout
+from PySide2.QtCore import Qt
+from PySide2.QtGui import QStandardItem, QStandardItemModel
+from PySide2.QtWidgets import QComboBox, QFormLayout, QGridLayout, QGroupBox, QSizePolicy, QSpinBox, QCheckBox, QLabel, QVBoxLayout, QHBoxLayout
 
 from Services.Loader import Loader
 from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork

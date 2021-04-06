@@ -1,11 +1,11 @@
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QColor, QPaintEvent, QPainter, QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QStyle, QStyleOption, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtGui import QColor, QPaintEvent, QPainter, QPixmap
+from PySide2.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QStyle, QStyleOption, QWidget
 
 from Components.Widgets.StylizableWidget import StylizableWidget
 
 class ChartLegendItem(StylizableWidget):
-    toggled = pyqtSignal(bool)
+    toggled = Signal(bool)
 
     def __init__(self, label: str, color: QColor, parent: QWidget = None):
         super().__init__(parent)

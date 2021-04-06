@@ -1,6 +1,6 @@
 from Controllers.DownloadController import DownloadController
-from PyQt5.QtCore import Qt, pyqtSlot
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout
+from PySide2.QtCore import Qt, Slot
+from PySide2.QtWidgets import QHBoxLayout, QVBoxLayout
 
 from Controllers.BaseController import BaseController
 from Components.Widgets.StylizedButton import StylizedButton
@@ -53,18 +53,18 @@ class HistoryController(BaseController):
         self._report_component.reset(self._analysis)
         self._export_button.setEnabled(True)
 
-    @pyqtSlot()
+    @Slot()
     def _exportReport(self):
         download_dialog = DownloadController(self)
         download_dialog.start(self._analysis)
 
         download_dialog.exec_()
 
-    @pyqtSlot()
+    @Slot()
     def _returnClicked(self):
-        self.changeWidget.emit("/menu")
+        self.changeWidget.emit("/menu", None)
 
-    @pyqtSlot(Analysis)
+    @Slot(Analysis)
     def _currentAnalysisChanged(self, analysis: Analysis):
         self._analysis = analysis
         self._report_component.reset(analysis)

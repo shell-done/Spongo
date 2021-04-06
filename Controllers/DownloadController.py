@@ -1,7 +1,7 @@
 from Services.Writers.ReportWriter import ReportWriter
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QDialog, QGridLayout, QHBoxLayout, QVBoxLayout
+from PySide2.QtCore import Qt, Signal, Slot
+from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QDialog, QGridLayout, QHBoxLayout, QVBoxLayout
 
 from Controllers.BaseController import BaseController
 from Components.Widgets.StylizedButton import StylizedButton
@@ -46,10 +46,10 @@ class DownloadController(QDialog):
 
         self._download_component.reset(self._analysis)
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def _saveCompleted(self, sucess: bool):
         self.close()
 
-    @pyqtSlot()
+    @Slot()
     def _returnClicked(self):
         self.close()

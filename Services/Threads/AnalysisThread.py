@@ -2,7 +2,7 @@
 
 import time
 
-from PyQt5.QtCore import QThread, pyqtSignal
+from PySide2.QtCore import QThread, Signal
 
 from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork
 from Models.Detection import Detection
@@ -10,12 +10,12 @@ from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
 
 class AnalysisThread(QThread):
-    initialized = pyqtSignal()
-    imageProcessed = pyqtSignal(ProcessedImage)
-    completed = pyqtSignal()
+    initialized = Signal()
+    imageProcessed = Signal(ProcessedImage)
+    completed = Signal()
 
     def __init__(self):
-        super(QThread, self).__init__()
+        super().__init__()
         self._abort = False
         self._network = None
 

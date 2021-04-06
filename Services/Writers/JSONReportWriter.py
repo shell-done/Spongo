@@ -1,6 +1,6 @@
 import json
 
-from PyQt5.QtCore import Qt
+from PySide2.QtCore import Qt
 
 from Models.Analysis import Analysis
 from Models.ProcessedImage import ProcessedImage

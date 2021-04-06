@@ -1,11 +1,11 @@
 # This Python file uses the following encoding: utf-8
 from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork
-from PyQt5.QtCore import QThread, QUrl, pyqtSlot
+from PySide2.QtCore import QThread, QUrl, Slot
 import sys
-from PyQt5.QtPrintSupport import QPrinter
-from PyQt5.QtGui import QFontDatabase
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout
-from PyQt5.QtWebEngineWidgets import QWebEngineSettings, QWebEngineView
+from PySide2.QtPrintSupport import QPrinter
+from PySide2.QtGui import QFontDatabase
+from PySide2.QtWidgets import QWidget, QApplication, QVBoxLayout
+from PySide2.QtWebEngineWidgets import QWebEngineSettings, QWebEngineView
 
 from Services.Loader import Loader
 from Controllers.WindowController import WindowController
@@ -29,4 +29,4 @@ if __name__ == "__main__":
 
     window = WindowController()
 
-    sys.exit(App.exec())
+    sys.exit(App.exec_())

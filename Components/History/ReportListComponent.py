@@ -1,13 +1,13 @@
 from Services.HistoryManager import HistoryManager
 from Services.Writers.HTMLReportWriter import HTMLReportWriter
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PySide2.QtWebEngineWidgets import QWebEngineView
 from Models.Analysis import Analysis
-from PyQt5.QtCore import QPoint, QRegExp, Qt, QUrl, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QGroupBox, QInputDialog, QListWidget, QListWidgetItem, QMenu, QMessageBox, QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout
+from PySide2.QtCore import QPoint, QRegExp, Qt, QUrl, Signal, Slot
+from PySide2.QtGui import QFont
+from PySide2.QtWidgets import QGroupBox, QInputDialog, QListWidget, QListWidgetItem, QMenu, QMessageBox, QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout
 
 class ReportListComponent(QGroupBox):
-    currentAnalysisChanged = pyqtSignal(object)
+    currentAnalysisChanged = Signal(object)
 
     def __init__(self):
         super().__init__()
@@ -38,7 +38,7 @@ class ReportListComponent(QGroupBox):
         
         self._list.setCurrentRow(0)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def _currentAnalysisChanged(self, row: int):
         if row < 0:
             return
@@ -56,7 +56,7 @@ class ReportListComponent(QGroupBox):
         self._analysis = HistoryManager.loadAnalysis(new_analysis_file)
         self.currentAnalysisChanged.emit(self._analysis)
 
-    @pyqtSlot(QPoint)
+    @Slot(QPoint)
     def _showItemMenu(self, pos: QPoint):
         globalPos = self._list.mapToGlobal(pos)
 
@@ -64,9 +64,9 @@ class ReportListComponent(QGroupBox):
         actions_menu.addAction("Renommer", self._renameItem)
         actions_menu.addAction("Supprimer",  self._eraseItem)
 
-        actions_menu.exec(globalPos)
+        actions_menu.exec_(globalPos)
 
-    @pyqtSlot()
+    @Slot()
     def _renameItem(self):
         item = self._list.currentItem()
         
@@ -104,7 +104,7 @@ class ReportListComponent(QGroupBox):
         self._list.setCurrentRow(current_row)
         self.currentAnalysisChanged.emit(self._analysis)
 
-    @pyqtSlot()
+    @Slot()
     def _eraseItem(self):
         item = self._list.currentItem()
 
@@ -115,7 +115,7 @@ class ReportListComponent(QGroupBox):
         message_box.setInformativeText("Assurez vous d'avoir exportez toutes les données dont vous avez besoin.")
         message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
 
-        ret = message_box.exec()
+        ret = message_box.exec_()
         if ret == QMessageBox.Yes:
             HistoryManager.deleteAnalysis(item.data(Qt.UserRole))
             self._list.takeItem(self._list.currentRow())

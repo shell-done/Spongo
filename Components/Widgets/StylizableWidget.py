@@ -1,5 +1,5 @@
-from PyQt5.QtGui import QPaintEvent, QPainter
-from PyQt5.QtWidgets import QStyle, QStyleOption, QWidget
+from PySide2.QtGui import QPaintEvent, QPainter
+from PySide2.QtWidgets import QStyle, QStyleOption, QWidget
 
 class StylizableWidget(QWidget):
     def __init__(self, parent: QWidget = None):

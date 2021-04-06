@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtWidgets import QBoxLayout, QGridLayout, QSizePolicy, QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
+from PySide2.QtCore import Qt, Signal, Slot
+from PySide2.QtGui import QFont, QPixmap
+from PySide2.QtWidgets import QBoxLayout, QGridLayout, QSizePolicy, QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
 
 from Models.Parameters import Parameters
 from Services.Threads.AnalysisThread import AnalysisThread
@@ -90,7 +90,7 @@ class AnalysisController(BaseController):
 
         return CancelMessageBox(self).exec_()
 
-    @pyqtSlot(ProcessedImage)
+    @Slot(ProcessedImage)
     def _imageProcessed(self, processed_image: ProcessedImage):
         self._analysis.addProcessedImage(processed_image)
 
@@ -102,32 +102,32 @@ class AnalysisController(BaseController):
         self._stat_component.update(self._analysis)
         self._progress_component.update(next_image, self._analysis.currentImageIndex(), self._analysis.estimateTimeLeft())
 
-    @pyqtSlot()
+    @Slot()
     def _returnClick(self):
         if self._analysis.isFinished():
-            self.changeWidget[str, object].emit("/history", self._analysis)
+            self.changeWidget.emit("/history", self._analysis)
         else:
             self._cancel_message_box = CancelMessageBox(self)
 
             if self._cancel_message_box.exec_():
                 self._analysis_thread.stop()
-                self.changeWidget.emit("/menu")
+                self.changeWidget.emit("/menu", None)
 
             self._cancel_message_box = None
 
-    @pyqtSlot()
+    @Slot()
     def _neuralNetworkInitialized(self):
         self._title.setText("Analyse en cours")
         self._analysis.start()
 
-    @pyqtSlot()
+    @Slot()
     def _analysisFinished(self):
         self._analysis.finish()
 
         self._title.setText("Post analyse en cours")
         self._post_analysis_thread.start(self._analysis)
 
-    @pyqtSlot()
+    @Slot()
     def _postAnalysisFinished(self):
         if self._cancel_message_box:
             self._cancel_message_box.close()

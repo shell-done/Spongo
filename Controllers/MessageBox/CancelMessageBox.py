@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMessageBox
+from PySide2.QtWidgets import QMessageBox
 
 class CancelMessageBox(QMessageBox):
     def __init__(self, parent = None):

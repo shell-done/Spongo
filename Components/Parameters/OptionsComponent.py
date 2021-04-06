@@ -1,7 +1,7 @@
 from Services.AppInfo import AppInfo
 from Services.Loader import Loader
-from PyQt5.QtCore import QStandardPaths, pyqtSlot
-from PyQt5.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QLineEdit, QPushButton, QHBoxLayout
+from PySide2.QtCore import QStandardPaths, Slot
+from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QLineEdit, QPushButton, QHBoxLayout
 
 from Models.Parameters import Parameters
 
@@ -45,12 +45,12 @@ class OptionsComponent(QGroupBox):
         parameters.setSaveProcessedImages(self._save_cbox.isChecked())
         parameters.setDestFolder(self._filepath_text.text())
 
-    @pyqtSlot(bool)
+    @Slot(bool)
     def _saveCBoxToggled(self, checked: bool):
         self._filepath_text.setEnabled(checked)
         self._filepath_button.setEnabled(checked)
 
-    @pyqtSlot()
+    @Slot()
     def _filepathClick(self):
         path = None
 

@@ -1,6 +1,6 @@
-from PyQt5.QtCore import QSize, Qt, QMargins, QThread, pyqtSignal
-from PyQt5.QtGui import QBrush, QColor, QFont, QImage, QPainter, QPen, QPixmap
-from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis, QSplineSeries
+from PySide2.QtCore import QSize, Qt, QMargins, QThread, Signal
+from PySide2.QtGui import QBrush, QColor, QFont, QImage, QPainter, QPen, QPixmap
+from PySide2.QtCharts import QtCharts
 
 from Models.Analysis import Analysis
 from Services.Loader import Loader
@@ -9,10 +9,10 @@ from Services.Images.ImageConverter import ImageConverter
 from Services.Images.ImagePainter import ImagePainter
 
 class PostAnalysisThread(QThread):
-    completed = pyqtSignal()
+    completed = Signal()
 
     def __init__(self):
-        super(QThread, self).__init__()
+        super().__init__()
         self._abort = False
         self._analysis = None
 
@@ -48,7 +48,7 @@ class PostAnalysisThread(QThread):
         self._analysis.setMostInterestingBase64Images(base64_highlighted_images)
 
     def _generateChartImage(self):
-        chart = QChart()
+        chart = QtCharts.QChart()
 
         chart.legend().setVisible(False)
         chart.setBackgroundBrush(QBrush(QColor("transparent")))
@@ -63,8 +63,8 @@ class PostAnalysisThread(QThread):
         labels_font = QFont(Loader.QSSVariable("@font"))
         labels_font.setPointSize(18)
 
-        axis_x = QValueAxis()
-        axis_y = QValueAxis()
+        axis_x = QtCharts.QValueAxis()
+        axis_y = QtCharts.QValueAxis()
 
         for axis in (axis_x, axis_y):
             axis.setLinePen(axis_pen)
@@ -79,7 +79,7 @@ class PostAnalysisThread(QThread):
         current_series = {}
         max_s = 0
         for i, m in self._analysis.parameters().selectedMorphotypes().items():
-            current_series[i] = QSplineSeries()
+            current_series[i] = QtCharts.QSplineSeries()
             current_series[i].setName(m.name())
             current_series[i].setColor(m.color())
 
@@ -102,7 +102,7 @@ class PostAnalysisThread(QThread):
         chart.axisX().setRange(0, max(len(self._analysis.processedImages()), 4))
         chart.axisY().setRange(0, max(round(max_s*1.05), 4))
 
-        chart_view = QChartView(chart)
+        chart_view = QtCharts.QChartView(chart)
         chart_view.setRenderHint(QPainter.Antialiasing)
         chart_view.resize(QSize(1080, 500))
 

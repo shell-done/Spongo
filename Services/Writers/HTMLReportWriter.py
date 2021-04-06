@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt, QBuffer, QByteArray
+from PySide2.QtCore import Qt, QBuffer, QByteArray
 
 from Models.ProcessedImage import ProcessedImage
 from Models.Analysis import Analysis

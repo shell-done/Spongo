@@ -1,6 +1,6 @@
-from PyQt5.QtCore import QFile, QIODevice, QTextStream, Qt, pyqtSlot
-from PyQt5.QtGui import QPixmap, QTextDocument
-from PyQt5.QtWidgets import QComboBox, QDialogButtonBox, QGridLayout, QHBoxLayout, QLabel, QLayout, QMessageBox, QPlainTextEdit, QSizePolicy, QSpacerItem, QTextEdit, QWidget, QDialog, QTabWidget, QVBoxLayout
+from PySide2.QtCore import QFile, QIODevice, QTextStream, Qt, Slot
+from PySide2.QtGui import QPixmap, QTextDocument
+from PySide2.QtWidgets import QComboBox, QDialogButtonBox, QGridLayout, QHBoxLayout, QLabel, QLayout, QMessageBox, QPlainTextEdit, QSizePolicy, QSpacerItem, QTextEdit, QWidget, QDialog, QTabWidget, QVBoxLayout
 
 class AboutMessageBox(QMessageBox):
     @staticmethod
@@ -206,7 +206,7 @@ class AboutMessageBox(QMessageBox):
 
         return tab
     
-    @pyqtSlot(int)
+    @Slot(int)
     def _dependenciesComboBoxChanged(self, idx: int):
         data = self._dependencies_list.currentData()
         self._version.setText(data["version"])
@@ -215,6 +215,7 @@ class AboutMessageBox(QMessageBox):
         self._link.setText("<a href='%s'>%s</a>" % (data["link"], data["link"]))
 
         license_file = QFile(":/documents/licenses/%s" % data["license-file"])
+        text = ""
         if license_file.open(QIODevice.ReadOnly | QFile.Text):
             text = QTextStream(license_file).readAll()
             license_file.close()
