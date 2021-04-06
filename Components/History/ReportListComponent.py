@@ -70,12 +70,16 @@ class ReportListComponent(QGroupBox):
     def _renameItem(self):
         item = self._list.currentItem()
         
-        input_dialog = QInputDialog(self)
+        input_dialog = QInputDialog(self.parentWidget())
+        font = input_dialog.font()
+        font.setPixelSize(16)
+        input_dialog.setFont(font)
+        input_dialog.setMinimumWidth(300)
         input_dialog.setInputMode(QInputDialog.TextInput)
         input_dialog.setWindowTitle("Renommer l'analyse")
         input_dialog.setLabelText("Nouveau nom pour '%s' :" % item.data(Qt.UserRole + 1))
         input_dialog.setTextValue(item.data(Qt.UserRole + 1))
-        input_dialog.setOkButtonText("Ok")
+        input_dialog.setOkButtonText("OK")
         input_dialog.setCancelButtonText("Annuler")
 
         if not input_dialog.exec_():
