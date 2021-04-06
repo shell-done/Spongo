@@ -1,5 +1,6 @@
 from Models.Detection import Detection
 import json
+from numpy import ndarray
 
 class ProcessedImage:
     @staticmethod
@@ -14,6 +15,7 @@ class ProcessedImage:
         self._folder_path = folder_path
         self._file_name = file_name
         self._detections = detections
+        self._loaded_image = None
 
     def folderPath(self) -> str:
         return self._folder_path
@@ -44,5 +46,15 @@ class ProcessedImage:
 
         return s
 
+    def setLoadedImage(self, image: ndarray):
+        self._loaded_image = image
+
+    def loadedImage(self) -> ndarray:
+        return self._loaded_image
+
+    def resetLoadedImage(self):
+        self._loaded_image = None
+
     def toJSON(self):
+        self._loaded_image = None
         return json.dumps(self, default=lambda o: o.__dict__, indent=4, ensure_ascii=False)

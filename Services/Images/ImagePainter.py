@@ -1,5 +1,6 @@
-import cv2
+import cv2, time
 
+from numpy import ndarray
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPixmap
 
@@ -9,8 +10,14 @@ from Services.Images.ImageConverter import ImageConverter
 
 class ImagePainter:
     @staticmethod
-    def drawDetections(processed_image: ProcessedImage, width=2048) -> QPixmap:
-        cv_mat = cv2.imread(processed_image.filePath())        
+    def drawDetections(processed_image: ProcessedImage, pre_loaded_image: ndarray = None, width=2048) -> QPixmap:
+        cv_mat = None
+
+        if pre_loaded_image is None:
+            cv_mat = cv2.imread(processed_image.filePath())
+        else:
+            cv_mat = pre_loaded_image
+
         pixmap = ImageConverter.CVToQPixmap(cv_mat)
 
         original_width = pixmap.width()

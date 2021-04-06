@@ -61,4 +61,4 @@ class NeuralNetwork:
 
                 detections.append([xywh, id, conf])
 
-            return detections
+            return img, detections

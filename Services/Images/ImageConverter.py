@@ -1,5 +1,5 @@
 import cv2
-import numpy as np
+from numpy import array, ndarray
 
 from PySide2.QtCore import QBuffer, QByteArray
 from PySide2.QtGui import QImage, QPixmap
@@ -24,7 +24,7 @@ class ImageConverter:
         return ImageConverter.QImageToBase64(pixmap.toImage(), format, width, with_header)
 
     @staticmethod
-    def CVToQImage(array: np.ndarray) -> QImage:
+    def CVToQImage(array: ndarray) -> QImage:
         height, width, channel = array.shape
         cv2.cvtColor(array, cv2.COLOR_BGR2RGB, array)
         bytesPerLine = 3 * width
@@ -34,25 +34,22 @@ class ImageConverter:
         return image
 
     @staticmethod
-    def CVToQPixmap(array: np.ndarray) -> QPixmap:
+    def CVToQPixmap(array: ndarray) -> QPixmap:
         return QPixmap.fromImage(ImageConverter.CVToQImage(array))
 
     @staticmethod
-    def QImageToCV(image: QImage) -> np.ndarray:
+    def QImageToCV(image: QImage) -> ndarray:
         if image.format() != QImage.Format_RGB888:
             image = image.convertToFormat(QImage.Format_RGB888)
-
-        image = image.convertToFormat(4)
 
         width = image.width()
         height = image.height()
 
         ptr = image.bits()
-        ptr.setsize(image.byteCount())
-        arr = np.array(ptr).reshape(height, width, 4)
+        arr = array(ptr).reshape(height, width, 3)
 
         return arr
 
     @staticmethod
-    def QPixmapToCV(pixmap: QPixmap) -> np.ndarray:
+    def QPixmapToCV(pixmap: QPixmap) -> ndarray:
         return ImageConverter.QImageToCV(pixmap.toImage())

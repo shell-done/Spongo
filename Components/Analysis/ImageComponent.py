@@ -44,6 +44,8 @@ class ImageComponent(QGroupBox):
         if processed_image.hasDetections():
             self._highlight_detections_thread.start(processed_image, self._image_label.size(), dest_folder)
 
+        processed_image.resetLoadedImage()
+
     @Slot(ProcessedImage, QPixmap)
     def _highlightedImageReceived(self, processed_image: ProcessedImage, pixmap: QPixmap):
         self._image_label.setFixedSize(pixmap.size())

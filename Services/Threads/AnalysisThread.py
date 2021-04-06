@@ -56,7 +56,7 @@ class AnalysisThread(QThread):
             detections = []
 
             filepath = self._srcPath + "/" + image_name
-            network_output = self._network.process(filepath)
+            loaded_image, network_output = self._network.process(filepath)
 
             for det in network_output:
                 if det[1] in self._morphotypes:
@@ -67,6 +67,7 @@ class AnalysisThread(QThread):
                 return
 
             processed_image = ProcessedImage(self._srcPath, image_name, detections)
+            processed_image.setLoadedImage(loaded_image)
             self.imageProcessed.emit(processed_image)
 
         print("Predictions complete on %d images in %.2fs" % (len(self._images), time.time() - t0))
