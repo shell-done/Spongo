@@ -9,8 +9,8 @@
         <file>img/ifremer_logo.png</file>
         <file>img/isen_logo.png</file>
         <file>img/example.jpg</file>
-        <file>documents/licenses/pyqt5.txt</file>
-        <file>documents/licenses/dicttoxml.txt</file>
+        <file>documents/licenses/pyside2.txt</file>
+        <file>documents/licenses/dict2xml.txt</file>
         <file>documents/licenses/numpy.txt</file>
         <file>documents/licenses/opencv-python.txt</file>
         <file>documents/licenses/pytorch-yolov4.txt</file>

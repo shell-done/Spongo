@@ -52,7 +52,7 @@ class AboutMessageBox(QMessageBox):
         implementation = (
             "La détection et la classification des éponges est réalisée grâce au réseau de neurone Yolov4 entrainé sur environ 250 images "
             "de chaque morphotype. Ce réseau a ensuite été implémenté dans l'outil grâce à la library PyTorch. L'interface de l'application "
-            "a quant à elle été réalisée avec le framework PyQt. Pour plus d'informations sur les autres dépendances, se référer à l'onglet "
+            "a quant à elle été réalisée avec le framework PySide2. Pour plus d'informations sur les autres dépendances, se référer à l'onglet "
             "\"Dépendances\"."
         )
 
@@ -85,12 +85,12 @@ class AboutMessageBox(QMessageBox):
 
         # add link and version
         dependencies = {
-            "PyQt5": {
-                "version": "5.15.4",
-                "author": "Riverbank Computing Limited",
-                "link": "https://www.riverbankcomputing.com/software/pyqt/",
-                "license": "GPL v3",
-                "license-file": "pyqt5.txt"
+            "PySide2": {
+                "version": "5.15.2",
+                "author": "Qt for Python Team",
+                "link": "https://www.pyside.org",
+                "license": "LGPL v3",
+                "license-file": "pyside2.txt"
             },
             "PyTorch": {
                 "version": "1.8.1+cu102",
@@ -127,12 +127,12 @@ class AboutMessageBox(QMessageBox):
                 "license": "Apache-2.0",
                 "license-file": "pytorch-yolov4.txt"
             },
-            "dicttoxml": {
-                "version": "1.7.4",
-                "author": "Ryan McGreal",
-                "link": "https://github.com/quandyfactory/dicttoxml",
-                "license": "GPL v2",
-                "license-file": "dicttoxml.txt"
+            "dict2xml": {
+                "version": "1.7.0",
+                "author": "Stephen Moore",
+                "link": "http://github.com/delfick/python-dict2xml",
+                "license": "MIT",
+                "license-file": "dict2xml.txt"
             }
         }
 
@@ -191,7 +191,7 @@ class AboutMessageBox(QMessageBox):
 
         self._license_area = QTextEdit(self)
         self._license_area.setReadOnly(True)
-        self._license_area.setFontPointSize(11)
+        self._license_area.setFontPointSize(9)
         license_area_layout = QVBoxLayout()
         license_area_layout.addWidget(self._license_area)
         license_area_layout.setContentsMargins(5, 0, 5, 5)
