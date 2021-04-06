@@ -22,6 +22,12 @@ class HistoryManager:
         return directory
 
     @staticmethod
+    def generateNewAnalysisName() -> str:
+        prev_analysis_number = len(HistoryManager.analysisList())
+
+        return "Analyse de la plongée #%d" % (prev_analysis_number + 1)
+
+    @staticmethod
     def saveAnalysis(analysis: Analysis):
         filename = "%s@%s.json" % (analysis.parameters().name(), analysis.startDateTime().toString(HistoryManager.DATE_FORMAT))
         

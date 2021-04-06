@@ -20,7 +20,7 @@ class InputComponent(QGroupBox):
         main_layout.setVerticalSpacing(14)
 
         self._name_text = QLineEdit()
-        self._name_validator = QRegExpValidator(QRegExp("^[a-zA-Z0-9_-éèêëàîï ]{5,30}$"))
+        self._name_validator = QRegExpValidator(QRegExp("^[a-zA-Z0-9_-#éèêëàîï ]{5,30}$"))
         self._name_text.setValidator(self._name_validator)
         self._name_text.inputRejected.connect(self._analysisNameError)
         self._name_text.textChanged.connect(self._analysisNameChanged)
@@ -55,7 +55,7 @@ class InputComponent(QGroupBox):
 
     @Slot()
     def _analysisNameError(self):
-        text = "Caractères autorisés : alphanumérique, espace, - et _\nLongueur maximale : 30 caractères"
+        text = "Caractères autorisés : alphanumérique, espace, #, - et _\nLongueur maximale : 30 caractères"
         QToolTip.showText(self._name_text.mapToGlobal(QPoint()) + self._name_text.cursorRect().topLeft(), text, self)
 
     @Slot()

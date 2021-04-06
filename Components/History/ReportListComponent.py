@@ -89,10 +89,10 @@ class ReportListComponent(QGroupBox):
         if new_name == self._analysis.parameters().name():
             return
         
-        regexp = QRegExp("^[a-zA-Z0-9_-éèêëàîï ]{5,30}$")
+        regexp = QRegExp("^[a-zA-Z0-9_-#éèêëàîï ]{5,30}$")
         
         if not regexp.exactMatch(new_name):
-            QMessageBox.warning(self, "Nouveau nom invalide", "Caractères autorisés : alphanumérique, espace, - et _ avec une longueur maximale de 30 caractères")
+            QMessageBox.warning(self, "Nouveau nom invalide", "Caractères autorisés : alphanumérique, espace, #, - et _ avec une longueur maximale de 30 caractères")
             return
 
 

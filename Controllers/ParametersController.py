@@ -1,3 +1,4 @@
+from Services.HistoryManager import HistoryManager
 from PySide2.QtCore import Qt, QDir, Signal, Slot
 from PySide2.QtGui import QFont
 from PySide2.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QVBoxLayout
@@ -46,6 +47,7 @@ class ParametersController(BaseController):
 
     def start(self):
         self._parameters = Parameters()
+        self._parameters.setName(HistoryManager.generateNewAnalysisName())
 
         self._input_component.reset(self._parameters)
         self._parameters_component.reset(self._parameters)
