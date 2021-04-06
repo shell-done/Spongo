@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource>
         <file>fonts/mulish.ttf</file>
+        <file>fonts/inconsolata.ttf</file>
         <file>style/app_style.qss</file>
         <file>style/report_style.css</file>
         <file>img/spongo_icon.png</file>

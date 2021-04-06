@@ -15,6 +15,7 @@
 @white: #FFFFFF;
 
 @font: 'Mulish';
+@monospaced: 'Inconsolata';
 
 BaseController QWidget {
     font-family: @font;
@@ -193,4 +194,9 @@ QWidget#about-tab QComboBox {
 
 QWidget#about-tab QLabel#dependency-info {
     font-weight: bold;
+}
+
+QWidget#about-tab QTextEdit#license-file {
+    font-family: @monospaced;
+    font-size: 14px;
 }

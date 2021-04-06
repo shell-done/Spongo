@@ -191,7 +191,7 @@ class AboutMessageBox(QMessageBox):
 
         self._license_area = QTextEdit(self)
         self._license_area.setReadOnly(True)
-        self._license_area.setFontPointSize(9)
+        self._license_area.setObjectName("license-file")
         license_area_layout = QVBoxLayout()
         license_area_layout.addWidget(self._license_area)
         license_area_layout.setContentsMargins(5, 0, 5, 5)

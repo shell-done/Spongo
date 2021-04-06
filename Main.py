@@ -16,7 +16,9 @@ from Controllers.WindowController import WindowController
 if __name__ == "__main__":
     App = QApplication(sys.argv)
 
-    QFontDatabase.addApplicationFont("Resources/fonts/mulish.ttf")
+    QFontDatabase.addApplicationFont(":/fonts/mulish.ttf")
+    QFontDatabase.addApplicationFont(":/fonts/inconsolata.ttf")
+    
     App.setStyleSheet(Loader.PreprocessedQSS())
     Loader.SpongesMorphotypes()
 
