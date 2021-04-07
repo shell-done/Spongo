@@ -1,5 +1,6 @@
+from PySide2 import QtWidgets
 from PySide2.QtCore import QStandardPaths, Qt, Signal, Slot
-from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QComboBox, QLabel, QHBoxLayout, QSpinBox
+from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QComboBox, QLabel, QHBoxLayout, QSpinBox, QVBoxLayout, QWidget
 
 from Models.Analysis import Analysis
 from Services.Writers.ReportWriter import ReportWriter
@@ -42,59 +43,41 @@ class DownloadComponent(QGroupBox):
         self._default_report_type = "summary"
 
         self.setTitle("Paramètres")
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        main_layout = QFormLayout(self)
-        main_layout.setHorizontalSpacing(20)
-        main_layout.setVerticalSpacing(14)
+        self._form_layout = QFormLayout()
+        self._form_layout.setHorizontalSpacing(20)
+        self._form_layout.setVerticalSpacing(14)
 
         self._report_type_cbox = QComboBox()
         for report_type, v in self._report_types.items():
             self._report_type_cbox.addItem(v["name"], report_type)
 
-        main_layout.addRow("Type de rapport :", self._report_type_cbox)
+        self._form_layout.addRow("Type de rapport :", self._report_type_cbox)
 
         self._info_text = QLabel(self._report_types[self._default_report_type]["description"])
         self._info_text.setObjectName("info")
-        main_layout.addRow(self._info_text)
+        self._form_layout.addRow(self._info_text)
 
         self._report_format_cbox = QComboBox()
         for format, data in self._report_formats[self._default_report_type].items():
             self._report_format_cbox.addItem(format, data)
 
-        main_layout.addRow("Format du rapport :", self._report_format_cbox)
+        self._form_layout.addRow("Format du rapport :", self._report_format_cbox)
 
-        self._detection_shape_label = QLabel("Détection :")
         self._detection_shape_cbox = QComboBox()
         self._detection_shape_cbox.addItem("Rectangle", "rectangle")
         self._detection_shape_cbox.addItem("Cercle", "circle")
-        self._detection_shape_label.hide()
         self._detection_shape_cbox.hide()
-        main_layout.addRow(self._detection_shape_label, self._detection_shape_cbox)
 
-        self._separator_label = QLabel("Séparateur :")
         self._separator_cbox = QComboBox()
         self._separator_cbox.addItem("Point virgule", ";")
         self._separator_cbox.addItem("Virgule", ",")
-        self._separator_label.hide()
         self._separator_cbox.hide()
-        main_layout.addRow(self._separator_label, self._separator_cbox)
 
-        self._nb_keeped_label = QLabel("Images à exporter :")
         self._nb_keeped_spinbox = QSpinBox(self)
         self._nb_keeped_spinbox.setRange(1, 1)
-        self._nb_keeped_label.hide()
         self._nb_keeped_spinbox.hide()
-        main_layout.addRow(self._nb_keeped_label, self._nb_keeped_spinbox)
-
-        spacer_label = QLabel("Spacer")
-        spacer_label.hide()
-        main_layout.addRow(spacer_label)
-
-        for widget in (self._detection_shape_label, self._detection_shape_cbox, self._separator_label, self._separator_cbox, self._nb_keeped_label, self._nb_keeped_spinbox, spacer_label):
-            retain = widget.sizePolicy()
-            retain.setRetainSizeWhenHidden(True)
-            widget.setSizePolicy(retain)
 
         download_button = StylizedButton("Télécharger", "blue")
         download_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -102,9 +85,11 @@ class DownloadComponent(QGroupBox):
         button_layout = QHBoxLayout()
         button_layout.setAlignment(Qt.AlignRight)
         button_layout.addWidget(download_button)
-        main_layout.addRow(button_layout)
 
-        self.setLayout(main_layout)
+        main_layout = QVBoxLayout(self)
+        main_layout.addLayout(self._form_layout)
+        main_layout.addStretch(1)
+        main_layout.addLayout(button_layout)
 
         # Signals
         download_button.clicked.connect(self._exportReport)
@@ -153,30 +138,47 @@ class DownloadComponent(QGroupBox):
         for format, data in self._report_formats[report_type].items():
             self._report_format_cbox.addItem(format, data)
 
-        if report_type == "full":
-            self._detection_shape_label.show()
-            self._detection_shape_cbox.show()
-        else:
-            self._detection_shape_label.hide()
-            self._detection_shape_cbox.hide()
-
-        if report_type == "annotations":
-            self._nb_keeped_label.show()
-            self._nb_keeped_spinbox.show()
-        else:
-            self._nb_keeped_label.hide()
-            self._nb_keeped_spinbox.hide()
+        if report_type == "summary":
+            self._showDetectionShape(False)
+            self._showSeparator(False)
+            self._showKeepedNumber(False)
+        elif report_type == "full":
+            self._showDetectionShape(True)
+            self._showKeepedNumber(False)
+        elif report_type == "annotations":
+            self._showDetectionShape(False)
+            self._showSeparator(False)
+            self._showKeepedNumber(True)
     
     @Slot(str)
     def _reportFormatChanged(self, format: str):
         if format == "CSV":
-            self._separator_label.show()
-            self._separator_cbox.show()
+            self._showSeparator(True)
         else: # JSON & XSML
-            self._separator_label.hide()
-            self._separator_cbox.hide()
+            self._showSeparator(False)
 
         self._loadWriter()
+
+    def _showDetectionShape(self, show: bool):
+        self._showRow("Séparateur :", self._detection_shape_cbox, show)
+
+    def _showSeparator(self, show: bool):
+        self._showRow("Détection :", self._separator_cbox, show)
+
+    def _showKeepedNumber(self, show: bool):
+        self._showRow("Images à exporter :", self._nb_keeped_spinbox, show)
+
+    def _showRow(self, label: str, widget: QWidget, show: bool):
+        if show and not widget.isVisible():
+            widget.show()
+            self._form_layout.addRow(label, widget)
+        elif not show and widget.isVisible():
+            label = self._form_layout.labelForField(widget)
+            widget.hide()
+            label.hide()
+            self._form_layout.removeWidget(widget)
+            self._form_layout.removeWidget(label)
+            del label
 
     @Slot(int)
     def _reportParamsChanged(self, index: int):

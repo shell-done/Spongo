@@ -18,6 +18,7 @@ class DownloadController(QDialog):
         title.backArrowClicked.connect(self._returnClicked)
 
         components_layout = QGridLayout()
+        components_layout.setContentsMargins(10, 10, 10, 10)
         components_layout.setSpacing(20)
         components_layout.setColumnStretch(0, 4)
         components_layout.setColumnStretch(1, 3)
