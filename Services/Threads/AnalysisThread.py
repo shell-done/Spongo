@@ -38,8 +38,8 @@ class AnalysisThread(QThread):
 
     def run(self):
         # Give the configuration and weight files for the model and load the network using them.
-        modelConfiguration = "data/parameters/yolov4_custom_test.cfg"
-        modelWeights = "data/parameters/yolov4_custom_train_last.weights"
+        modelConfiguration = "Resources/config/yolov4_config.cfg"
+        modelWeights = "Resources/config/yolov4_weights.weights"
 
         self._network = NeuralNetwork(modelConfiguration, modelWeights, self._threshold, self._device_id)
         
@@ -70,7 +70,7 @@ class AnalysisThread(QThread):
             processed_image.setLoadedImage(img)
             self.imageProcessed.emit(processed_image)
 
-        print("Predictions complete on %d images in %.2fs" % (len(self._images), time.time() - t0))
+        print("Predictions completed on %d images in %.2fs" % (len(self._images), time.time() - t0))
 
         self._network = None
         self.completed.emit()
