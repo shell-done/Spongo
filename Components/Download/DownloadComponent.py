@@ -1,3 +1,4 @@
+from Services.Writers.Yolov4AnnotationsWriter import Yolov4AnnotationsWriter
 from Services.Writers.ReportWriter import ReportWriter
 from Models.Analysis import Analysis
 from PySide2 import QtWidgets
@@ -23,7 +24,8 @@ class DownloadComponent(QGroupBox):
 
         self._report_types = {
             "summary": {"name": "Résumé", "description": "Le résumé inclu les statistiques générales sur les images analysées"},
-            "full": {"name": "Complet", "description": "Le rapport complet inclu les statistiques détaillées sur les images analysées"}
+            "full": {"name": "Complet", "description": "Le rapport complet inclu les statistiques détaillées sur les images analysées"},
+            "annotations": {"name": "Annotations", "description": "Converti les résultats de l'analyse en annotation utilisable pour l'entrainement"}
         }
         self._report_formats = {
             "summary": {
@@ -33,7 +35,10 @@ class DownloadComponent(QGroupBox):
             "full": {
                 "CSV": {"type": "Fichier CSV", "extension": "*.csv"},
                 "JSON": {"type": "Fichier JSON", "extension": "*.json"},
-                "XML": {"type": "Fichier XML", "extension": "*.xml"}
+                "XML": {"type": "Fichier XML", "extension": "*.xml"},
+            },
+            "annotations": {
+                "Annotations YOLOv4": {"type": "Fichier zip", "extension": "*.zip"}
             }
         }
         self._default_report_type = "summary"
@@ -112,7 +117,13 @@ class DownloadComponent(QGroupBox):
 
     def _loadWriter(self):
         format_text = self._report_format_cbox.currentText()
-        if format_text == "CSV":
+        if format_text == "PDF":
+            self._report_writer = PDFReportWriter(self._analysis)
+        
+        elif format_text == "Texte":
+            self._report_writer = TextReportWriter(self._analysis)
+
+        elif format_text == "CSV":
             self._report_writer = CSVReportWriter(self._analysis, self._separator_cbox.currentData(), self._detection_shape_cbox.currentData())
 
         elif format_text == "JSON":
@@ -121,11 +132,8 @@ class DownloadComponent(QGroupBox):
         elif format_text == "XML":
             self._report_writer = XMLReportWriter(self._analysis, shape=self._detection_shape_cbox.currentData())
 
-        elif format_text == "PDF":
-            self._report_writer = PDFReportWriter(self._analysis)
-        
-        elif format_text == "Texte":
-            self._report_writer = TextReportWriter(self._analysis)
+        elif format_text == "Annotations YOLOv4":
+            self._report_writer = Yolov4AnnotationsWriter(self._analysis)
 
         self.reportFormatChanged.emit(self._report_writer)
 
@@ -138,12 +146,12 @@ class DownloadComponent(QGroupBox):
         for format, data in self._report_formats[report_type].items():
             self._report_format_cbox.addItem(format, data)
 
-        if report_type == "summary":
-            self._detection_shape_label.hide()
-            self._detection_shape_cbox.hide()
-        else:
+        if report_type == "full":
             self._detection_shape_label.show()
             self._detection_shape_cbox.show()
+        else:
+            self._detection_shape_label.hide()
+            self._detection_shape_cbox.hide()
     
     @Slot(str)
     def _reportFormatChanged(self, format: str):
@@ -162,6 +170,11 @@ class DownloadComponent(QGroupBox):
 
     @Slot()
     def _exportReport(self):
+        error = self._report_writer.checkErrors()
+        if error:
+            QMessageBox.warning(self.parentWidget(), "Impossible de générer le rapport", error)
+            return
+
         filename = self._analysis.parameters().name()
         report_format = self._report_format_cbox.currentData()
 

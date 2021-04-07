@@ -36,9 +36,8 @@ class NeuralNetwork:
             self._model = self._model.to(device_id)
             self._model.eval()
 
-    def process(self, image_file: str):
+    def process(self, img):
         with torch.no_grad():
-            img = cv2.imread(image_file)
             sized = cv2.resize(img, (416, 416))
             sized = cv2.cvtColor(sized, cv2.COLOR_BGR2RGB)
 
@@ -61,4 +60,4 @@ class NeuralNetwork:
 
                 detections.append([xywh, id, conf])
 
-            return img, detections
+            return detections

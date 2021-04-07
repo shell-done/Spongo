@@ -3,6 +3,7 @@
 import time
 
 from PySide2.QtCore import QThread, Signal
+import cv2
 
 from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork
 from Models.Detection import Detection
@@ -56,7 +57,9 @@ class AnalysisThread(QThread):
             detections = []
 
             filepath = self._srcPath + "/" + image_name
-            loaded_image, network_output = self._network.process(filepath)
+
+            img = cv2.imread(filepath)
+            network_output = self._network.process(img)
 
             for det in network_output:
                 if det[1] in self._morphotypes:
@@ -66,8 +69,8 @@ class AnalysisThread(QThread):
                 self._network = None
                 return
 
-            processed_image = ProcessedImage(self._srcPath, image_name, detections)
-            processed_image.setLoadedImage(loaded_image)
+            processed_image = ProcessedImage(self._srcPath, image_name, (img.shape[1], img.shape[0]), detections)
+            processed_image.setLoadedImage(img)
             self.imageProcessed.emit(processed_image)
 
         print("Predictions complete on %d images in %.2fs" % (len(self._images), time.time() - t0))

@@ -7,6 +7,9 @@ class ReportWriter():
     def text(self) -> str:
         return None
 
+    def checkErrors(self) -> str:
+        return None
+
     def write(self, filepath: str):
         return None
 

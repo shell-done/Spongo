@@ -9,13 +9,14 @@ class ProcessedImage:
         for d in obj["_detections"]:
             detections.append(Detection.fromJSON(d))
 
-        return ProcessedImage(obj["_folder_path"], obj["_file_name"], detections)
+        return ProcessedImage(obj["_folder_path"], obj["_file_name"], obj["_size"], detections)
 
-    def __init__(self, folder_path: str, file_name: str, detections: list):
+    def __init__(self, folder_path: str, file_name: str, size: tuple, detections: list):
         self._folder_path = folder_path
         self._file_name = file_name
         self._detections = detections
         self._loaded_image = None
+        self._size = size
 
     def folderPath(self) -> str:
         return self._folder_path
@@ -46,6 +47,9 @@ class ProcessedImage:
 
         return s
 
+    def size(self) -> tuple:
+        return self._size
+
     def setLoadedImage(self, image: ndarray):
         self._loaded_image = image
 
@@ -56,5 +60,5 @@ class ProcessedImage:
         self._loaded_image = None
 
     def toJSON(self):
-        self._loaded_image = None
+        del self._loaded_image
         return json.dumps(self, default=lambda o: o.__dict__, indent=4, ensure_ascii=False)
