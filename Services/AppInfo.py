@@ -1,10 +1,10 @@
 class AppInfo:
     @staticmethod
     def isDevMode():
-        return True
+        return False
 
     @staticmethod
     def version():
-        dev_suffix = "(dev version)" if AppInfo.isDevMode() else ""
+        dev_suffix = "(dev)" if AppInfo.isDevMode() else ""
 
-        return "Beta 0.9 %s" % dev_suffix
+        return "Version R-1.0 %s" % dev_suffix
