@@ -47,7 +47,7 @@ class StatComponent(QGroupBox):
         self._legend_items = {}
         self._series = {}
         for i,m in parameters.selectedMorphotypes().items():
-            self._series[i] = QtCharts.QSplineSeries(self)
+            self._series[i] = QtCharts.QLineSeries(self)
             self._series[i].setName(m.name())
             self._series[i].setColor(m.color())
 
