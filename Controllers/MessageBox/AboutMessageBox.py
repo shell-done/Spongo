@@ -217,7 +217,9 @@ class AboutMessageBox(QMessageBox):
         license_file = QFile(":/documents/licenses/%s" % data["license-file"])
         text = ""
         if license_file.open(QIODevice.ReadOnly | QFile.Text):
-            text = QTextStream(license_file).readAll()
+            stream = QTextStream(license_file)
+            stream.setCodec("UTF-8")
+            text = stream.readAll()
             license_file.close()
 
         self._license_area.setText(text)

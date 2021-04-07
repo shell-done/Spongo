@@ -1,3 +1,5 @@
+from PySide2.QtCore import QFile, QIODevice, QTextStream
+
 from Models.Analysis import Analysis
 from Services.Writers.ReportWriter import ReportWriter
 
@@ -6,7 +8,13 @@ class HTMLReportWriter(ReportWriter):
         super().__init__(analysis)
 
     def text(self) -> str:
-        content = open("Resources/documents/report_template.html", encoding="utf-8").read()
+        content = ""
+        file = QFile(":/documents/report_template.html")
+        if file.open(QIODevice.ReadOnly | QFile.Text):
+            stream = QTextStream(file)
+            stream.setCodec("UTF-8")
+            content = stream.readAll()
+            file.close()
 
         # Summary
         content = content.replace("{{TITLE}}", self._analysis._parameters.name())

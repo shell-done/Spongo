@@ -1,14 +1,13 @@
 import json
 
+from PySide2.QtCore import QFile, QIODevice, QTextStream
 from PySide2.QtGui import QColor
-from PySide2.QtCore import QFile
-from PySide2 import QtCore
 
 from Models.Morphotype import Morphotype
 
 class Loader:
-    MORPHOTYPES_FILE_PATH = "Resources/config/morphotypes.json"
-    STYLE_FILE_PATH = "Resources/style/app_style.qss"
+    MORPHOTYPES_FILE_PATH = ":/config/morphotypes.json"
+    STYLE_FILE_PATH = ":/style/app_style.qss"
 
     _sponges_morphotypes = {}
     _qss_variables = {}
@@ -16,8 +15,15 @@ class Loader:
     @staticmethod
     def SpongesMorphotypes() -> dict:
         if len(Loader._sponges_morphotypes) == 0:
-            with open(Loader.MORPHOTYPES_FILE_PATH, 'rt') as f:
-                obj = json.loads(f.read())
+            content = ""
+            file = QFile(Loader.MORPHOTYPES_FILE_PATH)
+            if file.open(QIODevice.ReadOnly | QFile.Text):
+                stream = QTextStream(file)
+                stream.setCodec("UTF-8")
+                content = stream.readAll()
+                file.close()
+
+                obj = json.loads(content)
 
             for i,m in enumerate(obj):
                 Loader._sponges_morphotypes[i] = Morphotype(m["name"], QColor(m["color"]))
@@ -28,11 +34,12 @@ class Loader:
     def PreprocessedQSS() -> str:
         lines = []
         qss_file = QFile(Loader.STYLE_FILE_PATH)
-        if qss_file.open(QtCore.QIODevice.ReadOnly | QtCore.QFile.Text):
-            text = QtCore.QTextStream(qss_file)
+        if qss_file.open(QIODevice.ReadOnly | QFile.Text):
+            stream = QTextStream(qss_file)
+            stream.setCodec("UTF-8")
 
-        while not text.atEnd():
-            lines.append(text.readLine().rstrip("\n"))
+        while not stream.atEnd():
+            lines.append(stream.readLine().rstrip("\n"))
 
         qss_file.close()
 

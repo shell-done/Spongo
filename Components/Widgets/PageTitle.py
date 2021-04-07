@@ -39,7 +39,7 @@ class PageTitle(StylizableWidget):
 
         if show:
             self._back_arrow = QLabel(self)
-            self._back_arrow.setPixmap(QPixmap("Resources/img/back_arrow.png"))
+            self._back_arrow.setPixmap(QPixmap(":/img/back_arrow.png"))
             self._back_arrow.mousePressEvent = self._backArrowClicked
             self._back_arrow.setCursor(Qt.PointingHandCursor)
 

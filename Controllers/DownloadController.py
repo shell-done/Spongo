@@ -12,7 +12,7 @@ class DownloadController(QDialog):
         super().__init__(parent, Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         self.setWindowTitle("Spongo")
         self.setFixedSize(950, 550)
-        self.setWindowIcon(QIcon("Resources/img/spongo_icon.png"))
+        self.setWindowIcon(QIcon(":/img/spongo_icon.png"))
 
         title = PageTitle("Téléchargement des données")
         title.backArrowClicked.connect(self._returnClicked)
