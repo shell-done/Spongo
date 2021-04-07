@@ -45,7 +45,7 @@ class DownloadController(QDialog):
         self._download_component.reset(self._analysis)
 
     @Slot(bool)
-    def _saveCompleted(self, sucess: bool):
+    def _saveCompleted(self, success: bool):
         self.close()
 
     @Slot()

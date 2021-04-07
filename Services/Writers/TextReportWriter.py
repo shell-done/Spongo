@@ -63,5 +63,8 @@ class TextReportWriter(ReportWriter):
         with open(filepath, "w", encoding='utf-8') as file:
             file.write(self.text())
 
+        print("aaah")
+        self.writingCompleted.emit(True)
+
     def toHTML(self):
         return super().toHTML(self.text())

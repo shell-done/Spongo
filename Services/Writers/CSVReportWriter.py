@@ -38,5 +38,7 @@ class CSVReportWriter(ReportWriter):
         with open(filepath, "w", encoding='utf-8') as file:
             file.write(self.text())
 
+        self.writingCompleted.emit(True)
+
     def toHTML(self):
         return super().toHTML(self.text())

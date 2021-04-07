@@ -13,6 +13,10 @@ class PDFReportWriter(HTMLReportWriter):
         return super().text()
 
     def write(self, filepath: str):
-        self._web_view.loadFinished.connect(lambda _: self._web_view.page().printToPdf(filepath))
+        self._web_view.page().loadFinished.connect(lambda _: self._web_view.page().printToPdf(filepath))
+        self._web_view.page().pdfPrintingFinished.connect(lambda fp, success: self.writingCompleted.emit(success))
 
         self._web_view.setHtml(self.text(), QUrl("qrc:/"))
+
+    def isAsync(self) -> bool:
+        return True

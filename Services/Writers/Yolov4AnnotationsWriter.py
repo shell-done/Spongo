@@ -50,5 +50,7 @@ class Yolov4AnnotationsWriter(ReportWriter):
                 zip.writestr("data/%s" % filename, text)
                 zip.write(img.filePath(), "data/%s" % img.fileName())
 
+        self.writingCompleted.emit(True)
+
     def toHTML(self):
         return super().toHTML("Aucun aperçu disponible")

@@ -1,4 +1,3 @@
-from PySide2 import QtWidgets
 from PySide2.QtCore import QStandardPaths, Qt, Signal, Slot
 from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QComboBox, QLabel, QHBoxLayout, QSpinBox, QVBoxLayout, QWidget
 
@@ -10,7 +9,9 @@ from Services.Writers.CSVReportWriter import CSVReportWriter
 from Services.Writers.JSONReportWriter import JSONReportWriter
 from Services.Writers.XMLReportWriter import XMLReportWriter
 from Services.Writers.Yolov4AnnotationsWriter import Yolov4AnnotationsWriter
+from Services.Threads.ReportWriterThread import ReportWriterThread
 from Components.Widgets.StylizedButton import StylizedButton
+from Controllers.MessageBox.ProgressMessageBox import ProgressMessageBox
 
 class DownloadComponent(QGroupBox):
     reportFormatChanged = Signal(ReportWriter)
@@ -20,6 +21,10 @@ class DownloadComponent(QGroupBox):
         super().__init__()
 
         self._report_writer = None
+        self._report_writer_thread = ReportWriterThread()
+        self._report_writer_thread.completed.connect(self._saveCompleted)
+        
+        self._progress_message = ProgressMessageBox(self.parentWidget(), "Export des données en cours...", "Export des données en cours...", 0, 0)
 
         self._report_types = {
             "summary": {"name": "Résumé", "description": "Le résumé inclu les statistiques générales sur les images analysées"},
@@ -131,7 +136,7 @@ class DownloadComponent(QGroupBox):
 
     @Slot(int)
     def _reportTypeChanged(self, index: int):
-        report_type = self.sender().currentData()
+        report_type = self._report_type_cbox.currentData()
         self._info_text.setText(self._report_types[report_type]["description"])
 
         self._report_format_cbox.clear()
@@ -207,5 +212,12 @@ class DownloadComponent(QGroupBox):
         if filepath == '':
             return
 
-        self._report_writer.write(filepath)
-        self.saveCompleted.emit(True)
+        self._report_writer_thread.start(self._report_writer, filepath)
+        self._progress_message.exec_()
+
+    @Slot()
+    def _saveCompleted(self, success: bool):
+        if self._progress_message:
+            self._progress_message.close()
+        
+        self.saveCompleted.emit(success)

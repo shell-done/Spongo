@@ -16,7 +16,7 @@ class PreviewComponent(QGroupBox):
 
         self._web_view = QWebEngineView(self)
         self._web_view.setContextMenuPolicy(Qt.NoContextMenu)
-        self._web_view.setZoomFactor(0.5)
+        self._web_view.setZoomFactor(0.4)
 
         web_view_container = StylizableWidget()
         web_view_container.setObjectName("WebView")

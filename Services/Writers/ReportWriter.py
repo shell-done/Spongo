@@ -1,7 +1,12 @@
+from PySide2.QtCore import QObject, Signal
+
 from Models.Analysis import Analysis
 
-class ReportWriter():
+class ReportWriter(QObject):
+    writingCompleted = Signal(bool)
+
     def __init__(self, analysis: Analysis):
+        super().__init__()
         self._analysis = analysis
 
     def text(self) -> str:
@@ -12,6 +17,9 @@ class ReportWriter():
 
     def write(self, filepath: str):
         return None
+
+    def isAsync(self) -> bool:
+        return False
 
     def toHTML(self, text, truncate = True):
         if truncate:
