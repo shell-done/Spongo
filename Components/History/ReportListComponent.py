@@ -1,10 +1,8 @@
-from Services.HistoryManager import HistoryManager
-from Services.Writers.HTMLReportWriter import HTMLReportWriter
-from PySide2.QtWebEngineWidgets import QWebEngineView
+from PySide2.QtCore import QPoint, QRegExp, Qt, Signal, Slot
+from PySide2.QtWidgets import QGroupBox, QInputDialog, QListWidget, QListWidgetItem, QMenu, QMessageBox, QVBoxLayout
+
 from Models.Analysis import Analysis
-from PySide2.QtCore import QPoint, QRegExp, Qt, QUrl, Signal, Slot
-from PySide2.QtGui import QFont
-from PySide2.QtWidgets import QGroupBox, QInputDialog, QListWidget, QListWidgetItem, QMenu, QMessageBox, QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout
+from Services.HistoryManager import HistoryManager
 
 class ReportListComponent(QGroupBox):
     currentAnalysisChanged = Signal(object)

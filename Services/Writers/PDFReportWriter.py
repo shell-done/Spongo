@@ -1,9 +1,8 @@
 from PySide2.QtCore import QUrl
-from Services.Writers.HTMLReportWriter import HTMLReportWriter
-from Services.Writers.ReportWriter import ReportWriter
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
 from Models.Analysis import Analysis
+from Services.Writers.HTMLReportWriter import HTMLReportWriter
 
 class PDFReportWriter(HTMLReportWriter):
     def __init__(self, analysis: Analysis):

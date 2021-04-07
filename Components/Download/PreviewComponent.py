@@ -1,10 +1,9 @@
+from PySide2.QtCore import Qt, QUrl, Slot
+from PySide2.QtWidgets import QGroupBox, QVBoxLayout
+from PySide2.QtWebEngineWidgets import QWebEngineView
+
 from Services.Writers.ReportWriter import ReportWriter
 from Components.Widgets.StylizableWidget import StylizableWidget
-from Services.Writers.HTMLReportWriter import HTMLReportWriter
-from PySide2.QtWebEngineWidgets import QWebEngineView
-from PySide2.QtCore import Qt, QUrl, Slot
-from PySide2.QtGui import QFont
-from PySide2.QtWidgets import QGroupBox, QVBoxLayout
 
 class PreviewComponent(QGroupBox):
 

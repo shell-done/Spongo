@@ -1,6 +1,6 @@
 from PySide2.QtCore import QFile, QIODevice, QTextStream, Qt, Slot
-from PySide2.QtGui import QPixmap, QTextDocument
-from PySide2.QtWidgets import QComboBox, QDialogButtonBox, QGridLayout, QHBoxLayout, QLabel, QLayout, QMessageBox, QPlainTextEdit, QSizePolicy, QSpacerItem, QTextEdit, QWidget, QDialog, QTabWidget, QVBoxLayout
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QLabel, QMessageBox, QTextEdit, QWidget, QTabWidget, QVBoxLayout
 
 class AboutMessageBox(QMessageBox):
     @staticmethod

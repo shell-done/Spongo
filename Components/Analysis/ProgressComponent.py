@@ -1,6 +1,5 @@
 from PySide2.QtCore import QPropertyAnimation, QTime
-from PySide2.QtGui import QFont
-from PySide2.QtWidgets import QGroupBox, QWidget, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
+from PySide2.QtWidgets import QGroupBox, QLabel, QLabel, QProgressBar, QVBoxLayout, QHBoxLayout
 
 try:
     from PySide2.QtWinExtras import QWinTaskbarButton

@@ -1,10 +1,10 @@
-from Components.Widgets.StylizableWidget import StylizableWidget
-from Services.Writers.HTMLReportWriter import HTMLReportWriter
-from PySide2.QtWebEngineWidgets import QWebEngineView
-from Models.Analysis import Analysis
-from PySide2.QtCore import QEvent, Qt, QUrl, Slot
-from PySide2.QtGui import QFont, QWheelEvent
+from PySide2.QtCore import Qt, QUrl
 from PySide2.QtWidgets import QGroupBox, QVBoxLayout
+from PySide2.QtWebEngineWidgets import QWebEngineView
+
+from Models.Analysis import Analysis
+from Services.Writers.HTMLReportWriter import HTMLReportWriter
+from Components.Widgets.StylizableWidget import StylizableWidget
 
 class ReportComponent(QGroupBox):
 

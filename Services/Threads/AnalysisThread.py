@@ -1,14 +1,11 @@
-# This Python file uses the following encoding: utf-8
-
-import time
+import cv2, time
 
 from PySide2.QtCore import QThread, Signal
-import cv2
 
-from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork
 from Models.Detection import Detection
 from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
+from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork
 
 class AnalysisThread(QThread):
     initialized = Signal()

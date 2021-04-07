@@ -1,9 +1,8 @@
-from Services.AppInfo import AppInfo
-from Services.Loader import Loader
 from PySide2.QtCore import QStandardPaths, Slot
 from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QLineEdit, QPushButton, QHBoxLayout
 
 from Models.Parameters import Parameters
+from Services.AppInfo import AppInfo
 
 class OptionsComponent(QGroupBox):
 

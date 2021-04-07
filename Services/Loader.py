@@ -1,10 +1,10 @@
-from Models.Morphotype import Morphotype
 import json
 
 from PySide2.QtGui import QColor
-import Resources.Resources
 from PySide2.QtCore import QFile
 from PySide2 import QtCore
+
+from Models.Morphotype import Morphotype
 
 class Loader:
     MORPHOTYPES_FILE_PATH = "Resources/config/morphotypes.json"

@@ -1,5 +1,5 @@
 from PySide2.QtCore import QSize, Qt, QMargins, QThread, Signal
-from PySide2.QtGui import QBrush, QColor, QFont, QImage, QPainter, QPen, QPixmap
+from PySide2.QtGui import QBrush, QColor, QFont, QPainter, QPen
 from PySide2.QtCharts import QtCharts
 
 from Models.Analysis import Analysis

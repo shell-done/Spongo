@@ -1,10 +1,9 @@
-from Services.AppInfo import AppInfo
-from Services.Loader import Loader
 import json
 
-from PySide2.QtCore import QDateTime, QDir, QFile, QRegExp, QRegularExpression, Qt, QStandardPaths
+from PySide2.QtCore import QDateTime, QDir, QFile, QRegExp, QStandardPaths
 
 from Models.Analysis import Analysis
+from Services.AppInfo import AppInfo
 
 class HistoryManager:
     DATE_FORMAT = "yyyyMMdd-hhmmss"
@@ -31,9 +30,11 @@ class HistoryManager:
             if regexp.exactMatch(pa["name"]):
                 match.append(int(pa["name"].lstrip("Analyse de la plongée #")))
 
-        next_number = len(prev_analysis) + 1
+        next_number = len(prev_analysis)
         if len(match):
-            next_number = max(match) + 1
+            next_number = max(max(match), next_number)
+        
+        next_number += 1
 
         return "Analyse de la plongée #%d" % (next_number)
 

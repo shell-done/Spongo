@@ -2,10 +2,6 @@ from PySide2.QtCore import Slot
 from PySide2.QtGui import QIcon, QCloseEvent
 from PySide2.QtWidgets import QMainWindow, QStackedWidget
 
-import Resources.Resources
-
-from Models.Parameters import Parameters
-from Models.Analysis import Analysis
 from Controllers.MenuController import MenuController
 from Controllers.ParametersController import ParametersController
 from Controllers.AnalysisController import AnalysisController

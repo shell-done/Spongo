@@ -1,7 +1,6 @@
-from Components.Widgets.StylizableWidget import StylizableWidget
 from PySide2.QtCore import Signal
-from PySide2.QtGui import QPaintEvent, QPainter
-from PySide2.QtWidgets import QStyle, QStyleOption, QWidget
+
+from Components.Widgets.StylizableWidget import StylizableWidget
 
 class BaseController(StylizableWidget):
     changeWidget = Signal(str, object)

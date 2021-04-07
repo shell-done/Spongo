@@ -1,6 +1,7 @@
-from Models.Detection import Detection
 import json
 from numpy import ndarray
+
+from Models.Detection import Detection
 
 class ProcessedImage:
     @staticmethod

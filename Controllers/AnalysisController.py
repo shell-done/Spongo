@@ -1,21 +1,18 @@
-from PySide2.QtCore import Qt, Signal, Slot
-from PySide2.QtGui import QFont, QPixmap
-from PySide2.QtWidgets import QBoxLayout, QGridLayout, QSizePolicy, QWidget, QLabel, QProgressBar, QPushButton, QHBoxLayout, QVBoxLayout
+from PySide2.QtCore import Qt, Slot
+from PySide2.QtWidgets import QGridLayout, QSizePolicy, QHBoxLayout, QVBoxLayout
 
+from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters
+from Models.Analysis import Analysis
 from Services.Threads.AnalysisThread import AnalysisThread
 from Services.Threads.PostAnalysisThread import PostAnalysisThread
 from Components.Widgets.StylizedButton import StylizedButton
 from Components.Widgets.PageTitle import PageTitle
-from Services.Writers.TextReportWriter import TextReportWriter
-from Services.Writers.CSVReportWriter import CSVReportWriter
-from Models.ProcessedImage import ProcessedImage
-from Models.Analysis import Analysis
-from Controllers.BaseController import BaseController
-from Controllers.MessageBox.CancelMessageBox import CancelMessageBox
 from Components.Analysis.StatComponent import StatComponent
 from Components.Analysis.ImageComponent import ImageComponent
 from Components.Analysis.ProgressComponent import ProgressComponent
+from Controllers.BaseController import BaseController
+from Controllers.MessageBox.CancelMessageBox import CancelMessageBox
 
 class AnalysisController(BaseController):
 

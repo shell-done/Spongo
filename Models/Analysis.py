@@ -1,4 +1,5 @@
 import json
+
 from PySide2.QtCore import Qt, QDateTime, QTime
 
 from Models.Parameters import Parameters
@@ -38,6 +39,7 @@ class Analysis:
         self._detected_sponges = {key:0 for key in parameters.selectedMorphotypes()}
 
         self._current_img_index = 0
+        self._img_with_detections = 0
         self._end_datetime = None
         self._base64_chart_image = None
         self._processed_images = []
@@ -48,6 +50,9 @@ class Analysis:
 
     def addProcessedImage(self, processed_image: ProcessedImage):
         self._processed_images.append(processed_image)
+
+        if processed_image.hasDetections():
+            self._img_with_detections += 1
         
         for k in self._detected_sponges:
             self._detected_sponges[k] += processed_image.detectionsCount().get(k, 0)
@@ -68,6 +73,14 @@ class Analysis:
 
     def imagesCount(self) -> int:
         return self._images_count
+
+    def imagesWithDetections(self) -> int:
+        s = 0
+        for p in self._processed_images:
+            if p.hasDetections():
+                s += 1
+
+        return s
 
     def currentImageIndex(self) -> int:
         return self._current_img_index

@@ -1,14 +1,12 @@
-from math import ceil
-
-from Components.Widgets.ChartLegendItem import ChartLegendItem
 from PySide2.QtCore import QMargins, Qt, Slot
 from PySide2.QtGui import QBrush, QColor, QFont, QPainter, QPen
-from PySide2.QtWidgets import QGridLayout, QGroupBox, QWidget, QLabel, QVBoxLayout
+from PySide2.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 from PySide2.QtCharts import QtCharts
 
 from Models.Parameters import Parameters
 from Models.Analysis import Analysis
 from Services.Loader import Loader
+from Components.Widgets.ChartLegendItem import ChartLegendItem
 
 class StatComponent(QGroupBox):
 
@@ -107,7 +105,6 @@ class StatComponent(QGroupBox):
 
     def update(self, analysis: Analysis):
         self._analysis = analysis
-        #points = list(self._series.values())[0].count()
 
         for class_id in self._parameters.selectedMorphotypes():
             last_idx = self._series[class_id].count() - 1
@@ -115,7 +112,7 @@ class StatComponent(QGroupBox):
             new_x = self._series[class_id].at(last_idx).x() + 1
             new_y = analysis.cumulativeDetectionsFor(class_id)
 
-            if last_idx >= 0:
+            if last_idx > 0:
                 if self._series[class_id].at(last_idx).y() == new_y:
                     self._series[class_id].replace(last_idx, new_x, new_y)
                     continue
@@ -128,7 +125,6 @@ class StatComponent(QGroupBox):
         self._recalculateAxis()
 
     def _recalculateAxis(self):
-        #points = list(self._series.values())[0].count()
         last_idx = self._series[0].count() - 1
         x = self._series[0].at(last_idx).x()
 

@@ -1,6 +1,6 @@
 from PySide2.QtCore import Qt, Signal
-from PySide2.QtGui import QColor, QPaintEvent, QPainter, QPixmap
-from PySide2.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QStyle, QStyleOption, QWidget
+from PySide2.QtGui import QColor, QPixmap
+from PySide2.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QWidget
 
 from Components.Widgets.StylizableWidget import StylizableWidget
 

@@ -1,16 +1,14 @@
-from Services.Writers.Yolov4AnnotationsWriter import Yolov4AnnotationsWriter
-from Services.Writers.ReportWriter import ReportWriter
-from Models.Analysis import Analysis
-from PySide2 import QtWidgets
-from PySide2.QtCore import QFileInfo, QObject, QRegExp, QStandardPaths, Qt, Signal, Slot
-from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QPushButton, QComboBox, QLabel, QHBoxLayout, QLineEdit
+from PySide2.QtCore import QStandardPaths, Qt, Signal, Slot
+from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QMessageBox, QSizePolicy, QComboBox, QLabel, QHBoxLayout, QSpinBox
 
+from Models.Analysis import Analysis
+from Services.Writers.ReportWriter import ReportWriter
+from Services.Writers.PDFReportWriter import PDFReportWriter
+from Services.Writers.TextReportWriter import TextReportWriter
 from Services.Writers.CSVReportWriter import CSVReportWriter
 from Services.Writers.JSONReportWriter import JSONReportWriter
 from Services.Writers.XMLReportWriter import XMLReportWriter
-from Services.Writers.TextReportWriter import TextReportWriter
-from Services.Writers.PDFReportWriter import PDFReportWriter
-
+from Services.Writers.Yolov4AnnotationsWriter import Yolov4AnnotationsWriter
 from Components.Widgets.StylizedButton import StylizedButton
 
 class DownloadComponent(QGroupBox):
@@ -82,11 +80,18 @@ class DownloadComponent(QGroupBox):
         self._separator_cbox.hide()
         main_layout.addRow(self._separator_label, self._separator_cbox)
 
+        self._nb_keeped_label = QLabel("Images à exporter :")
+        self._nb_keeped_spinbox = QSpinBox(self)
+        self._nb_keeped_spinbox.setRange(1, 1)
+        self._nb_keeped_label.hide()
+        self._nb_keeped_spinbox.hide()
+        main_layout.addRow(self._nb_keeped_label, self._nb_keeped_spinbox)
+
         spacer_label = QLabel("Spacer")
         spacer_label.hide()
         main_layout.addRow(spacer_label)
 
-        for widget in (self._detection_shape_label, self._detection_shape_cbox, self._separator_label, self._separator_cbox, spacer_label):
+        for widget in (self._detection_shape_label, self._detection_shape_cbox, self._separator_label, self._separator_cbox, self._nb_keeped_label, self._nb_keeped_spinbox, spacer_label):
             retain = widget.sizePolicy()
             retain.setRetainSizeWhenHidden(True)
             widget.setSizePolicy(retain)
@@ -113,6 +118,8 @@ class DownloadComponent(QGroupBox):
 
         self._report_type_cbox.setCurrentIndex(0)
         self._report_format_cbox.setCurrentIndex(0)
+        self._nb_keeped_spinbox.setMaximum(analysis.imagesWithDetections())
+        self._nb_keeped_spinbox.setValue(min(100, analysis.imagesWithDetections()))
         self._loadWriter()
 
     def _loadWriter(self):
@@ -152,6 +159,13 @@ class DownloadComponent(QGroupBox):
         else:
             self._detection_shape_label.hide()
             self._detection_shape_cbox.hide()
+
+        if report_type == "annotations":
+            self._nb_keeped_label.show()
+            self._nb_keeped_spinbox.show()
+        else:
+            self._nb_keeped_label.hide()
+            self._nb_keeped_spinbox.hide()
     
     @Slot(str)
     def _reportFormatChanged(self, format: str):
@@ -170,6 +184,10 @@ class DownloadComponent(QGroupBox):
 
     @Slot()
     def _exportReport(self):
+        report_type = self._report_type_cbox.currentData()
+        if report_type == "annotations":
+            self._report_writer.setKeep(self._nb_keeped_spinbox.value())
+
         error = self._report_writer.checkErrors()
         if error:
             QMessageBox.warning(self.parentWidget(), "Impossible de générer le rapport", error)

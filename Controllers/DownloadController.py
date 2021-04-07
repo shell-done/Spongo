@@ -1,14 +1,11 @@
-from Services.Writers.ReportWriter import ReportWriter
-from PySide2.QtCore import Qt, Signal, Slot
+from PySide2.QtCore import Qt, Slot
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QDialog, QGridLayout, QHBoxLayout, QVBoxLayout
+from PySide2.QtWidgets import QDialog, QGridLayout, QVBoxLayout
 
-from Controllers.BaseController import BaseController
-from Components.Widgets.StylizedButton import StylizedButton
+from Models.Analysis import Analysis
 from Components.Widgets.PageTitle import PageTitle
 from Components.Download.DownloadComponent import DownloadComponent
 from Components.Download.PreviewComponent import PreviewComponent
-from Models.Analysis import Analysis
 
 class DownloadController(QDialog):
     def __init__(self, parent = None):

@@ -1,10 +1,8 @@
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QStandardItem, QStandardItemModel
-from PySide2.QtWidgets import QComboBox, QFormLayout, QGridLayout, QGroupBox, QSizePolicy, QSpinBox, QCheckBox, QLabel, QVBoxLayout, QHBoxLayout
+from PySide2.QtWidgets import QComboBox, QFormLayout, QGridLayout, QGroupBox, QSizePolicy, QSpinBox, QCheckBox, QLabel, QHBoxLayout
 
+from Models.Parameters import Parameters
 from Services.Loader import Loader
 from Services.NeuralNetwork.NeuralNetwork import NeuralNetwork
-from Models.Parameters import Parameters
 
 class ParametersComponent(QGroupBox):
 
@@ -71,7 +69,6 @@ class ParametersComponent(QGroupBox):
 
     def reset(self, parameters: Parameters):
         self._threshold_sbox.setValue(parameters.threshold()*100)
-        # self._detection_box_cbox.setChecked(parameters.displayProcessedImages())
 
         for k,v in parameters.morphotypes().items():
             self._tab_cbox[k].setChecked(v)
@@ -79,7 +76,6 @@ class ParametersComponent(QGroupBox):
     def updateParameters(self, parameters: Parameters):
         parameters.setThreshold(self._threshold_sbox.value()/100)
         parameters.setDeviceId(self._devices_list.currentData())
-        # parameters.setDisplayProcessedImages(self._detection_box_cbox.isChecked())
 
         for k in parameters.morphotypes():
             parameters.morphotypes()[k] = self._tab_cbox[k].isChecked()

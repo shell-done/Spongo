@@ -1,7 +1,7 @@
-import time
+import cv2
+
 from PySide2.QtCore import QSize, Qt, QThread, Signal
 from PySide2.QtGui import QPixmap
-import cv2
 
 from Models.ProcessedImage import ProcessedImage
 from Services.Images.ImageConverter import ImageConverter

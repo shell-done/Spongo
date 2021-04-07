@@ -1,9 +1,8 @@
-from Services.HistoryManager import HistoryManager
-from PySide2.QtCore import Qt, QDir, Signal, Slot
-from PySide2.QtGui import QFont
-from PySide2.QtWidgets import QHBoxLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QVBoxLayout
+from PySide2.QtCore import Qt, QDir, Slot
+from PySide2.QtWidgets import QHBoxLayout, QMessageBox, QSizePolicy, QVBoxLayout
 
 from Models.Parameters import Parameters
+from Services.HistoryManager import HistoryManager
 from Components.Widgets.PageTitle import PageTitle
 from Components.Widgets.StylizedButton import StylizedButton
 from Components.Parameters.InputComponent import InputComponent

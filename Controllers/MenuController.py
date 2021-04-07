@@ -1,13 +1,12 @@
-from Controllers.MessageBox.AboutMessageBox import AboutMessageBox
+from PySide2.QtCore import Qt, Slot
 from PySide2.QtGui import QPixmap
-from Services.AppInfo import AppInfo
-from Services.Loader import Loader
-from PySide2.QtCore import Qt, Signal, Slot
-from PySide2.QtWidgets import QApplication, QBoxLayout, QGridLayout, QHBoxLayout, QLabel, QMessageBox, QSpacerItem, QVBoxLayout
+from PySide2.QtWidgets import QApplication, QGridLayout, QHBoxLayout, QLabel, QVBoxLayout
 
+from Services.AppInfo import AppInfo
 from Services.HistoryManager import HistoryManager
-from Controllers.BaseController import BaseController
 from Components.Widgets.StylizedButton import StylizedButton
+from Controllers.BaseController import BaseController
+from Controllers.MessageBox.AboutMessageBox import AboutMessageBox
 
 class MenuController(BaseController):
 
@@ -96,7 +95,6 @@ class MenuController(BaseController):
     @Slot()
     def _aboutButtonClicked(self):
         AboutMessageBox.show(self)
-        #QMessageBox.aboutQt(self, "aa")
 
     @Slot()
     def _exitButtonClicked(self):

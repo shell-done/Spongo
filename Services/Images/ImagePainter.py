@@ -1,6 +1,6 @@
-import cv2, time
-
+import cv2
 from numpy import ndarray
+
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPixmap
 

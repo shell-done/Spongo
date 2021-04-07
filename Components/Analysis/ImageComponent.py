@@ -1,6 +1,6 @@
 from PySide2.QtCore import Qt, Slot
-from PySide2.QtGui import QFont, QPixmap, QImage
-from PySide2.QtWidgets import QGridLayout, QGroupBox, QSizePolicy, QWidget, QLabel, QVBoxLayout, QHBoxLayout
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QGridLayout, QGroupBox,QLabel
 
 from Models.ProcessedImage import ProcessedImage
 from Models.Parameters import Parameters

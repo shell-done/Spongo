@@ -1,14 +1,13 @@
-from Controllers.DownloadController import DownloadController
 from PySide2.QtCore import Qt, Slot
 from PySide2.QtWidgets import QHBoxLayout, QVBoxLayout
 
-from Controllers.BaseController import BaseController
+from Models.Analysis import Analysis
 from Components.Widgets.StylizedButton import StylizedButton
 from Components.Widgets.PageTitle import PageTitle
 from Components.History.ReportListComponent import ReportListComponent
 from Components.History.ReportComponent import ReportComponent
-
-from Models.Analysis import Analysis
+from Controllers.BaseController import BaseController
+from Controllers.DownloadController import DownloadController
 
 class HistoryController(BaseController):
 

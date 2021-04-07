@@ -1,10 +1,9 @@
-from Services.AppInfo import AppInfo
 from PySide2.QtGui import QRegExpValidator
-from Services.Loader import Loader
 from PySide2.QtCore import QPoint, QRegExp, QStandardPaths, Signal, Slot
 from PySide2.QtWidgets import QFileDialog, QFormLayout, QGroupBox, QSizePolicy, QHBoxLayout, QLineEdit, QPushButton, QToolTip
 
 from Models.Parameters import Parameters
+from Services.AppInfo import AppInfo
 
 class InputComponent(QGroupBox):
     analysisNameStateChanged = Signal(bool)

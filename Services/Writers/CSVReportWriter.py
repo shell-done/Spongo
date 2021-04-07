@@ -1,5 +1,4 @@
 from Models.Analysis import Analysis
-from Models.ProcessedImage import ProcessedImage
 from Models.Detection import Detection
 from Services.Writers.ReportWriter import ReportWriter
 
