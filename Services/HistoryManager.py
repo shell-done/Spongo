@@ -2,7 +2,7 @@ from Services.AppInfo import AppInfo
 from Services.Loader import Loader
 import json
 
-from PySide2.QtCore import QDateTime, QDir, QFile, Qt, QStandardPaths
+from PySide2.QtCore import QDateTime, QDir, QFile, QRegExp, QRegularExpression, Qt, QStandardPaths
 
 from Models.Analysis import Analysis
 
@@ -23,9 +23,19 @@ class HistoryManager:
 
     @staticmethod
     def generateNewAnalysisName() -> str:
-        prev_analysis_number = len(HistoryManager.analysisList())
+        prev_analysis = HistoryManager.analysisList()
+        regexp = QRegExp("^Analyse de la plongée #[0-9]+$")
+        
+        match = []
+        for pa in prev_analysis:
+            if regexp.exactMatch(pa["name"]):
+                match.append(int(pa["name"].lstrip("Analyse de la plongée #")))
 
-        return "Analyse de la plongée #%d" % (prev_analysis_number + 1)
+        next_number = len(prev_analysis) + 1
+        if len(match):
+            next_number = max(match) + 1
+
+        return "Analyse de la plongée #%d" % (next_number)
 
     @staticmethod
     def saveAnalysis(analysis: Analysis):
