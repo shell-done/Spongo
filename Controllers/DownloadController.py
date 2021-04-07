@@ -12,7 +12,7 @@ from Models.Analysis import Analysis
 
 class DownloadController(QDialog):
     def __init__(self, parent = None):
-        super().__init__(parent)
+        super().__init__(parent, Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         self.setWindowTitle("Spongo")
         self.setFixedSize(950, 550)
         self.setWindowIcon(QIcon("Resources/img/spongo_icon.png"))

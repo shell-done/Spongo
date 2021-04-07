@@ -70,7 +70,7 @@ class ReportListComponent(QGroupBox):
     def _renameItem(self):
         item = self._list.currentItem()
         
-        input_dialog = QInputDialog(self.parentWidget())
+        input_dialog = QInputDialog(self.parentWidget(), Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         font = input_dialog.font()
         font.setPixelSize(16)
         input_dialog.setFont(font)
