@@ -48,7 +48,7 @@
 - ### IHM (8 pages)
     - Introduction
         - Objectif de l'IHM : claire, épurée et utilisable par n'importe qui. Explication de nos choix (graphique, historique, etc..). Dire qu'on leur avait présenté une maquette (à mettre en annexe).
-        - Technos utilisées : Python et Qt car simple et on les maîtrise
+        - Technos utilisées : Python et Qt car simple, on les maîtrise, bcp de lib de NN et interprêté donc + facilement déployable que du C++ 
 
     - Paramètres
         - Explication des paramètres, pourquoi on a laissé le choix du seuil de confiance, du processeur à utiliser, des images à sauvegarder, etc...
@@ -74,7 +74,7 @@
     - Organisation
         - Fonctionnement en mode Agile, par tâches atomiques
         - Réunions régulières avec l'encadrant
-        - Nous avons fait des choix : pas testé faster RCNN, etc ... -> nous sommes dans les temps
+        - Nous avons fait des choix : pas tester faster RCNN, etc ... -> nous sommes dans les temps
 
     - Problèmes rencontrés : beaucoup de temps perdu sur les annotations, ...
 
