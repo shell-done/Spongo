@@ -37,6 +37,10 @@ class HTMLReportWriter(ReportWriter):
         total_progress = ""
 
         total = self._analysis.totalDetections()
+        div_by = total
+        if div_by == 0:
+            div_by = 1
+        
         for morphotype_id, morphotype in self._analysis.parameters().selectedMorphotypes().items():
             detections = self._analysis.cumulativeDetectionsFor(morphotype_id)
 
@@ -50,11 +54,11 @@ class HTMLReportWriter(ReportWriter):
                         <div class="progress" style="width: %.1f%%; background-color: %s"></div>
                     </div>
                 </div>
-            """ % (morphotype.name(), detections, detections*100/total, detections*100/total, morphotype.color().name())
+            """ % (morphotype.name(), detections, detections*100/div_by, detections*100/div_by, morphotype.color().name())
 
             total_progress += """
                 <div class="progress" style="width: %.1f%%; background-color: %s"></div>
-            """ % (detections*100/total, morphotype.color().name())
+            """ % (detections*100/div_by, morphotype.color().name())
 
         content = content.replace("{{MORPHOTYPES_STATS}}", morphotypes_stats)
         content = content.replace("{{TOTAL_PROGRESS}}", total_progress)

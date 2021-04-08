@@ -46,9 +46,13 @@ class TextReportWriter(ReportWriter):
         lines.append("-"*25)
 
         total = self._analysis.totalDetections()
+        div_by = total
+        if div_by == 0:
+            div_by = 1
+
         for morphotype_id, morphotype in self._analysis.parameters().selectedMorphotypes().items():
             detections = self._analysis.cumulativeDetections()[morphotype_id]
-            lines.append("\t%s : %d (%.1f%%)" % (morphotype.name(), detections, detections*100/total))
+            lines.append("\t%s : %d (%.1f%%)" % (morphotype.name(), detections, detections*100/div_by))
 
         lines.append("")
         lines.append("\tTotal : %d" % total)
