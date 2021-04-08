@@ -11,10 +11,10 @@ class AboutMessageBox(QMessageBox):
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
 
-        self.setWindowTitle("A propos")
+        self.setWindowTitle("À propos")
         self.setIconPixmap(QPixmap(":/img/spongo_logo.png").scaledToWidth(100, Qt.SmoothTransformation))
 
-        title = QLabel("A propos de Spongo")
+        title = QLabel("À propos de Spongo")
         title.setObjectName("about-title")
         self.layout().addWidget(title, 0, 2)
 
@@ -61,7 +61,7 @@ class AboutMessageBox(QMessageBox):
             "Pour plus d'informations, se référer au dépôt GitHub du projet : <a href='https://github.com/shell-done/Spongo_IHM'>https://github.com/shell-done/Spongo_IHM</a>."
         )
 
-        title = QLabel("A propos")
+        title = QLabel("À propos")
         title.setAlignment(Qt.AlignJustify)
         title.setObjectName("tab-title")
         layout.addWidget(title)
