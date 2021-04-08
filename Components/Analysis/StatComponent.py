@@ -112,8 +112,8 @@ class StatComponent(QGroupBox):
             new_x = self._series[class_id].at(last_idx).x() + 1
             new_y = analysis.cumulativeDetectionsFor(class_id)
 
-            if last_idx > 0:
-                if self._series[class_id].at(last_idx).y() == new_y:
+            if last_idx > 1:
+                if self._series[class_id].at(last_idx - 1).y() == new_y and self._series[class_id].at(last_idx).y() == new_y:
                     self._series[class_id].replace(last_idx, new_x, new_y)
                     continue
 
@@ -125,8 +125,10 @@ class StatComponent(QGroupBox):
         self._recalculateAxis()
 
     def _recalculateAxis(self):
-        last_idx = self._series[0].count() - 1
-        x = self._series[0].at(last_idx).x()
+        base_series = list(self._series.values())[0]
+
+        last_idx = base_series.count() - 1
+        x = base_series.at(last_idx).x()
 
         self._chart.axisX().setRange(0, max(x, 4))
 
