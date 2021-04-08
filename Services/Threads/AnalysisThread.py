@@ -1,4 +1,5 @@
 import cv2, time
+from numpy import fromfile, uint8
 
 from PySide2.QtCore import QThread, Signal
 
@@ -55,7 +56,8 @@ class AnalysisThread(QThread):
 
             filepath = self._srcPath + "/" + image_name
 
-            img = cv2.imread(filepath)
+            #img = cv2.imread(filepath)
+            img = cv2.imdecode(fromfile(filepath, dtype=uint8), cv2.IMREAD_UNCHANGED)
             network_output = self._network.process(img)
 
             for det in network_output:

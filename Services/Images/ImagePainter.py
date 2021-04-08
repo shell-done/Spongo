@@ -1,5 +1,5 @@
 import cv2
-from numpy import ndarray
+from numpy import ndarray, fromfile, uint8
 
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPixmap
@@ -14,7 +14,8 @@ class ImagePainter:
         cv_mat = None
 
         if pre_loaded_image is None:
-            cv_mat = cv2.imread(processed_image.filePath())
+            cv_mat = cv2.imdecode(fromfile(processed_image.filePath(), dtype=uint8), cv2.IMREAD_UNCHANGED)
+            #cv_mat = cv2.imread(processed_image.filePath())
         else:
             cv_mat = pre_loaded_image
 
