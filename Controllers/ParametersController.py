@@ -68,7 +68,7 @@ class ParametersController(BaseController):
 
         error = self._parameters.checkValidity()
         if error is None:
-            images = QDir(self._parameters.srcFolder()).entryList(["*.jpg", "*.jpeg"], filters = QDir.Files)
+            images = QDir(self._parameters.srcFolder()).entryList(["*.png", "*.jpg", "*.jpeg"], filters = QDir.Files)
 
             if len(images) == 0:
                 error = "Le dossier source ne contient aucune image au format .jpg"
