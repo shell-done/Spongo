@@ -21,7 +21,7 @@ class Yolov4AnnotationsWriter(ReportWriter):
     def checkErrors(self) -> str:
         for img in self._analysis.processedImages():
             if not QFile(img.filePath()).exists():
-                text = "Fichier introuvable : %s. Assurez-vous que les images soient toujours dans le dossier analysé (%s)." % (img.fileName(), img.folderPath())
+                text = "Fichier introuvable : %s. Assurez-vous que les images soient toujours dans le dossier analysé (%s). " % (img.fileName(), img.folderPath())
                 text += "Si les images étaient sur un support externe (clé USB, disque dur, ...), assurez-vous que celui-ci soit connecté."
 
                 return text
@@ -37,12 +37,29 @@ class Yolov4AnnotationsWriter(ReportWriter):
                 if not img.hasDetections():
                     continue
 
-                w,h = img.size()
+                img_w,img_h = img.size()
 
                 lines = []
                 for d in img.detections():
                     box = d.boundingBox()
-                    lines.append("%d %.6f %.6f %.6f %.6f" % (d.classId(), (box[0]+box[2]/2)/w, (box[1]+box[3]/2)/h, box[2]/w, box[3]/h))
+
+                    nl = (box[0])/img_w
+                    nr = (box[0] + box[2])/img_w
+                    nt = (box[1])/img_h
+                    nb = (box[1] + box[3])/img_h
+
+                    if nl <= 0: nl = 0.00001
+                    if nr >= 1: nr = 0.99999
+                    if nt <= 0: nt = 0.00001
+                    if nb >= 1: nb = 0.99999
+
+                    nx = (nl + nr)/2
+                    nw = nr - nl
+
+                    ny = (nt + nb)/2
+                    nh = nb - nt
+
+                    lines.append("%d %.6f %.6f %.6f %.6f" % (d.classId(), nx, ny, nw, nh))
 
                 filename = ".".join(img.fileName().split(".")[:-1]) + ".txt"
                 text = "\n".join(lines)
