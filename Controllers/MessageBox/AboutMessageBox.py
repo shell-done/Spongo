@@ -71,6 +71,7 @@ class AboutMessageBox(QMessageBox):
             label = QLabel(p)
             label.setAlignment(Qt.AlignJustify)
             label.setWordWrap(True)
+            label.setOpenExternalLinks(True)
 
             layout.addWidget(label)
 
@@ -176,6 +177,7 @@ class AboutMessageBox(QMessageBox):
         link_title = QLabel("Lien :")
         link_title.setObjectName("dependency-info")
         self._link = QLabel()
+        self._link.setOpenExternalLinks(True)
         link_layout.addWidget(link_title)
         link_layout.addWidget(self._link, 1)
 

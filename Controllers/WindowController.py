@@ -11,7 +11,7 @@ class WindowController(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Spongo")
+        self.setWindowTitle("Spongo - Projet M1 ISEN Yncréa Brest | Margaux DOUDET et Alexandre THOMAS")
         self.setFixedSize(1280, 720)
         self.setWindowIcon(QIcon(":/img/spongo_icon.png"))
 

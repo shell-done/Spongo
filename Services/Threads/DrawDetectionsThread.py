@@ -35,7 +35,11 @@ class DrawDetectionsThread(QThread):
 
         if self._dest_folder and self._processed_image.hasDetections():
             rgb_img = cv2.cvtColor(ImageConverter.QPixmapToCV(pixmap), cv2.COLOR_RGB2BGR)
-            cv2.imwrite(self._dest_folder + "/" + self._processed_image.fileName(), rgb_img)
+
+            #cv2.imwrite(self._dest_folder + "/" + self._processed_image.fileName(), rgb_img)
+            path = self._dest_folder + "/" + self._processed_image.fileName()
+            is_success, im_buf_arr = cv2.imencode(".jpg", rgb_img)
+            im_buf_arr.tofile(path)
 
         if self._label_size:
             pixmap = pixmap.scaled(self._label_size, Qt.KeepAspectRatio)
