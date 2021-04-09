@@ -165,10 +165,10 @@ class DownloadComponent(QGroupBox):
         self._loadWriter()
 
     def _showDetectionShape(self, show: bool):
-        self._showRow("Séparateur :", self._detection_shape_cbox, show)
+        self._showRow("Détection :", self._detection_shape_cbox, show)
 
     def _showSeparator(self, show: bool):
-        self._showRow("Détection :", self._separator_cbox, show)
+        self._showRow("Séparateur :", self._separator_cbox, show)
 
     def _showKeepedNumber(self, show: bool):
         self._showRow("Images à exporter :", self._nb_keeped_spinbox, show)
