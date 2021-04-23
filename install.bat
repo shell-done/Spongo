@@ -5,7 +5,7 @@ echo [93mLe programme d'installation va télécharger et installer plusieurs pa
 echo.
 call :upgradepip
 call :installpackage "PySide2==5.15.2"
-call :installpackage "opencv-python==4.5.1.48
+call :installpackage "opencv-python==4.5.1.48"
 call :installpackage "dict2xml==1.7.0"
 call :installpackage "torch==1.8.1+cu102 -f https://download.pytorch.org/whl/torch_stable.html"
 goto ok
