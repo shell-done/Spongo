@@ -58,7 +58,7 @@ class AboutMessageBox(QMessageBox):
 
         license = (
             "Ce projet est mis à disposition sous licence MIT. "
-            "Pour plus d'informations, se référer au dépôt GitHub du projet : <a href='https://github.com/shell-done/Spongo_IHM'>https://github.com/shell-done/Spongo_IHM</a>."
+            "Pour plus d'informations, se référer au dépôt GitHub du projet : <a href='https://github.com/shell-done/Spongo'>https://github.com/shell-done/Spongo</a>."
         )
 
         title = QLabel("À propos")
