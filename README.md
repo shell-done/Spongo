@@ -3,7 +3,7 @@
 ![repository header](documents/img/header.png) 
 
 ## Context
-This application was produced by Margaux DOUDET and Alexandre THOMAS as part of an M1 project at ISEN Yncréa Brest in France. This software was developed in collaboration with the Ifremer (French Research Institute for Exploitation of the Sea).
+This application was created by Margaux DOUDET and Alexandre THOMAS as part of an M1 project at ISEN Yncréa Brest in France. This software was developed in collaboration with the Ifremer (French Research Institute for Exploitation of the Sea).
 
 The purpose of this tool is to analyze seabed images. During the analysis, the tool seeks to detect and classify marine sponges of 6 different shapes that we call "morphotypes" : Ball, Vase, Corona, Crown, Red and Grey_white. One example of each is shown on this image below.
 
