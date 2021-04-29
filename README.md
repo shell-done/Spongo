@@ -18,7 +18,7 @@ To get more information, you can read the [project's report](documents/Rapport%2
 First, we strongly recommand to run this application on a computer with a NVIDIA graphics card. These GPUs allow the software to use the CUDA technology that greatly increases the speed of the application. However, it's still usable without a NVIDIA GPU (it's just 2 to 5 times slower). Also, this application is made for Windows 10. It should work on other environments (like Linux or previous versions of Windows) but we've never tested it.
 
 ### From installer (Windows only)
-To try the application, you can download the [installer](https://github.com/shell-done/Spongo/releases/download/latest/Spongo_R10_Installer.exe). Nothing more is required ! You can also download [this archive](https://github.com/shell-done/Spongo/releases/download/v1.0/Images_test.zip) that contains 50 images to test the application.
+To try the application, you can download the [installer](https://github.com/shell-done/Spongo/releases/download/v1.0/Spongo_R10_Installer.exe). Nothing more is required ! You can also download [this archive](https://github.com/shell-done/Spongo/releases/download/v1.0/Images_test.zip) that contains 50 images to test the application.
 
 ### From sources
 The installation from source is useful if you want to modify the application for your own purposes. Our software **should** work on Linux but was only tested on Windows. To install it on your environments, follow these steps :  
